@@ -1,0 +1,528 @@
+<title>Oracle Note Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#f2f2f3;
+  --paper-raised:#ffffff;
+  --ink:#1d1f20;
+  --ink-55:rgba(29,31,32,.55);
+  --ink-45:rgba(29,31,32,.45);
+  --blueprint:#416180;
+  --steel:#5980a6;
+  --pale:#eef6ff;
+  --pale-border:rgba(89,128,166,.4);
+  --border:rgba(29,31,32,.16);
+  --mark:#d6ebff;
+  --stage-bg:#d9d9da;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:15px;line-height:1.5}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+[hidden]{display:none!important}
+
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
+.k{font:600 10px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-55)}
+
+.bp{position:relative;border:1px solid var(--border);background:var(--paper-raised)}
+.bp>i{position:absolute;width:11px;height:11px;color:var(--ink-45)}
+.bp>i::before{content:"";position:absolute;left:5px;top:0;width:1px;height:100%;background:currentColor}
+.bp>i::after{content:"";position:absolute;top:5px;left:0;width:100%;height:1px;background:currentColor}
+.bp>i.tl{top:-6px;left:-6px}.bp>i.tr{top:-6px;right:-6px}.bp>i.bl{bottom:-6px;left:-6px}.bp>i.br{bottom:-6px;right:-6px}
+
+.row{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.row:last-child{border-bottom:none}
+.row.tap{cursor:pointer}
+.row.tap:hover{background:rgba(89,128,166,.06)}
+.tag{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);border:1px solid rgba(29,31,32,.2);padding:3px 4px;white-space:nowrap;flex:none}
+.tagv{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--steel);padding:3px 4px;white-space:nowrap;flex:none}
+
+button.cta{background:var(--steel);color:#fff;height:50px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:var(--blueprint);width:100%}
+button.cta.ghost{background:transparent;color:var(--ink);border-color:var(--border)}
+button.cta:active{transform:translateY(1px)}
+.cta .l{font:600 16px/1 "Barlow Condensed",sans-serif;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;background:#fff;display:block;flex:none}
+
+button.textlink{background:none;border:0;padding:6px;font:600 11.5px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)}
+button.textlink:hover{color:var(--ink)}
+
+.wave{display:flex;align-items:flex-end;gap:3px}
+.wave i{width:3px;background:var(--steel);display:block;border-radius:1px}
+
+.icon-btn{display:inline-flex;align-items:center;gap:6px;background:var(--pale);border:1px solid var(--pale-border);color:var(--blueprint);padding:7px 11px;font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.icon-btn:hover{background:#e2f0ff}
+.icon-btn[disabled]{opacity:.4;cursor:not-allowed}
+.icon-btn svg{width:14px;height:14px}
+.icon-btn.speaking{background:var(--steel);color:#fff;border-color:var(--blueprint)}
+
+/* ---- page chrome ---- */
+header.top{padding-block:20px;border-bottom:1px solid var(--border)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+.wordmark{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.wordmark b{color:var(--blueprint)}
+.top-meta{font:500 12px/1.4 "Barlow",sans-serif;color:var(--ink-55)}
+
+.intro{padding-block:36px 8px}
+.intro h1{font:600 32px/1.1 "Barlow Condensed",sans-serif;max-width:22ch}
+.intro p{font:400 15px/1.55 "Barlow",sans-serif;color:rgba(29,31,32,.66);max-width:62ch;margin-top:12px}
+
+.tabs{display:flex;gap:8px;margin-top:24px}
+.tab{flex:1;max-width:220px;background:var(--paper-raised);border:1px solid var(--border);padding:13px 16px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.tab .k{color:var(--ink-45)}
+.tab .name{font:600 17px/1.2 "Barlow Condensed",sans-serif}
+.tab[aria-selected="true"]{border-color:var(--blueprint);background:var(--pale)}
+.tab[aria-selected="true"] .k{color:var(--blueprint)}
+
+.stage-section{padding-block:30px 56px}
+.stage-note{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.stage-note p{font:400 13.5px/1.5 "Barlow",sans-serif;color:rgba(29,31,32,.62);max-width:60ch}
+.stage-caption{font:600 12.5px/1.3 "Barlow Condensed",sans-serif;color:var(--ink);background:var(--paper-raised);border:1px solid var(--border);padding:8px 12px;display:inline-block}
+
+.stage{background:var(--stage-bg);padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.stage-label{font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45)}
+.controls-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.sim-btn{background:transparent;border:1px dashed rgba(29,31,32,.35);color:var(--ink-45);padding:8px 12px;font:500 11.5px/1 ui-monospace,Menlo,monospace;display:inline-flex;align-items:center;gap:7px}
+.sim-btn:hover{color:var(--ink);border-color:rgba(29,31,32,.55)}
+.sim-btn svg{width:13px;height:13px}
+.sim-note{font:400 12px/1.5 "Barlow",sans-serif;color:var(--ink-45);max-width:420px;text-align:center}
+
+/* phone frame */
+.phone{width:328px;max-width:100%;min-height:600px;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.phone-status{display:flex;justify-content:space-between;padding:9px 16px 5px;font:500 10.5px/1 "Barlow",sans-serif;color:var(--ink-55);font-variant-numeric:tabular-nums}
+.screen{display:flex;flex-direction:column;flex:1}
+.sheet-overlay{position:absolute;left:0;right:0;bottom:0;background:var(--paper-raised);border-top:1px solid var(--ink);padding:16px 18px;display:flex;flex-direction:column;gap:11px;box-shadow:0 -14px 30px rgba(29,31,32,.18)}
+
+/* car frame */
+.car{width:520px;max-width:100%;height:297px;padding:26px;display:flex;flex-direction:column}
+
+footer.status{padding-block:40px 60px;border-top:1px solid var(--border)}
+.status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:16px}
+.status-grid h3{font:600 13px/1.3 "Barlow Condensed",sans-serif;margin-bottom:10px}
+.status-grid ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px}
+.status-grid li{font:400 13px/1.5 "Barlow",sans-serif;color:rgba(29,31,32,.65)}
+footer.status a{color:var(--blueprint)}
+
+@media (max-width:640px){
+  .intro h1{font-size:26px}
+  .status-grid{grid-template-columns:1fr}
+  .car{padding:16px}
+}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="wordmark">Oracle <b>Note</b></div>
+    <div class="top-meta">Interactive demo &middot; phone app + in-car display</div>
+  </div>
+</header>
+
+<section class="intro">
+  <div class="wrap">
+    <h1>Try both sides of one debrief.</h1>
+    <p>Oracle Note is two surfaces, not one. The car display carries state only, hands and eyes free. The phone is where the rep actually reviews, answers and confirms. Switch between them below and tap through a real visit &mdash; Bergman Maskin AB, 15 Sep.</p>
+    <div class="tabs" role="tablist" aria-label="Device">
+      <button class="tab" id="tabbtn-phone" role="tab" aria-selected="true" onclick="setDevice('phone')">
+        <span class="k">On the</span><span class="name">Phone</span>
+      </button>
+      <button class="tab" id="tabbtn-car" role="tab" aria-selected="false" onclick="setDevice('car')">
+        <span class="k">In the</span><span class="name">Car</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= PHONE ============================= -->
+<section class="stage-section" id="stage-phone">
+  <div class="wrap">
+    <div class="stage-note">
+      <p>Fully interactive: tap buttons and rows the way a rep would after the visit is already recorded. (Recording itself happens in the car &mdash; see that tab.)</p>
+      <span class="stage-caption" id="phone-caption">Home &middot; today's visits</span>
+    </div>
+  </div>
+
+  <div class="stage">
+
+    <div class="bp phone" id="phone-frame">
+      <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+
+      <!-- HOME -->
+      <div class="screen" data-state="home">
+        <div class="phone-status"><span>9:41</span><span>iOS</span></div>
+        <div style="padding:10px 18px 16px;border-bottom:1px solid var(--border)">
+          <div class="k">Oracle Note</div>
+          <div style="font:600 30px/1.05 'Barlow Condensed',sans-serif;margin-top:5px">Tue 15 Sep</div>
+        </div>
+        <div style="flex:1">
+          <div class="row"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:var(--ink-55)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="tag">Synced</span></div>
+          <div class="row" style="background:var(--pale)"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:#2c455d">11:05 &middot; recorded in the car &middot; ready to review</div></div><span class="tagv">Next</span></div>
+          <div class="row" style="opacity:.55"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
+        </div>
+        <div style="padding:14px 18px 18px">
+          <button class="bp cta" onclick="goPhone('gaps')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Review Bergman visit</span></button>
+        </div>
+      </div>
+
+      <!-- GAPS -->
+      <div class="screen" data-state="gaps" hidden>
+        <div class="phone-status"><span>11:34</span><span>iOS</span></div>
+        <div style="padding:10px 18px 14px;border-bottom:1px solid var(--border)">
+          <div class="k">Car stopped &middot; 2:07 captured</div>
+          <div style="font:600 24px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Three gaps in the Bergman debrief</div>
+          <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Checked against the existing-customer schema. Two of the three are mandatory.</div>
+        </div>
+        <div style="flex:1">
+          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">1</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Decision maker</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; nobody named</div></div></div></div>
+          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">2</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Next step and date</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; &quot;after their audit&quot;</div></div></div></div>
+          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--ink-45)">3</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Consumption change</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Optional</div></div></div></div>
+        </div>
+        <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
+          <button class="bp cta" onclick="goPhone('asking',0)"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Answer out loud</span></button>
+          <button class="textlink" style="text-align:center" onclick="goPhone('staged')">Later &middot; keep in staging</button>
+        </div>
+      </div>
+
+      <!-- ASKING (3 questions, one block, content swapped by JS) -->
+      <div class="screen" data-state="asking" hidden>
+        <div class="phone-status"><span>11:35</span><span>iOS</span></div>
+        <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border);align-items:baseline">
+          <div id="ask-progress" style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Question 1 of 3</div>
+          <div class="k">Bergman Maskin AB</div>
+        </div>
+        <div style="padding:16px 18px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+            <div class="k" style="color:var(--blueprint)">Oracle asked</div>
+            <button class="icon-btn" id="ask-speak-btn" onclick="speakAsking()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+              <span id="ask-speak-label">Hear it</span>
+            </button>
+          </div>
+          <div id="ask-question" style="font:600 21px/1.15 'Barlow Condensed',sans-serif;margin-top:6px"></div>
+          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45);margin-top:7px">Spoken aloud &middot; tap &quot;hear it&quot; to play</div>
+        </div>
+        <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center;gap:9px">
+            <div style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Listening</div>
+            <div class="wave" style="height:20px;flex:1;opacity:.75" id="ask-wave"></div>
+          </div>
+          <div id="ask-reply" style="font:400 14.5px/1.55 'Barlow',sans-serif"></div>
+          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45)">Transcribing as you speak. Say &quot;next&quot; to move on.</div>
+        </div>
+        <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
+          <button class="bp cta" onclick="askingNext()"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Next question</span></button>
+          <button class="textlink" style="text-align:center" onclick="askingNext()">Skip this one</button>
+        </div>
+      </div>
+
+      <!-- STAGED -->
+      <div class="screen" data-state="staged" hidden>
+        <div class="phone-status"><span>11:41</span><span>iOS</span></div>
+        <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="k">In staging &middot; not in CRM</div>
+            <span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);border:1px solid var(--pale-border);padding:3px 5px">Draft</span>
+          </div>
+          <div style="font:600 23px/1.1 'Barlow Condensed',sans-serif;margin-top:4px">Bergman Maskin AB</div>
+          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55);margin-top:2px">Existing customer visit &middot; 15 Sep 11:05 &middot; Bor&aring;s</div>
+        </div>
+        <div style="flex:1">
+          <div class="row"><div><div class="k">Stage</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Proposal</div></div><span class="tag">Extracted</span></div>
+          <div class="row"><div><div class="k">Volume / value</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">SEK 180&ndash;220k / yr</div></div><span class="tag">Extracted</span></div>
+          <div class="row"><div><div class="k" style="color:var(--blueprint)">Decision maker</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Ulrika Sand decides &middot; plant mgr signs over 200k</div></div><span class="tagv">You said</span></div>
+          <div class="row"><div><div class="k" style="color:var(--blueprint)">Next step</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Kanban quote &middot; Fri 18 Sep</div></div><span class="tagv">You said</span></div>
+          <div class="row tap" style="border-color:var(--steel)" onclick="goPhone('sheet')"><div><div class="k">Risk flagged &middot; tap for source</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div></div><span class="tag">Extracted</span></div>
+        </div>
+        <div style="padding:12px 18px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:7px;align-items:center;font:500 10.5px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.58)">
+            <span style="width:7px;height:7px;background:var(--steel);display:block"></span><span>Managed device and corporate network verified</span>
+          </div>
+          <button class="bp cta" onclick="goPhone('synced')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Confirm &amp; sync 6 fields</span></button>
+        </div>
+      </div>
+
+      <!-- SYNCED -->
+      <div class="screen" data-state="synced" hidden>
+        <div class="phone-status"><span>11:42</span><span>iOS</span></div>
+        <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border)">
+          <div class="k" style="color:var(--blueprint)">Synced 11:42</div>
+          <div style="font:600 26px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Six fields written to your CRM</div>
+          <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
+        </div>
+        <div style="flex:1">
+          <div class="row"><div><div class="k">Account record</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Stage, volume, decision maker updated</div></div><span class="tagv">Written</span></div>
+          <div class="row"><div><div class="k">Task created</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Send kanban quote &middot; due Fri 18 Sep</div></div><span class="tagv">Written</span></div>
+          <div class="row"><div><div class="k">Deal health</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">At risk &rarr; Improving</div></div><span class="tagv">Written</span></div>
+          <div class="row"><div><div class="k">Audit trail</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Transcript and origins kept 90 days</div></div><span class="tag">Kept</span></div>
+        </div>
+        <div style="padding:14px 18px 18px">
+          <button class="bp cta ghost" onclick="goPhone('home')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Back to today</span></button>
+        </div>
+      </div>
+
+      <!-- SHEET (overlay on top of staged) -->
+      <div class="bp sheet-overlay" id="sheet-overlay" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div class="k">Risk flagged &middot; transcript 01:12&ndash;01:31</div>
+          <button onclick="goPhone('staged')" style="background:none;border:0;font:400 18px/1 'Barlow',sans-serif;color:var(--ink-45)">&times;</button>
+        </div>
+        <p style="font:400 13.5px/1.6 'Barlow',sans-serif">&hellip;they're happy with delivery reliability, that came up twice. <span style="background:var(--mark);box-shadow:0 1px 0 var(--steel)">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price&hellip;</p>
+        <div style="display:flex;gap:9px">
+          <button class="bp cta" style="height:42px" onclick="goPhone('staged')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Keep field</span></button>
+          <button class="bp cta ghost" style="height:42px" onclick="goPhone('staged')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Edit text</span></button>
+        </div>
+        <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Origin: extracted from your debrief &middot; not edited</div>
+      </div>
+
+    </div>
+
+    <div class="sim-note">Every tap above is a real state change &mdash; the same screens and transitions as the app.</div>
+  </div>
+</section>
+
+<!-- ============================= CAR ============================= -->
+<section class="stage-section" id="stage-car" hidden>
+  <div class="wrap">
+    <div class="stage-note">
+      <p>Nothing on this display is tappable, on purpose &mdash; the design review ruled out touch here entirely. Start and stop are spoken. Use the controls below the frame to stand in for that voice command.</p>
+      <span class="stage-caption" id="car-caption">Ready to debrief</span>
+    </div>
+  </div>
+
+  <div class="stage">
+
+    <div class="bp car" id="car-frame">
+      <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+
+      <div class="screen" data-cstate="ready" style="justify-content:space-between">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Ready to debrief</div>
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Oracle Note</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
+          <div style="font:600 40px/1.02 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
+          <div style="font:500 14.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.6)">11:05 visit &middot; matched from calendar, time and location</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border);padding-top:11px">
+          <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Oracle, start debrief&quot;</div>
+          <div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45)">Existing customer visit</div>
+        </div>
+      </div>
+
+      <div class="screen" data-cstate="recording" style="justify-content:space-between" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Recording</div>
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px">
+          <div id="car-clock" style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
+          <div class="wave" style="height:32px" id="car-wave"></div>
+        </div>
+        <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Say &quot;Oracle, stop&quot; when you're finished</div>
+      </div>
+
+      <div class="screen" data-cstate="saved" style="justify-content:space-between" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved to phone</div>
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div id="car-final-clock" style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink-55)">02:07</div>
+          <div style="height:1px;background:var(--border)"></div>
+        </div>
+        <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Follow-up questions wait until you've parked</div>
+      </div>
+
+    </div>
+
+    <div class="controls-row">
+      <button class="icon-btn" id="car-speak-btn" onclick="speakCar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+        <span id="car-speak-label">Hear Oracle</span>
+      </button>
+    </div>
+    <div class="controls-row" id="car-sim-controls">
+      <button class="sim-btn" id="car-sim-start" onclick="carStart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        Simulate: &quot;Oracle, start debrief&quot;
+      </button>
+      <button class="sim-btn" id="car-sim-stop" onclick="carStop()" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        Simulate: &quot;Oracle, stop&quot;
+      </button>
+    </div>
+    <div class="sim-note" id="car-parked-note" hidden>
+      Once parked, the held gap questions continue on the phone.
+      <button class="textlink" style="color:var(--blueprint);vertical-align:baseline" onclick="continueOnPhone()">Continue there &rarr;</button>
+    </div>
+    <div class="sim-note">The dashed control stands in for the spoken command &mdash; in the app this has no on-screen button at all.</div>
+  </div>
+</section>
+
+<footer class="status">
+  <div class="wrap">
+    <div class="k" style="margin-bottom:4px">Build notes</div>
+    <div class="status-grid">
+      <div>
+        <h3>What's real here</h3>
+        <ul>
+          <li>Every screen, transition and field is the actual copy and layout from the design review and the working React Native build.</li>
+          <li>The spoken lines use your browser's built-in text-to-speech (Web Speech API), triggered on tap &mdash; no audio files, nothing recorded.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What's simulated</h3>
+        <ul>
+          <li>There's no real voice recognition here. The dashed controls under the car display stand in for the spoken commands the app itself listens for.</li>
+          <li>One fixed demo visit (Bergman Maskin AB), same as the full build and the <a href="https://claude.ai/artifact/UesVC7p1CRtC6v4SNzSuRw" target="_blank" rel="noopener">walkthrough</a>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  var GAPS = [
+    { q: '"Who decides on the frame agreement, and who signs it?"',
+      a: '"Ulrika Sand in purchasing decides, but the plant manager signs anything over two hundred thousand…"' },
+    { q: '"You said the next step is after their audit — what’s the date, and what happens?"',
+      a: '"Their audit wraps up the eighteenth, so let’s target Friday the eighteenth for the kanban quote…"' },
+    { q: '"Anything changed in what they’re ordering — more, less, or different parts?"',
+      a: '"Nothing yet, but they hinted at a second production line next year…"' }
+  ];
+
+  var CAR_LINES = {
+    ready: 'Ready to debrief. Say, Oracle, start debrief.',
+    recording: 'Recording. Say, Oracle, stop, when you’re finished.',
+    saved: 'Saved to phone. Follow-up questions wait until you’ve parked.'
+  };
+
+  var phoneCaptions = { home: 'Home · today’s visits', gaps: 'Gaps held · phone', asking: 'Oracle asks out loud', staged: 'Staged record', sheet: 'Field origin · transcript', synced: 'Synced to CRM' };
+  var carCaptions = { ready: 'Ready to debrief', recording: 'Recording', saved: 'Saved to phone' };
+
+  var askingIndex = 0;
+  var carSeconds = 108;
+  var carTimer = null;
+
+  function fmt(s){ var m = Math.floor(s/60), r = s%60; return String(m).padStart(2,'0') + ':' + String(r).padStart(2,'0'); }
+
+  function paintWave(id, seed, bars){
+    var el = document.getElementById(id);
+    if(!el) return;
+    var n = bars || 26, out = '';
+    for(var i=0;i<n;i++){
+      var h = Math.round((Math.abs(Math.sin(i*1.3+seed))*0.65+0.35)*100);
+      out += '<i style="height:'+h+'%"></i>';
+    }
+    el.innerHTML = out;
+  }
+
+  // ---- speech ----
+  var canSpeak = 'speechSynthesis' in window;
+  function speak(text, btn, labelEl, doneLabel){
+    if(!canSpeak){ if(labelEl) labelEl.textContent = 'Voice unavailable'; return; }
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text.replace(/["“”]/g,''));
+    u.rate = 0.98; u.pitch = 1;
+    if(btn) btn.classList.add('speaking');
+    if(labelEl) labelEl.textContent = 'Speaking…';
+    u.onend = u.onerror = function(){
+      if(btn) btn.classList.remove('speaking');
+      if(labelEl) labelEl.textContent = doneLabel || 'Hear it';
+    };
+    window.speechSynthesis.speak(u);
+  }
+
+  window.speakAsking = function(){
+    var g = GAPS[askingIndex];
+    speak(g.q, document.getElementById('ask-speak-btn'), document.getElementById('ask-speak-label'));
+  };
+  window.speakCar = function(){
+    var line = CAR_LINES[currentCarState()];
+    speak(line, document.getElementById('car-speak-btn'), document.getElementById('car-speak-label'), 'Hear Oracle');
+  };
+  if(!canSpeak){
+    document.getElementById('car-speak-btn').setAttribute('disabled','');
+    document.getElementById('car-speak-label').textContent = 'Voice unavailable';
+  }
+
+  // ---- device tabs ----
+  window.setDevice = function(d){
+    document.getElementById('stage-phone').hidden = d !== 'phone';
+    document.getElementById('stage-car').hidden = d !== 'car';
+    document.getElementById('tabbtn-phone').setAttribute('aria-selected', d === 'phone');
+    document.getElementById('tabbtn-car').setAttribute('aria-selected', d === 'car');
+  };
+  window.continueOnPhone = function(){
+    setDevice('phone');
+    goPhone('gaps');
+    window.scrollTo({ top: document.getElementById('stage-phone').getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' });
+  };
+
+  // ---- phone state ----
+  function showPhoneScreen(state){
+    var screens = document.querySelectorAll('#phone-frame > .screen');
+    for(var i=0;i<screens.length;i++){ screens[i].hidden = screens[i].dataset.state !== state; }
+    document.getElementById('sheet-overlay').hidden = state !== 'sheet';
+    if(state === 'sheet') document.querySelector('.screen[data-state="staged"]').hidden = false;
+    document.getElementById('phone-caption').textContent = phoneCaptions[state];
+  }
+  window.goPhone = function(state, idx){
+    if(state === 'asking'){
+      askingIndex = idx || 0;
+      renderAsking();
+    }
+    showPhoneScreen(state);
+  };
+  function renderAsking(){
+    var g = GAPS[askingIndex];
+    document.getElementById('ask-progress').textContent = 'Question ' + (askingIndex+1) + ' of ' + GAPS.length;
+    document.getElementById('ask-question').textContent = g.q;
+    document.getElementById('ask-reply').textContent = g.a;
+    document.getElementById('ask-speak-label').textContent = 'Hear it';
+    paintWave('ask-wave', askingIndex, 20);
+  }
+  window.askingNext = function(){
+    if(askingIndex < GAPS.length - 1){ askingIndex++; renderAsking(); }
+    else { goPhone('staged'); }
+  };
+
+  // ---- car state ----
+  function currentCarState(){
+    var el = document.querySelector('#car-frame > .screen:not([hidden])');
+    return el ? el.dataset.cstate : 'ready';
+  }
+  function showCarScreen(state){
+    var screens = document.querySelectorAll('#car-frame > .screen');
+    for(var i=0;i<screens.length;i++){ screens[i].hidden = screens[i].dataset.cstate !== state; }
+    document.getElementById('car-caption').textContent = carCaptions[state];
+    document.getElementById('car-sim-start').hidden = state !== 'ready';
+    document.getElementById('car-sim-stop').hidden = state !== 'recording';
+    document.getElementById('car-parked-note').hidden = state !== 'saved';
+  }
+  window.carStart = function(){
+    carSeconds = 108;
+    document.getElementById('car-clock').textContent = fmt(carSeconds);
+    paintWave('car-wave', 0, 30);
+    showCarScreen('recording');
+    clearInterval(carTimer);
+    carTimer = setInterval(function(){
+      carSeconds++;
+      document.getElementById('car-clock').textContent = fmt(carSeconds);
+    }, 1000);
+  };
+  window.carStop = function(){
+    clearInterval(carTimer);
+    document.getElementById('car-final-clock').textContent = fmt(carSeconds);
+    showCarScreen('saved');
+  };
+
+  // ---- init ----
+  paintWave('car-wave', 0, 30);
+  renderAsking();
+  showPhoneScreen('home');
+  showCarScreen('ready');
+})();
+</script>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;700&family=Barlow+Condensed:wght@400;600&display=swap"><style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#f2f2f3;color:#1d1f20;font-family:"Barlow",system-ui,sans-serif;font-size:15px;line-height:1.55}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(29,31,32,.16);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1d1f20;color:#f2f2f3;border-radius:0;text-decoration:none}
+.dv-tname{font:600 15px/1.2 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.02em;color:#1d1f20}
+.dv-opts{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:11px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(29,31,32,.08);color:#1d1f20;border-radius:0;text-decoration:none}
+.dv-olabel{display:block;font:400 11.5px/1.5 "Barlow",system-ui,sans-serif;color:rgba(29,31,32,.55);max-width:340px}
+.dv-olabel>.dv-oid:first-child{display:inline-block;margin-right:7px}
+.dv-oid{display:inline-block}
+.dv-opt:target .dv-oid{background:#5980a6;color:#fff}
+.dv-next{margin:26px 0 0;font:12px/1.6 "Barlow",system-ui,sans-serif;color:rgba(29,31,32,.55)}
+.dv-grouphd{font:600 12px/1 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55);margin:34px 0 16px;display:flex;align-items:center;gap:12px}
+.dv-grouphd::after{content:"";flex:1;height:1px;background:rgba(29,31,32,.16)}
+.bp{position:relative;border:1px solid rgba(29,31,32,.16);border-radius:0}
+.bp>i{position:absolute;width:11px;height:11px;color:rgba(29,31,32,.5)}
+.bp>i::before{content:"";position:absolute;left:5px;top:0;width:1px;height:100%;background:currentColor}
+.bp>i::after{content:"";position:absolute;top:5px;left:0;width:100%;height:1px;background:currentColor}
+.bp>i.tl{top:-6px;left:-6px}.bp>i.tr{top:-6px;right:-6px}.bp>i.bl{bottom:-6px;left:-6px}.bp>i.br{bottom:-6px;right:-6px}
+a{color:#416180}a:hover{color:#1d2d3d}
+</style></helmet>
+
+<section class="dv-turn" id="brief">
+<div class="dv-thd"><a class="dv-tid" href="#brief">00</a><span class="dv-tname">Oracle Note — brief &amp; assumptions</span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,300px));gap:28px">
+<div>
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55);margin-bottom:8px">What it is</div>
+<p style="margin:0 0 10px">A rep finishes a customer visit, gets in the car, and talks for 1–2 minutes. The app transcribes, extracts CRM fields, then asks about the gaps it could not resolve. Nothing is written to the CRM until the rep confirms on the phone.</p>
+<p style="margin:0">Sample content throughout is a C-parts trading rep — fasteners and consumables, kanban bins, frame agreements.</p>
+</div>
+<div>
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55);margin-bottom:8px">Settled by your answers</div>
+<ul style="margin:0;padding-left:16px">
+<li>Car screen carries state only: elapsed time and one big target.</li>
+<li>Monologue first, then gap questions — who decides &amp; who signs, next step + date.</li>
+<li>The customer is matched automatically from calendar, timestamp and location — no account guess to confirm during capture.</li>
+<li>Gap questions are held until the car has stopped; the car display never asks anything.</li>
+<li>Uncertainty is shown as a question, never as a low-confidence value.</li>
+<li>Tapping a field opens a transcript sheet with its source line.</li>
+<li>Steel-on-paper wireframe, light ground, in the car too.</li>
+</ul>
+</div>
+<div>
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55);margin-bottom:8px">My assumptions</div>
+<ul style="margin:0;padding-left:16px">
+<li>Your repo is empty, so the visual language comes entirely from the Industry design system.</li>
+<li>"Your CRM" is generic — one push action, seven fields, no vendor chrome.</li>
+<li>The car display is a landscape 560×320-ish surface; the phone screens are 340-wide.</li>
+<li>Recording keeps running if the phone locks or the car disconnects.</li>
+</ul>
+</div>
+</div>
+<p class="dv-next">Pick one option per group below and I'll build it into the full tappable flow: calendar prompt → car session → confirm → push.</p>
+</section>
+
+<section class="dv-turn" id="t4">
+<div class="dv-thd"><a class="dv-tid" href="#t4">4</a><span class="dv-tname">Reconciled with the concept paper — auto context match, questions only once stopped, staged before CRM</span></div>
+<div style="max-width:880px;margin:0 0 22px;font:400 13px/1.6 'Barlow',sans-serif;color:rgba(29,31,32,.62)">Two corrections to what I had: the customer comes from calendar + timestamp + location, not from the transcript, so there is no account guess to confirm during capture; and AI gap questions are held until the car has stopped, so the car display never asks anything. The review screen becomes a staging record — schema-checked, field-level origin, governed sync.</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="4a">
+<div class="dv-olabel"><a class="dv-oid" href="#4a">4a</a>Car display, ready state. Context is already matched, so the screen just names the customer and waits for the voice command. Precedes <a class="dv-oid" href="#3a">3a</a>.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;padding:30px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Ready to debrief</div>
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
+<div style="font:600 46px/1.02 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
+<div style="font:500 17px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.6)">11:05 visit · matched from calendar, time and location</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(29,31,32,.16);padding-top:14px">
+<div style="font:600 17px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180">Say "Oracle, start debrief"</div>
+<div style="font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.5)">Existing customer visit</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="4b">
+<div class="dv-olabel"><a class="dv-oid" href="#4b">4b</a>Held questions, phone. Fires only once the car has stopped; the questions are spoken, and the list is there for a rep who would rather read.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:34</span><span>iOS</span></div>
+<div style="padding:10px 18px 16px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">Car stopped · 2:07 captured</div>
+<div style="font:600 30px/1.05 'Barlow Condensed',sans-serif;margin-top:6px">Three gaps in<br>the Bergman debrief</div>
+<div style="font:500 13px/1.45 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:8px">Checked against the existing-customer schema. Two of the three are mandatory.</div>
+</div>
+<div style="flex:1">
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:#416180;width:14px">1</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Decision maker</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Mandatory · nobody named in the debrief</div></div>
+</div>
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:#416180;width:14px">2</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Next step and date</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Mandatory · you said "after their audit"</div></div>
+</div>
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.5);width:14px">3</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Consumption change</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Optional</div></div>
+</div>
+<div style="padding:16px 18px;font:500 12.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Oracle reads each one out and waits. Answer by voice, or tap a line to type.</div>
+</div>
+<div style="padding:14px 18px 20px;display:flex;flex-direction:column;gap:11px">
+<div class="bp" style="background:#5980a6;color:#fff;height:54px;display:flex;align-items:center;justify-content:center;gap:10px;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span style="font:600 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Answer out loud</span></div>
+<div style="text-align:center;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55)">Later — keep in staging</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="4c">
+<div class="dv-olabel"><a class="dv-oid" href="#4c">4c</a>Staged record. <a class="dv-oid" href="#1d">1d</a> rebuilt as the staging layer: schema fields, where each value came from, and the sync gate stated plainly.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:41</span><span>iOS</span></div>
+<div style="padding:8px 18px 13px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">In staging · not in CRM</div>
+<span style="font:600 9.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180;border:1px solid rgba(89,128,166,.5);padding:3px 5px">Draft</span>
+</div>
+<div style="font:600 26px/1.1 'Barlow Condensed',sans-serif;margin-top:5px">Bergman Maskin AB</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55);margin-top:3px">Existing customer visit · 15 Sep 11:05 · Borås</div>
+</div>
+<div style="flex:1">
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Stage</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Proposal</div></div>
+<span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.5);border:1px solid rgba(29,31,32,.2);padding:3px 4px">Extracted</span>
+</div>
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Volume / value</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">SEK 180–220k per year</div></div>
+<span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.5);border:1px solid rgba(29,31,32,.2);padding:3px 4px">Extracted</span>
+</div>
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#eef6ff">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">Decision maker</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Ulrika Sand, purchasing</div></div>
+<span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#5980a6;padding:3px 4px">You said</span>
+</div>
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px;background:#eef6ff">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">Next step</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Kanban quote · Fri 18 Sep</div></div>
+<span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#5980a6;padding:3px 4px">You said</span>
+</div>
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Risk flagged</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div></div>
+<span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.5);border:1px solid rgba(29,31,32,.2);padding:3px 4px">Extracted</span>
+</div>
+<div style="padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:center;gap:8px">
+<div style="flex:1"><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Consumption change</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.5)">Left blank · optional</div></div>
+</div>
+<div style="padding:12px 18px;font:500 12px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Tap a row for the transcript line behind it. Transcript kept; audio was deleted after transcription.</div>
+</div>
+<div style="padding:12px 18px 20px;border-top:1px solid rgba(29,31,32,.16);display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;gap:7px;align-items:center;font:500 11.5px/1.35 'Barlow',sans-serif;color:rgba(29,31,32,.58)">
+<span style="width:7px;height:7px;background:#5980a6;display:block;flex:none"></span>
+<span>Managed device and corporate network verified</span>
+</div>
+<div class="bp" style="background:#5980a6;color:#fff;height:50px;display:flex;align-items:center;justify-content:center;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 19px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Confirm &amp; sync 6 fields</span></div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "build <a class="dv-oid" href="#4a">4a</a> → <a class="dv-oid" href="#3a">3a</a> → <a class="dv-oid" href="#4b">4b</a> → <a class="dv-oid" href="#4c">4c</a> as one tappable flow" · "show the blocked-sync state when off the corporate network" · "add the schema library sales management maintains"</p>
+</section>
+
+<section class="dv-turn" id="t3">
+<div class="dv-thd"><a class="dv-tid" href="#t3">3</a><span class="dv-tname">Car display — status only, no touch targets</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="3a">
+<div class="dv-olabel"><a class="dv-oid" href="#3a">3a</a><a class="dv-oid" href="#1a">1a</a> with the button removed. Nothing on the car screen is tappable — start, stop and skip are spoken, or done on the phone before the car moves.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;padding:30px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Recording</div>
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px">
+<div style="font:600 126px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
+<div style="height:40px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 9px);opacity:.75"></div>
+</div>
+<div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Say "Oracle, stop" when you're finished</div>
+</div>
+</div>
+
+<div class="dv-opt" id="3b">
+<div class="dv-olabel"><a class="dv-oid" href="#3b">3b</a>The three states this one screen ever shows — only the top line and the band change.</div>
+<div style="display:flex;flex-direction:column;gap:16px;width:560px">
+<div class="bp" style="height:92px;background:#f2f2f3;padding:0 26px;display:flex;align-items:center;gap:24px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="width:150px;font:600 13px/1.25 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#416180">Recording</div>
+<div style="font:600 46px/.9 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums">01:48</div>
+<div style="flex:1;height:26px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 9px);opacity:.7"></div>
+</div>
+<div class="bp" style="height:92px;background:#f2f2f3;padding:0 26px;display:flex;align-items:center;gap:24px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="width:150px;font:600 13px/1.25 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#416180">Oracle is asking<br><span style="letter-spacing:.1em;color:rgba(29,31,32,.5)">1 of 2</span></div>
+<div style="font:600 46px/.9 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums">01:48</div>
+<div style="flex:1;height:26px;background:repeating-linear-gradient(90deg,#94bce3 0 4px,transparent 4px 12px)"></div>
+</div>
+<div class="bp" style="height:92px;background:#f2f2f3;padding:0 26px;display:flex;align-items:center;gap:24px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="width:150px;font:600 13px/1.25 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">Saved to phone</div>
+<div style="font:600 46px/.9 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;color:rgba(29,31,32,.55)">02:12</div>
+<div style="flex:1;height:1px;background:rgba(29,31,32,.16)"></div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "build <a class="dv-oid" href="#3a">3a</a> + <a class="dv-oid" href="#1d">1d</a> + <a class="dv-oid" href="#1g">1g</a> into the full flow" · "add the phone lock-screen view of a running session" · "write the voice script"</p>
+</section>
+
+<section class="dv-turn" id="t2">
+<div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Car display — the app asks out loud, nothing to read (replaces <a class="dv-oid" href="#1b">1b</a>)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="2a">
+<div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Speaking / listening. The screen only says who has the floor; the question itself is spoken. Shown mid-question.</div>
+<div class="bp" style="width:560px;height:320px;background:#1d2d3d;padding:26px;display:flex;flex-direction:column;border-color:#1d2d3d"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#b5d9fd">Oracle is asking</div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:rgba(242,242,243,.6)">01:48</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px">
+<div style="height:46px;background:repeating-linear-gradient(90deg,#94bce3 0 3px,transparent 3px 11px);opacity:.9"></div>
+<div style="font:600 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(242,242,243,.55)">Listen — then just answer</div>
+</div>
+<div class="bp" style="background:#5980a6;color:#fff;height:62px;display:flex;align-items:center;justify-content:center;border-color:#94bce3"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 28px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase">Done</span>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="2b">
+<div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Turn-taking lane. A two-lane meter shows whether the app or the rep has the floor — glanceable, still no wording on screen.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;padding:26px;display:flex;flex-direction:column;gap:18px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Your turn</div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:rgba(29,31,32,.55)">01:48</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:74px;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.45)">Oracle</div>
+<div style="flex:1;height:22px;border:1px solid rgba(29,31,32,.16)"></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:74px;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180">You</div>
+<div style="flex:1;height:34px;border:1px solid #5980a6;background:repeating-linear-gradient(90deg,#5980a6 0 3px,transparent 3px 10px)"></div>
+</div>
+</div>
+<div style="font:500 15px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Question 1 of 2 · asked out loud</div>
+<div style="flex:1"></div>
+<div style="display:flex;gap:14px">
+<div class="bp" style="flex:2;background:#5980a6;color:#fff;height:62px;display:flex;align-items:center;justify-content:center;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 26px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase">Done</span></div>
+<div class="bp" style="flex:1;height:62px;display:flex;align-items:center;justify-content:center">
+<span style="font:600 26px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Repeat</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="2c">
+<div class="dv-olabel"><a class="dv-oid" href="#2c">2c</a>State by ground. Same dial as <a class="dv-oid" href="#1a">1a</a> all session; when the app speaks the whole screen inverts to steel, so the change is caught peripherally.</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div class="bp" style="width:560px;height:152px;background:#f2f2f3;padding:20px 26px;display:flex;align-items:center;gap:26px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="font:600 64px/.85 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums">01:48</div>
+<div style="flex:1;height:30px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 9px);opacity:.7"></div>
+<div style="font:600 13px/1.3 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55);width:70px">You're<br>talking</div>
+</div>
+<div class="bp" style="width:560px;height:152px;background:#1d2d3d;padding:20px 26px;display:flex;align-items:center;gap:26px;border-color:#1d2d3d"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="font:600 64px/.85 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums;color:#f2f2f3">01:48</div>
+<div style="flex:1;height:30px;background:repeating-linear-gradient(90deg,#94bce3 0 3px,transparent 3px 11px)"></div>
+<div style="font:600 13px/1.3 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b5d9fd;width:70px">Oracle<br>asking</div>
+</div>
+</div>
+</div>
+
+</div>
+<p class="dv-next">Try next: "go with <a class="dv-oid" href="#2a">2a</a>" · "<a class="dv-oid" href="#2c">2c</a> but keep the light ground both ways" · "write the voice script for the two questions"</p>
+</section>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Three variations per screen</span></div>
+
+<div class="dv-grouphd">Car display · during a session</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a">
+<div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Dial. Time is the whole screen; one target. Zero reading.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;padding:26px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Recording</div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
+<div style="font:600 108px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
+<div style="height:34px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 9px);opacity:.75"></div>
+</div>
+<div class="bp" style="background:#5980a6;color:#fff;height:66px;display:flex;align-items:center;justify-content:center;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 30px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase">Done</span>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b">
+<div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Question moment. Same shell, but the gap-fill question takes the screen — two targets, no values to read.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;padding:26px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Question 1 of 2</div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.06em;font-variant-numeric:tabular-nums;color:rgba(29,31,32,.55)">01:48</div>
+</div>
+<div style="flex:1;display:flex;align-items:center">
+<div style="font:600 44px/1.05 'Barlow Condensed',sans-serif;letter-spacing:-.01em;text-wrap:pretty">Who signs the frame agreement?</div>
+</div>
+<div style="display:flex;gap:14px">
+<div class="bp" style="flex:2;background:#5980a6;color:#fff;height:66px;display:flex;align-items:center;justify-content:center;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 28px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase">Answer</span></div>
+<div class="bp" style="flex:1;height:66px;display:flex;align-items:center;justify-content:center;background:transparent">
+<span style="font:600 28px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Skip</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1c">
+<div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Spec plate. Session data as a labelled grid, stop target as a full-height column on the driver's side.</div>
+<div class="bp" style="width:560px;height:320px;background:#f2f2f3;display:flex"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="flex:1;padding:24px;display:flex;flex-direction:column;gap:18px">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Recording · note 12</div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div><div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Elapsed</div><div style="font:600 58px/1 'Barlow Condensed',sans-serif;font-variant-numeric:tabular-nums">01:48</div></div>
+<div style="height:1px;background:rgba(29,31,32,.16)"></div>
+<div><div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">From calendar</div><div style="font:600 26px/1.1 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div></div>
+<div style="height:1px;background:rgba(29,31,32,.16)"></div>
+<div><div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Questions queued</div><div style="font:600 26px/1.1 'Barlow Condensed',sans-serif">2</div></div>
+</div>
+</div>
+<div style="width:200px;padding:24px 24px 24px 0;display:flex">
+<div class="bp" style="flex:1;background:#5980a6;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 34px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Stop</span>
+<span style="font:500 13px/1 'Barlow',sans-serif;opacity:.85">&amp; save to phone</span>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="dv-grouphd">Phone · confirm &amp; push</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1d">
+<div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Field ledger. Everything in one list; the two unresolved items sit inline as questions with spoken-answer chips.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>iOS</span></div>
+<div style="padding:8px 18px 14px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">Tue 15 Sep · 1:48 recorded</div>
+<div style="font:600 27px/1.1 'Barlow Condensed',sans-serif;margin-top:5px">Nordflex Verkstad AB</div>
+<div style="display:flex;align-items:center;gap:8px;margin-top:8px;background:#eef6ff;border:1px solid rgba(89,128,166,.4);padding:6px 9px">
+<span style="font:500 11.5px/1.3 'Barlow',sans-serif;color:#2c455d;flex:1">Matched from what you said — "out at Nordflex this morning"</span>
+<span style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#416180">Change</span>
+</div>
+</div>
+<div style="flex:1;overflow:hidden">
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+<div><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Stage</div><div style="font:500 15px/1.3 'Barlow',sans-serif">Proposal</div></div>
+<div style="font:400 15px/1 'Barlow',sans-serif;color:rgba(29,31,32,.4)">›</div>
+</div>
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Volume / value</div>
+<div style="font:500 15px/1.3 'Barlow',sans-serif">SEK 180–220k per year, C-parts kanban</div>
+</div>
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16);background:#eef6ff">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">Question · decision maker</div>
+<div style="font:600 18px/1.2 'Barlow Condensed',sans-serif;margin:4px 0 9px">Who signs the frame agreement?</div>
+<div style="display:flex;flex-wrap:wrap;gap:7px">
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3">Purchasing mgr</span>
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3">Plant mgr</span>
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3;color:rgba(29,31,32,.55)">Type…</span>
+</div>
+</div>
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16);background:#eef6ff">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">Question · next step</div>
+<div style="font:600 18px/1.2 'Barlow Condensed',sans-serif;margin:4px 0 4px">You said "after their audit" — what date?</div>
+<div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:7px">
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3">Fri 18 Sep</span>
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3">Mid-Oct</span>
+<span class="bp" style="padding:5px 9px;font:500 12px/1 'Barlow',sans-serif;background:#f2f2f3;color:rgba(29,31,32,.55)">Pick date</span>
+</div>
+</div>
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Risk flagged</div>
+<div style="font:500 15px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours on fasteners</div>
+</div>
+<div style="padding:13px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:center">
+<div><div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Deal health</div><div style="font:500 15px/1.3 'Barlow',sans-serif">Improving</div></div>
+<span style="font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#416180;border:1px solid rgba(89,128,166,.5);padding:4px 7px">↑ Was at risk</span>
+</div>
+<div style="padding:13px 18px;font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Tap any row to hear it in the transcript.</div>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp" style="background:#5980a6;color:#fff;height:50px;display:flex;align-items:center;justify-content:center;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="font:600 19px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Push 7 fields to CRM</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1e">
+<div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>Questions first. Clear the two open items as a stack, then the ready fields unlock underneath. The push button stays shut until then.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>Android</span></div>
+<div style="padding:8px 18px 16px">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">Nordflex Verkstad AB · 1:48</div>
+<div style="font:600 34px/1.05 'Barlow Condensed',sans-serif;margin-top:6px">Two things<br>to confirm</div>
+</div>
+<div style="padding:0 18px;display:flex;flex-direction:column;gap:20px">
+<div class="bp" style="padding:16px;background:#f2f2f3"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">1 / 2 · decision maker</div>
+<div style="font:600 21px/1.15 'Barlow Condensed',sans-serif;margin:7px 0 12px">Who signs the frame agreement?</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="bp" style="padding:9px 11px;font:500 13.5px/1 'Barlow',sans-serif">Ulrika Sand — purchasing mgr</div>
+<div class="bp" style="padding:9px 11px;font:500 13.5px/1 'Barlow',sans-serif">Jonas Bergqvist — plant mgr</div>
+<div class="bp" style="padding:9px 11px;font:500 13.5px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Someone else…</div>
+</div>
+</div>
+<div style="padding:0 2px;opacity:.5">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">2 / 2 · next step</div>
+<div style="font:600 19px/1.15 'Barlow Condensed',sans-serif;margin-top:5px">You said "after their audit" — what date?</div>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="padding:16px 18px;border-top:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:center">
+<span style="font:500 13px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.55)">5 fields ready</span>
+<span style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#416180">Review ↓</span>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp" style="height:50px;display:flex;align-items:center;justify-content:center;background:transparent;opacity:.45">
+<span style="font:600 19px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Push to CRM</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1f">
+<div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Source sheet open — the state behind <a class="dv-oid" href="#1d">1d</a>. Tapping a field slides up its transcript passage with the line it came from marked.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible;position:relative"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>iOS</span></div>
+<div style="padding:8px 18px 14px;opacity:.35">
+<div style="font:600 27px/1.1 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div>
+</div>
+<div style="opacity:.35;padding:0 18px">
+<div style="padding:11px 0;border-top:1px solid rgba(29,31,32,.16);font:500 14px/1.3 'Barlow',sans-serif">Stage · Proposal</div>
+<div style="padding:11px 0;border-top:1px solid rgba(29,31,32,.16);font:500 14px/1.3 'Barlow',sans-serif">Volume · SEK 180–220k / yr</div>
+</div>
+<div class="bp" style="padding:11px 18px;margin:0 18px;background:#eef6ff;border-color:#5980a6">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#416180">Risk flagged</div>
+<div style="font:500 14.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div>
+</div>
+<div style="flex:1"></div>
+<div class="bp" style="background:#f2f2f3;border-color:#1d1f20;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -12px 32px rgba(43,43,45,.16)">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Transcript · 01:12–01:31</div>
+<span style="font:500 18px/1 'Barlow',sans-serif;color:rgba(29,31,32,.45)">×</span>
+</div>
+<div style="font:400 14.5px/1.65 'Barlow',sans-serif">…they're happy with delivery reliability, that came up twice. <span style="background:#d6ebff;box-shadow:0 1px 0 #5980a6">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price…</div>
+<div style="display:flex;gap:10px">
+<div class="bp" style="flex:1;background:#5980a6;color:#fff;padding:11px 0;text-align:center;border-color:#416180"><span style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Keep field</span></div>
+<div class="bp" style="flex:1;padding:11px 0;text-align:center"><span style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.6)">Edit text</span></div>
+</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Play from 01:12 · 19 sec</div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="dv-grouphd">Phone · home</div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1g">
+<div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Day list. The calendar is the spine: meetings in order, each with the state of its note.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>iOS</span></div>
+<div style="padding:10px 18px 16px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+<div style="font:600 32px/1.05 'Barlow Condensed',sans-serif;margin-top:5px">Tue 15 Sep</div>
+</div>
+<div style="flex:1">
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;letter-spacing:.04em;color:rgba(29,31,32,.55);width:40px;font-variant-numeric:tabular-nums">09:20</div>
+<div style="flex:1">
+<div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Note synced · 6 fields updated</div>
+</div>
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.5);border:1px solid rgba(29,31,32,.2);padding:4px 6px;height:fit-content">Synced</div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);background:#eef6ff">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;letter-spacing:.04em;color:#416180;width:40px;font-variant-numeric:tabular-nums">11:05</div>
+<div style="flex:1">
+<div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:#2c455d">1:48 recorded in the car · 2 questions open</div>
+</div>
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#5980a6;padding:4px 6px;height:fit-content">Review</div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;letter-spacing:.04em;color:rgba(29,31,32,.55);width:40px;font-variant-numeric:tabular-nums">13:30</div>
+<div style="flex:1">
+<div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Unassigned note · 0:52, guessed from transcript</div>
+</div>
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#416180;border:1px solid rgba(89,128,166,.5);padding:4px 6px;height:fit-content">Confirm</div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);opacity:.55">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;letter-spacing:.04em;width:40px;font-variant-numeric:tabular-nums">15:45</div>
+<div style="flex:1">
+<div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Lindqvist Hydraulik</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif">Upcoming · 34 km, leave 15:05</div>
+</div>
+</div>
+</div>
+<div style="padding:16px 18px 20px;border-top:1px solid rgba(29,31,32,.16)">
+<div class="bp" style="background:#5980a6;color:#fff;height:52px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span style="font:600 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Record a note</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1h">
+<div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Queue. Only what needs the rep is at full weight; everything settled collapses into a line of accounting.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>iOS</span></div>
+<div style="padding:14px 18px 18px;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 76px/.8 'Barlow Condensed',sans-serif;color:#5980a6">3</div>
+<div style="font:600 21px/1.05 'Barlow Condensed',sans-serif;padding-bottom:4px">notes waiting<br>on you</div>
+</div>
+<div style="padding:18px;display:flex;flex-direction:column;gap:22px;flex:1">
+<div class="bp" style="padding:15px;background:#f2f2f3"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 20px/1.1 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div>
+<div style="font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55)">1:48</div>
+</div>
+<div style="font:500 13px/1.45 'Barlow',sans-serif;color:rgba(29,31,32,.55);margin-top:5px">2 questions open · risk flagged</div>
+<div style="height:1px;background:rgba(29,31,32,.16);margin:11px 0"></div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180">Answer &amp; push →</div>
+</div>
+<div class="bp" style="padding:15px;background:#f2f2f3"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 20px/1.1 'Barlow Condensed',sans-serif">Setterwall Mekaniska?</div>
+<div style="font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55)">0:52</div>
+</div>
+<div style="font:500 13px/1.45 'Barlow',sans-serif;color:rgba(29,31,32,.55);margin-top:5px">Account guessed from transcript — confirm</div>
+<div style="height:1px;background:rgba(29,31,32,.16);margin:11px 0"></div>
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180">Confirm account →</div>
+</div>
+<div style="font:500 13px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">+ 1 more · Hammarby Industri, 2:07</div>
+</div>
+<div style="border-top:1px solid rgba(29,31,32,.16);padding:14px 18px;display:flex;justify-content:space-between;font:500 12.5px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55)">
+<span>Synced this week</span><span style="font-variant-numeric:tabular-nums">11 notes · 64 fields</span>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp" style="background:#5980a6;color:#fff;height:52px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span style="font:600 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Record a note</span></div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1i">
+<div class="dv-olabel"><a class="dv-oid" href="#1i">1i</a>Account board. Sorted by what the notes did to each deal — health movement first, notes as evidence.</div>
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>9:41</span><span>Android</span></div>
+<div style="padding:10px 18px 14px">
+<div style="font:600 32px/1.05 'Barlow Condensed',sans-serif">Your territory</div>
+<div style="display:flex;gap:0;margin-top:12px;border:1px solid rgba(29,31,32,.16)">
+<div style="flex:1;padding:6px 0;text-align:center;background:#5980a6;color:#fff;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Moved</div>
+<div style="flex:1;padding:6px 0;text-align:center;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.6)">All</div>
+<div style="flex:1;padding:6px 0;text-align:center;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.6)">At risk</div>
+</div>
+</div>
+<div style="flex:1">
+<div style="padding:14px 18px;border-top:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:center">
+<div style="width:26px;text-align:center;font:600 22px/1 'Barlow Condensed',sans-serif;color:#416180">↑</div>
+<div style="flex:1">
+<div style="font:600 19px/1.1 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">At risk → Improving · today's note</div>
+</div>
+<div style="height:26px;width:52px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 7px);opacity:.6"></div>
+</div>
+<div style="padding:14px 18px;border-top:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:center">
+<div style="width:26px;text-align:center;font:600 22px/1 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.5)">↓</div>
+<div style="flex:1">
+<div style="font:600 19px/1.1 'Barlow Condensed',sans-serif">Hammarby Industri</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Stalled · 3 visits, no decision maker named</div>
+</div>
+<div style="font:600 10px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#5980a6;padding:4px 6px">Review</div>
+</div>
+<div style="padding:14px 18px;border-top:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:center">
+<div style="width:26px;text-align:center;font:600 22px/1 'Barlow Condensed',sans-serif;color:#416180">↑</div>
+<div style="flex:1">
+<div style="font:600 19px/1.1 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Kanban pilot agreed · synced 09:41</div>
+</div>
+</div>
+<div style="padding:14px 18px;border-top:1px solid rgba(29,31,32,.16);border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:center;opacity:.6">
+<div style="width:26px;text-align:center;font:600 22px/1 'Barlow Condensed',sans-serif">—</div>
+<div style="flex:1">
+<div style="font:600 19px/1.1 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div>
+<div style="font:500 12.5px/1.4 'Barlow',sans-serif">Unassigned note waiting</div>
+</div>
+</div>
+<div style="padding:16px 18px;font:500 12.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Health only moves when a note is pushed — nothing here is guessed silently.</div>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp" style="background:#5980a6;color:#fff;height:52px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:#416180"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span style="font:600 20px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Record a note</span></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<p class="dv-next">Try next: "build <a class="dv-oid" href="#1b">1b</a> + <a class="dv-oid" href="#1d">1d</a> + <a class="dv-oid" href="#1g">1g</a> into the full flow" · "<a class="dv-oid" href="#1c">1c</a> but with the question moment from <a class="dv-oid" href="#1b">1b</a>" · "more directions for the car screen"</p>
+</section>
+</x-dc>
+</body>
+</html>

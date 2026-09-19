@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600&display=swap"><style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#f2f2f3;color:#1d1f20;font-family:"Barlow",system-ui,sans-serif;font-size:15px;line-height:1.55}
+a{color:#416180}a:hover{color:#1d2d3d}
+.bp{position:relative;border:1px solid rgba(29,31,32,.16)}
+.bp>i{position:absolute;width:11px;height:11px;color:rgba(29,31,32,.5)}
+.bp>i::before{content:"";position:absolute;left:5px;top:0;width:1px;height:100%;background:currentColor}
+.bp>i::after{content:"";position:absolute;top:5px;left:0;width:100%;height:1px;background:currentColor}
+.bp>i.tl{top:-6px;left:-6px}.bp>i.tr{top:-6px;right:-6px}.bp>i.bl{bottom:-6px;left:-6px}.bp>i.br{bottom:-6px;right:-6px}
+.hs{cursor:pointer}
+.k{font:600 10px/1 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)}
+.row{padding:11px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.tag{font:600 9px/1 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.5);border:1px solid rgba(29,31,32,.2);padding:3px 4px;white-space:nowrap}
+.tagv{font:600 9px/1 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#5980a6;padding:3px 4px;white-space:nowrap}
+.cta{background:#5980a6;color:#fff;height:52px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:#416180;cursor:pointer}
+.cta span.l{font:600 19px/1 "Barlow Condensed",system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase}
+.st{display:block;width:100%;text-align:left;background:transparent;border:0;border-bottom:1px solid rgba(29,31,32,.12);padding:9px 12px;font:500 12.5px/1.3 "Barlow",system-ui,sans-serif;color:rgba(29,31,32,.55);cursor:pointer;font-family:"Barlow",system-ui,sans-serif}
+.st:hover{background:rgba(89,128,166,.08)}
+.stn{font:600 9.5px/1 ui-monospace,Menlo,monospace;color:rgba(29,31,32,.4);margin-right:7px}
+</style></helmet>
+
+<div style="display:flex;gap:30px;align-items:flex-start;padding:32px 34px;flex-wrap:wrap">
+
+<div style="width:214px;flex:none">
+<div style="font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+<div style="font:600 25px/1.05 'Barlow Condensed',sans-serif;margin:5px 0 4px">One debrief,<br>end to end</div>
+<div style="font:400 11.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55);margin-bottom:16px">Tap the screen to advance, or jump to a step.</div>
+<div class="bp" style="background:#f2f2f3"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<button class="st" onClick="{{ go0 }}" style="{{ s0 }}"><span class="stn">01</span>Home · today's visits</button>
+<button class="st" onClick="{{ go1 }}" style="{{ s1 }}"><span class="stn">02</span>In car · context matched</button>
+<button class="st" onClick="{{ go2 }}" style="{{ s2 }}"><span class="stn">03</span>In car · recording</button>
+<button class="st" onClick="{{ go3 }}" style="{{ s3 }}"><span class="stn">04</span>In car · saved to phone</button>
+<button class="st" onClick="{{ go4 }}" style="{{ s4 }}"><span class="stn">05</span>Stopped · gaps held</button>
+<button class="st" onClick="{{ go5 }}" style="{{ s5 }}"><span class="stn">06</span>Oracle asks out loud</button>
+<button class="st" onClick="{{ go6 }}" style="{{ s6 }}"><span class="stn">07</span>Staged record</button>
+<button class="st" onClick="{{ go7 }}" style="{{ s7 }}"><span class="stn">08</span>Field origin · transcript</button>
+<button class="st" onClick="{{ go8 }}" style="{{ s8 }}"><span class="stn">09</span>Synced to CRM</button>
+</div>
+<div style="font:400 11px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.5);margin-top:14px">Steps 02–04 are the car display: status only, no touch targets. Everything the rep does while moving is spoken.</div>
+</div>
+
+<div style="flex:none">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div class="bp hs" onClick="{{ go1 }}" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>10:52</span><span>iOS</span></div>
+<div style="padding:10px 18px 16px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div class="k">Oracle Note</div>
+<div style="font:600 32px/1.05 'Barlow Condensed',sans-serif;margin-top:5px">Tue 15 Sep</div>
+</div>
+<div style="flex:1">
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.55);width:40px;font-variant-numeric:tabular-nums">09:20</div>
+<div style="flex:1"><div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Synced · 5 fields updated</div></div>
+<div class="tag" style="height:fit-content">Synced</div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);background:#eef6ff">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;color:#416180;width:40px;font-variant-numeric:tabular-nums">11:05</div>
+<div style="flex:1"><div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:#2c455d">Existing customer visit · debrief not started</div></div>
+<div class="tagv" style="height:fit-content">Next</div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);opacity:.55">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;width:40px;font-variant-numeric:tabular-nums">13:30</div>
+<div style="flex:1"><div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif">Upcoming · 22 km, leave 13:00</div></div>
+</div>
+<div style="display:flex;gap:14px;padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);opacity:.55">
+<div style="font:600 14px/1.4 'Barlow Condensed',sans-serif;width:40px;font-variant-numeric:tabular-nums">15:45</div>
+<div style="flex:1"><div style="font:600 19px/1.15 'Barlow Condensed',sans-serif">Lindqvist Hydraulik</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif">Upcoming · prospect, first visit</div></div>
+</div>
+<div style="padding:16px 18px;font:500 12.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Each visit is matched to its customer from the calendar, the timestamp and your location. No account picking.</div>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span class="l">Debrief Bergman visit</span></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCarReady }}">
+<div class="bp hs" onClick="{{ go2 }}" style="width:560px;height:320px;background:#f2f2f3;padding:30px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Ready to debrief</div>
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Oracle Note</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
+<div style="font:600 46px/1.02 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
+<div style="font:500 17px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.6)">11:05 visit · matched from calendar, time and location</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid rgba(29,31,32,.16);padding-top:14px">
+<div style="font:600 17px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180">Say "Oracle, start debrief"</div>
+<div style="font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.5)">Existing customer visit</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCarRec }}">
+<div class="bp hs" onClick="{{ go3 }}" style="width:560px;height:320px;background:#f2f2f3;padding:30px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#416180">Recording</div>
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Bergman Maskin AB</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px">
+<div style="font:600 126px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">{{ clock }}</div>
+<div style="height:40px;background:repeating-linear-gradient(90deg,#5980a6 0 2px,transparent 2px 9px);opacity:.75"></div>
+</div>
+<div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Say "Oracle, stop" when you're finished</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isCarSaved }}">
+<div class="bp hs" onClick="{{ go4 }}" style="width:560px;height:320px;background:#f2f2f3;padding:30px;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:rgba(29,31,32,.55)">Saved to phone</div>
+<div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Bergman Maskin AB</div>
+</div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px">
+<div style="font:600 126px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:rgba(29,31,32,.55)">02:07</div>
+<div style="height:1px;background:rgba(29,31,32,.16)"></div>
+</div>
+<div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Follow-up questions wait until you've parked</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isGaps }}">
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:34</span><span>iOS</span></div>
+<div style="padding:10px 18px 16px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div class="k">Car stopped · 2:07 captured</div>
+<div style="font:600 30px/1.05 'Barlow Condensed',sans-serif;margin-top:6px">Three gaps in<br>the Bergman debrief</div>
+<div style="font:500 13px/1.45 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:8px">Checked against the existing-customer schema. Two of the three are mandatory.</div>
+</div>
+<div style="flex:1">
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:#416180;width:14px">1</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Decision maker</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Mandatory · nobody named in the debrief</div></div>
+</div>
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:#416180;width:14px">2</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Next step and date</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Mandatory · you said "after their audit"</div></div>
+</div>
+<div style="padding:15px 18px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;gap:12px;align-items:baseline">
+<div style="font:600 13px/1 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.5);width:14px">3</div>
+<div style="flex:1"><div style="font:600 18px/1.15 'Barlow Condensed',sans-serif">Consumption change</div><div style="font:500 12.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Optional</div></div>
+</div>
+<div style="padding:16px 18px;font:500 12.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Oracle reads each one out and waits. Answer by voice, or tap a line to type.</div>
+</div>
+<div style="padding:14px 18px 20px;display:flex;flex-direction:column;gap:11px">
+<div class="bp cta" onClick="{{ go5 }}"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<span style="width:11px;height:11px;border-radius:50%;background:#fff;display:block"></span>
+<span class="l">Answer out loud</span></div>
+<div class="hs" onClick="{{ go6 }}" style="text-align:center;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55)">Later — keep in staging</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isAsking }}">
+<div class="bp hs" onClick="{{ go6 }}" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:35</span><span>iOS</span></div>
+<div style="padding:10px 18px 14px;border-bottom:1px solid rgba(29,31,32,.16);display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#416180">Question 1 of 3</div>
+<div class="k">Bergman Maskin AB</div>
+</div>
+<div style="padding:20px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div class="k" style="color:#416180">Oracle asked</div>
+<div style="font:600 25px/1.15 'Barlow Condensed',sans-serif;margin-top:7px">"Who decides on the frame agreement, and who signs it?"</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.5);margin-top:9px">Spoken aloud · tap to hear again</div>
+</div>
+<div style="padding:20px 18px;flex:1;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px">
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#416180">Listening</div>
+<div style="flex:1;height:26px;background:repeating-linear-gradient(90deg,#5980a6 0 3px,transparent 3px 10px);opacity:.75"></div>
+</div>
+<div style="font:400 16px/1.6 'Barlow',sans-serif">"Ulrika Sand in purchasing decides, but the plant manager signs anything over two hundred thousand…"</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.5)">Transcribing as you speak. Say "next" to move on.</div>
+</div>
+<div style="padding:14px 18px 20px;display:flex;flex-direction:column;gap:11px">
+<div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Next question</span></div>
+<div style="text-align:center;font:600 12px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgba(29,31,32,.55)">Skip this one</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isStaged }}">
+<div class="bp" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column;position:relative;overflow:visible"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:41</span><span>iOS</span></div>
+<div style="padding:8px 18px 13px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div class="k">In staging · not in CRM</div>
+<span style="font:600 9.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#416180;border:1px solid rgba(89,128,166,.5);padding:3px 5px">Draft</span>
+</div>
+<div style="font:600 26px/1.1 'Barlow Condensed',sans-serif;margin-top:5px">Bergman Maskin AB</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55);margin-top:3px">Existing customer visit · 15 Sep 11:05 · Borås</div>
+</div>
+<div style="flex:1;opacity:{{ dim }}">
+<div class="row"><div style="flex:1"><div class="k">Stage</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Proposal</div></div><span class="tag">Extracted</span></div>
+<div class="row"><div style="flex:1"><div class="k">Volume / value</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">SEK 180–220k per year</div></div><span class="tag">Extracted</span></div>
+<div class="row" style="background:#eef6ff"><div style="flex:1"><div class="k" style="color:#416180">Decision maker</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Ulrika Sand decides · plant mgr signs over 200k</div></div><span class="tagv">You said</span></div>
+<div class="row" style="background:#eef6ff"><div style="flex:1"><div class="k" style="color:#416180">Next step</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Kanban quote · Fri 18 Sep</div></div><span class="tagv">You said</span></div>
+<div class="row hs" onClick="{{ go7 }}" style="border-color:{{ riskBorder }}"><div style="flex:1"><div class="k">Risk flagged</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div></div><span class="tag">Extracted</span></div>
+<div class="row"><div style="flex:1"><div class="k">Consumption change</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.5)">Left blank · optional</div></div></div>
+<div style="padding:12px 18px;font:500 12px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Tap a row for the transcript line behind it. Transcript kept; audio deleted after transcription.</div>
+</div>
+<div style="padding:12px 18px 20px;border-top:1px solid rgba(29,31,32,.16);display:flex;flex-direction:column;gap:9px;opacity:{{ dim }}">
+<div style="display:flex;gap:7px;align-items:center;font:500 11.5px/1.35 'Barlow',sans-serif;color:rgba(29,31,32,.58)">
+<span style="width:7px;height:7px;background:#5980a6;display:block;flex:none"></span><span>Managed device and corporate network verified</span>
+</div>
+<div class="bp cta" onClick="{{ go8 }}" style="height:50px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Confirm &amp; sync 6 fields</span></div>
+</div>
+<sc-if value="{{ isSheet }}">
+<div class="bp" style="position:absolute;left:0;right:0;bottom:0;background:#f2f2f3;border-color:#1d1f20;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -12px 32px rgba(43,43,45,.16)">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgba(29,31,32,.55)">Risk flagged · transcript 01:12–01:31</div>
+<span class="hs" onClick="{{ go6 }}" style="font:500 18px/1 'Barlow',sans-serif;color:rgba(29,31,32,.45)">×</span>
+</div>
+<div style="font:400 14.5px/1.65 'Barlow',sans-serif">…they're happy with delivery reliability, that came up twice. <span style="background:#d6ebff;box-shadow:0 1px 0 #5980a6">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price…</div>
+<div style="display:flex;gap:10px">
+<div class="bp hs" onClick="{{ go6 }}" style="flex:1;background:#5980a6;color:#fff;padding:11px 0;text-align:center;border-color:#416180"><span style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase">Keep field</span></div>
+<div class="bp hs" onClick="{{ go6 }}" style="flex:1;padding:11px 0;text-align:center"><span style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgba(29,31,32,.6)">Edit text</span></div>
+</div>
+<div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Origin: extracted from your debrief · not edited</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isSynced }}">
+<div class="bp hs" onClick="{{ go0 }}" style="width:340px;height:700px;background:#f2f2f3;display:flex;flex-direction:column"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+<div style="display:flex;justify-content:space-between;padding:10px 18px 6px;font:500 11px/1 'Barlow',sans-serif;color:rgba(29,31,32,.55);font-variant-numeric:tabular-nums"><span>11:42</span><span>iOS</span></div>
+<div style="padding:16px 18px 18px;border-bottom:1px solid rgba(29,31,32,.16)">
+<div class="k" style="color:#416180">Synced 11:42</div>
+<div style="font:600 32px/1.05 'Barlow Condensed',sans-serif;margin-top:6px">Six fields written<br>to your CRM</div>
+<div style="font:500 13px/1.45 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:8px">Bergman Maskin AB · existing customer visit</div>
+</div>
+<div style="flex:1">
+<div class="row"><div style="flex:1"><div class="k">Account record</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Stage, volume, decision maker updated</div></div><span class="tagv">Written</span></div>
+<div class="row"><div style="flex:1"><div class="k">Task created</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Send kanban quote · due Fri 18 Sep</div></div><span class="tagv">Written</span></div>
+<div class="row"><div style="flex:1"><div class="k">Deal health</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">At risk → Improving</div></div><span class="tagv">Written</span></div>
+<div class="row"><div style="flex:1"><div class="k">Audit trail</div><div style="font:500 14.5px/1.3 'Barlow',sans-serif">Transcript and field origins retained 90 days</div></div><span class="tag">Kept</span></div>
+<div style="padding:16px 18px;font:500 12.5px/1.5 'Barlow',sans-serif;color:rgba(29,31,32,.55)">Total rep effort after the visit: one spoken debrief and three answers. No form filling.</div>
+</div>
+<div style="padding:14px 18px 20px">
+<div class="bp cta" style="background:transparent;color:#1d1f20;border-color:rgba(29,31,32,.16)"><span class="l">Back to today</span></div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { step: 0, secs: 108 };
+  componentDidMount() {
+    this.t = setInterval(() => {
+      if (this.state.step === 2) this.setState(s => ({ secs: s.secs + 1 }));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const { step, secs } = this.state;
+    const mm = String(Math.floor(secs / 60)).padStart(2, "0");
+    const ss = String(secs % 60).padStart(2, "0");
+    const v = {
+      isHome: step === 0, isCarReady: step === 1, isCarRec: step === 2,
+      isCarSaved: step === 3, isGaps: step === 4, isAsking: step === 5,
+      isStaged: step === 6 || step === 7, isSheet: step === 7, isSynced: step === 8,
+      clock: mm + ":" + ss,
+      dim: step === 7 ? 0.35 : 1,
+      riskBorder: step === 7 ? "#5980a6" : "rgba(29,31,32,.16)"
+    };
+    for (let i = 0; i <= 8; i++) {
+      v["go" + i] = () => this.setState({ step: i });
+      v["s" + i] = step === i ? "background:#5980a6;color:#fff;border-bottom-color:#416180" : "";
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>
