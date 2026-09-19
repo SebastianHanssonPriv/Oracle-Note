@@ -3,10 +3,10 @@ import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../ui/Screen';
 import { PhoneChrome } from '../ui/PhoneChrome';
-import { CTAButton } from '../ui/CTAButton';
+import { Button } from '../ui/Button';
 import { TextAction } from '../ui/TextAction';
 import { Waveform } from '../ui/Waveform';
-import { color, font, ink } from '../theme';
+import { color, space } from '../theme';
 import { gapQuestions, visit } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
@@ -43,52 +43,48 @@ export function AskingScreen({ navigation, route }: Props) {
       <PhoneChrome time="11:08" />
       <View
         style={{
-          paddingHorizontal: 18,
-          paddingBottom: 14,
+          paddingHorizontal: space[4],
+          paddingBottom: space[3],
           borderBottomWidth: 1,
-          borderBottomColor: color.border,
+          borderBottomColor: color.border.subtle,
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'baseline',
         }}
       >
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: color.blueprint }}>
+        <Text style={{ fontSize: 12, fontWeight: '600', color: color.text.brand }}>
           Question {questionIndex + 1} of {gapQuestions.length}
         </Text>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: ink(0.55) }}>
+        <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
           {visit.customer}
         </Text>
       </View>
 
-      <View style={{ padding: 18, paddingTop: 20, borderBottomWidth: 1, borderBottomColor: color.border }}>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: color.blueprint }}>
+      <View style={{ padding: space[4], paddingTop: space[5], borderBottomWidth: 1, borderBottomColor: color.border.subtle }}>
+        <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.brand }}>
           Oracle asked
         </Text>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 25, lineHeight: 29, marginTop: 7, color: color.ink }}>{question.oracleAsked}</Text>
-        <Text style={{ fontFamily: font.body.medium, fontSize: 12, lineHeight: 17, color: ink(0.5), marginTop: 9 }}>
-          Spoken aloud · tap to hear again
+        <Text style={{ fontFamily: 'Archivo_600SemiBold', fontSize: 22, lineHeight: 28, marginTop: space[1], color: color.text.primary }}>
+          {question.oracleAsked}
         </Text>
+        <Text style={{ fontSize: 12, lineHeight: 17, color: color.text.muted, marginTop: space[2] }}>Spoken aloud · tap to hear again</Text>
       </View>
 
-      <View style={{ flex: 1, padding: 18, paddingTop: 20, gap: 14 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: color.blueprint }}>
-            Listening
-          </Text>
+      <View style={{ flex: 1, padding: space[4], paddingTop: space[5], gap: space[4] }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: space[3] }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.brand }}>Listening</Text>
           <View style={{ flex: 1 }}>
             <Waveform height={26} opacity={0.75} />
           </View>
         </View>
-        <Text style={{ fontFamily: font.body.regular, fontSize: 16, lineHeight: 26, color: color.ink }}>{question.liveTranscript}</Text>
-        <Text style={{ fontFamily: font.body.medium, fontSize: 12, lineHeight: 17, color: ink(0.5) }}>
-          Transcribing as you speak. Say "next" to move on.
-        </Text>
+        <Text style={{ fontSize: 16, lineHeight: 25, color: color.text.primary }}>{question.liveTranscript}</Text>
+        <Text style={{ fontSize: 12, lineHeight: 17, color: color.text.muted }}>Transcribing as you speak. Say &quot;next&quot; to move on.</Text>
       </View>
 
-      <View style={{ padding: 18, gap: 11 }}>
-        <CTAButton label="Next question" onPress={advance} />
+      <View style={{ padding: space[4], gap: space[3] }}>
+        <Button label="Next question" size="lg" block onPress={advance} />
         <TextAction label="Skip this one" onPress={advance} />
-        <TextAction label="Finish the rest later" tone="blueprint" onPress={finishLater} />
+        <TextAction label="Finish the rest later" tone="brand" onPress={finishLater} />
       </View>
     </Screen>
   );

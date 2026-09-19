@@ -14,7 +14,7 @@ export function Screen({
 }) {
   const Wrapper = scroll ? ScrollView : View;
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: color.paper }} edges={['top', 'bottom']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.bg.canvas }} edges={['top', 'bottom']}>
       <Wrapper style={scroll ? undefined : [{ flex: 1 }, style]} contentContainerStyle={scroll ? [{ flexGrow: 1 }, style] : undefined}>
         {children}
       </Wrapper>

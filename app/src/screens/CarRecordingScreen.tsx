@@ -4,7 +4,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CarFrame } from '../ui/CarFrame';
 import { DevAdvance } from '../ui/DevAdvance';
 import { Waveform } from '../ui/Waveform';
-import { color, font, ink } from '../theme';
+import { color, space } from '../theme';
 import { visit } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
@@ -45,33 +45,31 @@ export function CarRecordingScreen({ navigation }: Props) {
     >
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 14, letterSpacing: 1.8, textTransform: 'uppercase', color: color.blueprint }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.brand }}>
             Recording
           </Text>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 14, letterSpacing: 1.4, textTransform: 'uppercase', color: ink(0.55) }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
             {visit.customer}
           </Text>
         </View>
 
-        <View style={{ gap: 20 }}>
+        <View style={{ gap: space[3] }}>
           <Text
             style={{
-              fontFamily: font.condensed.semiBold,
-              fontSize: 88,
-              lineHeight: 88,
+              fontFamily: 'Archivo_700Bold',
+              fontSize: 68,
+              lineHeight: 68,
               letterSpacing: -1,
               fontVariant: ['tabular-nums'],
-              color: color.ink,
+              color: color.text.primary,
             }}
           >
             {formatClock(seconds)}
           </Text>
-          <Waveform height={40} opacity={0.75} />
+          <Waveform height={30} opacity={0.75} />
         </View>
 
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 15, letterSpacing: 1.4, textTransform: 'uppercase', color: ink(0.55) }}>
-          Say "Oracle, stop" when you're finished
-        </Text>
+        <Text style={{ fontSize: 16, fontWeight: '600', color: color.text.muted }}>Say &quot;Oracle, stop&quot; when you're finished</Text>
       </View>
     </CarFrame>
   );

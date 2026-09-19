@@ -1,13 +1,13 @@
 import React from 'react';
 import { Text, View } from 'react-native';
-import { font, ink } from '../theme';
+import { color, space } from '../theme';
 
-/** Minimal status-bar row shown at the top of the phone-shaped screens in the source (`9:41 · iOS`). */
+/** Minimal status-bar row shown at the top of the phone-shaped screens (`9:41 · iOS`). */
 export function PhoneChrome({ time = '9:41' }: { time?: string }) {
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 18, paddingTop: 10, paddingBottom: 6 }}>
-      <Text style={{ fontFamily: font.body.medium, fontSize: 11, color: ink(0.55) }}>{time}</Text>
-      <Text style={{ fontFamily: font.body.medium, fontSize: 11, color: ink(0.55) }}>iOS</Text>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: space[4], paddingTop: space[3], paddingBottom: space[1] }}>
+      <Text style={{ fontSize: 11, color: color.text.muted }}>{time}</Text>
+      <Text style={{ fontSize: 11, color: color.text.muted }}>iOS</Text>
     </View>
   );
 }

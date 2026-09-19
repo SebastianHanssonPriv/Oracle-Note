@@ -1,8 +1,8 @@
 import React from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { Screen } from '../ui/Screen';
-import { CTAButton } from '../ui/CTAButton';
-import { color, font, ink } from '../theme';
+import { Button } from '../ui/Button';
+import { color, space } from '../theme';
 import { useAuth } from './AuthContext';
 
 /**
@@ -15,15 +15,15 @@ export function SignInGate() {
 
   return (
     <Screen>
-      <View style={{ flex: 1, justifyContent: 'center', padding: 24, gap: 18 }}>
+      <View style={{ flex: 1, justifyContent: 'center', padding: space[6], gap: space[5] }}>
         <View>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 11, letterSpacing: 1.6, textTransform: 'uppercase', color: ink(0.55) }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
             Oracle Note
           </Text>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 30, lineHeight: 33, marginTop: 6, color: color.ink }}>
+          <Text style={{ fontFamily: 'Archivo_700Bold', fontSize: 26, lineHeight: 32, marginTop: space[1], color: color.text.primary }}>
             Sign in with your work account
           </Text>
-          <Text style={{ fontFamily: font.body.medium, fontSize: 13.5, lineHeight: 20, color: ink(0.58), marginTop: 10 }}>
+          <Text style={{ fontSize: 14, lineHeight: 21, color: color.text.secondary, marginTop: space[2] }}>
             On a managed device this is usually silent — Oracle Note reuses
             the sign-in you already have through Company Portal, the same
             way Teams and Outlook do. You're seeing this screen because that
@@ -31,15 +31,13 @@ export function SignInGate() {
           </Text>
         </View>
 
-        {status === 'checking' && <ActivityIndicator color={color.steel} />}
+        {status === 'checking' && <ActivityIndicator color={color.action.primaryBg} />}
 
         {status !== 'checking' && (
-          <CTAButton label="Sign in with Microsoft" onPress={signIn} withDot={status !== 'signing-in'} />
+          <Button label="Sign in with Microsoft" size="lg" onPress={signIn} withDot={status !== 'signing-in'} />
         )}
 
-        {errorMessage && (
-          <Text style={{ fontFamily: font.body.medium, fontSize: 12, lineHeight: 17, color: ink(0.5) }}>{errorMessage}</Text>
-        )}
+        {errorMessage && <Text style={{ fontSize: 12, lineHeight: 17, color: color.text.muted }}>{errorMessage}</Text>}
       </View>
     </Screen>
   );

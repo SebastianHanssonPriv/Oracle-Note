@@ -3,28 +3,28 @@ import { Pressable, Text, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../ui/Screen';
-import { CTAButton } from '../ui/CTAButton';
-import { Tag } from '../ui/Tag';
-import { color, font, ink } from '../theme';
+import { Button } from '../ui/Button';
+import { Badge, BadgeVariant } from '../ui/Badge';
+import { color, space } from '../theme';
 import { homeVisits, gapQuestions } from '../data/mockVisit';
 import { initialVisitState, loadVisitState, resetVisitState, VisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
-function bergmanRow(state: VisitState) {
+function bergmanRow(state: VisitState): { note: string; tag: { label: string; variant: BadgeVariant } } {
   const remaining = gapQuestions.length - state.askingIndex;
   switch (state.status) {
     case 'not_started':
-      return { note: 'Existing customer visit · debrief not started', tag: { label: 'Next', variant: 'filled' as const } };
+      return { note: 'Existing customer visit · debrief not started', tag: { label: 'Next', variant: 'brand' } };
     case 'recorded':
-      return { note: `Recorded in the car · ${gapQuestions.length} questions to answer`, tag: { label: 'Resume', variant: 'filled' as const } };
+      return { note: `Recorded in the car · ${gapQuestions.length} questions to answer`, tag: { label: 'Resume', variant: 'brand' } };
     case 'answering':
-      return { note: `${remaining} question${remaining === 1 ? '' : 's'} left to answer`, tag: { label: 'Resume', variant: 'filled' as const } };
+      return { note: `${remaining} question${remaining === 1 ? '' : 's'} left to answer`, tag: { label: 'Resume', variant: 'brand' } };
     case 'staged':
-      return { note: 'Answers in · ready to sync', tag: { label: 'Ready', variant: 'filled' as const } };
+      return { note: 'Answers in · ready to sync', tag: { label: 'Ready', variant: 'brand' } };
     case 'synced':
-      return { note: 'Synced · 6 fields updated', tag: { label: 'Synced', variant: 'outline' as const } };
+      return { note: 'Synced · 6 fields updated', tag: { label: 'Synced', variant: 'success' } };
   }
 }
 
@@ -63,15 +63,13 @@ export function HomeScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <View style={{ paddingHorizontal: 18, paddingTop: 10, paddingBottom: 16, borderBottomWidth: 1, borderBottomColor: color.border }}>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: ink(0.55) }}>
-          Oracle Note
-        </Text>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 32, lineHeight: 34, marginTop: 5, color: color.ink }}>Tue 15 Sep</Text>
+      <View style={{ paddingHorizontal: space[4], paddingTop: space[3], paddingBottom: space[4], borderBottomWidth: 1, borderBottomColor: color.border.subtle }}>
+        <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>Oracle Note</Text>
+        <Text style={{ fontFamily: 'Archivo_700Bold', fontSize: 30, lineHeight: 38, marginTop: space['05'], color: color.text.primary }}>Tue 15 Sep</Text>
       </View>
 
       <View style={{ flex: 1 }}>
-        {homeVisits.map((v, i) => {
+        {homeVisits.map((v) => {
           if (v.customer === 'Bergman Maskin AB') {
             const highlighted = visitState.status !== 'synced';
             return (
@@ -79,24 +77,20 @@ export function HomeScreen({ navigation }: Props) {
                 key="bergman"
                 style={{
                   flexDirection: 'row',
-                  gap: 14,
-                  paddingHorizontal: 18,
-                  paddingVertical: 15,
+                  gap: space[3],
+                  paddingHorizontal: space[4],
+                  paddingVertical: space[4],
                   borderBottomWidth: 1,
-                  borderBottomColor: color.border,
-                  backgroundColor: highlighted ? color.paleBlueBg : 'transparent',
+                  borderBottomColor: color.border.subtle,
+                  backgroundColor: highlighted ? color.bg.selected : 'transparent',
                 }}
               >
-                <Text style={{ width: 40, fontFamily: font.condensed.semiBold, fontSize: 14, color: highlighted ? color.blueprint : ink(0.55) }}>
-                  {v.time}
-                </Text>
+                <Text style={{ width: 44, fontSize: 14, fontWeight: '600', color: highlighted ? color.text.brand : color.text.muted }}>{v.time}</Text>
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 19, lineHeight: 22, color: color.ink }}>{v.customer}</Text>
-                  <Text style={{ fontFamily: font.body.medium, fontSize: 12.5, lineHeight: 17, color: highlighted ? '#2c455d' : ink(0.55) }}>
-                    {row.note}
-                  </Text>
+                  <Text style={{ fontFamily: 'Archivo_600SemiBold', fontSize: 16, lineHeight: 22, color: color.text.primary }}>{v.customer}</Text>
+                  <Text style={{ fontSize: 13, lineHeight: 18, color: highlighted ? color.text.brand : color.text.muted }}>{row.note}</Text>
                 </View>
-                <Tag label={row.tag.label} variant={row.tag.variant} />
+                <Badge label={row.tag.label} variant={row.tag.variant} />
               </View>
             );
           }
@@ -105,30 +99,30 @@ export function HomeScreen({ navigation }: Props) {
               key={v.time}
               style={{
                 flexDirection: 'row',
-                gap: 14,
-                paddingHorizontal: 18,
-                paddingVertical: 15,
+                gap: space[3],
+                paddingHorizontal: space[4],
+                paddingVertical: space[4],
                 borderBottomWidth: 1,
-                borderBottomColor: color.border,
+                borderBottomColor: color.border.subtle,
                 opacity: v.status === 'upcoming' ? 0.55 : 1,
               }}
             >
-              <Text style={{ width: 40, fontFamily: font.condensed.semiBold, fontSize: 14, color: ink(0.55) }}>{v.time}</Text>
+              <Text style={{ width: 44, fontSize: 14, fontWeight: '600', color: color.text.muted }}>{v.time}</Text>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 19, lineHeight: 22, color: color.ink }}>{v.customer}</Text>
-                <Text style={{ fontFamily: font.body.medium, fontSize: 12.5, lineHeight: 17, color: ink(0.55) }}>{v.note}</Text>
+                <Text style={{ fontFamily: 'Archivo_600SemiBold', fontSize: 16, lineHeight: 22, color: color.text.primary }}>{v.customer}</Text>
+                <Text style={{ fontSize: 13, lineHeight: 18, color: color.text.muted }}>{v.note}</Text>
               </View>
-              {v.status === 'synced' && <Tag label="Synced" variant="outline" />}
+              {v.status === 'synced' && <Badge label="Synced" variant="success" />}
             </View>
           );
         })}
-        <Text style={{ padding: 18, fontFamily: font.body.medium, fontSize: 12.5, lineHeight: 19, color: ink(0.55) }}>
+        <Text style={{ padding: space[4], fontSize: 13, lineHeight: 20, color: color.text.muted }}>
           Each visit is matched to its customer from the calendar, the timestamp and your location. No account picking.
         </Text>
       </View>
 
-      <View style={{ padding: 18, gap: 14 }}>
-        {cta && <CTAButton label={cta.label} withDot={visitState.status === 'not_started'} onPress={cta.onPress} />}
+      <View style={{ padding: space[4], gap: space[4] }}>
+        {cta && <Button label={cta.label} size="lg" block withDot={visitState.status === 'not_started'} onPress={cta.onPress} />}
         <Pressable
           onPress={async () => {
             await resetVisitState();
@@ -136,7 +130,7 @@ export function HomeScreen({ navigation }: Props) {
           }}
           hitSlop={8}
         >
-          <Text style={{ textAlign: 'center', fontFamily: font.body.medium, fontSize: 11, color: ink(0.35) }}>Reset demo data</Text>
+          <Text style={{ textAlign: 'center', fontSize: 12, color: color.text.disabled }}>Reset demo data</Text>
         </Pressable>
       </View>
     </Screen>

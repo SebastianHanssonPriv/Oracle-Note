@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CarFrame } from '../ui/CarFrame';
 import { DevAdvance } from '../ui/DevAdvance';
-import { color, font, ink } from '../theme';
+import { color, space } from '../theme';
 import { visit, gapQuestions } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
@@ -22,7 +22,7 @@ export function CarAskScreen({ navigation, route }: Props) {
   return (
     <CarFrame
       below={
-        <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row', gap: space[2], flexWrap: 'wrap', justifyContent: 'center' }}>
           <DevAdvance
             label='"Continue"'
             onPress={async () => {
@@ -45,24 +45,22 @@ export function CarAskScreen({ navigation, route }: Props) {
     >
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 14, letterSpacing: 1.8, textTransform: 'uppercase', color: ink(0.55) }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
             Saved &middot; {formatClock(elapsedSeconds)}
           </Text>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 14, letterSpacing: 1.4, textTransform: 'uppercase', color: ink(0.55) }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
             {visit.customer}
           </Text>
         </View>
 
-        <View style={{ gap: 10 }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 36, lineHeight: 39, color: color.ink }}>
+        <View style={{ gap: space[2] }}>
+          <Text style={{ fontFamily: 'Archivo_700Bold', fontSize: 32, lineHeight: 38, color: color.text.primary }}>
             {gapQuestions.length} quick questions{'\n'}now, or later?
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline', borderTopWidth: 1, borderTopColor: color.border, paddingTop: 11 }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 15, letterSpacing: 1, textTransform: 'uppercase', color: color.blueprint }}>
-            Say &quot;Continue&quot; or &quot;Later&quot;
-          </Text>
+        <View style={{ borderTopWidth: 1, borderTopColor: color.border.subtle, paddingTop: space[3] }}>
+          <Text style={{ fontSize: 16, fontWeight: '600', color: color.text.brand }}>Say &quot;Continue&quot; or &quot;Later&quot;</Text>
         </View>
       </View>
     </CarFrame>

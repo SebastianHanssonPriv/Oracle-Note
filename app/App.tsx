@@ -6,16 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import {
-  Barlow_400Regular,
-  Barlow_500Medium,
-  Barlow_600SemiBold,
-  Barlow_700Bold,
-} from '@expo-google-fonts/barlow';
-import {
-  BarlowCondensed_400Regular,
-  BarlowCondensed_600SemiBold,
-} from '@expo-google-fonts/barlow-condensed';
+import { Archivo_600SemiBold, Archivo_700Bold } from '@expo-google-fonts/archivo';
 
 import { HomeScreen } from './src/screens/HomeScreen';
 import { CarReadyScreen } from './src/screens/CarReadyScreen';
@@ -50,7 +41,7 @@ function RootNavigator() {
         initialRouteName="Home"
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: color.paper },
+          contentStyle: { backgroundColor: color.bg.canvas },
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -68,12 +59,8 @@ function RootNavigator() {
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    Barlow_400Regular,
-    Barlow_500Medium,
-    Barlow_600SemiBold,
-    Barlow_700Bold,
-    BarlowCondensed_400Regular,
-    BarlowCondensed_600SemiBold,
+    Archivo_600SemiBold,
+    Archivo_700Bold,
   });
 
   const onLayoutRootView = useCallback(async () => {

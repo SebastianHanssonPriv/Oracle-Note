@@ -29,10 +29,24 @@ npm install
 npm run ios      # or: npm run android
 ```
 
+## Design system
+
+Visually, this runs on **Bufab** — Bufab's own internal design system (colors,
+type, spacing, radius, shadow, component conventions), not the "Industry"
+steel-on-paper placeholder the original design review used (that system was
+never actually available to it — see `../design/chats/chat1.md`, where the
+designer explicitly flags this and asks for the real one). `src/theme.ts` is
+transcribed token-for-token from that system's `project/tokens.json` and
+`project/components/bundle.css` (light theme only — no dark-mode
+infrastructure in this app yet, though the source system defines a full dark
+theme already, under each token's `.dark` value). Layout, copy and the flow
+itself are unchanged; every component was rebuilt against Bufab's actual
+`.ds-btn` / `.ds-card` / `.ds-badge` CSS rather than approximated.
+
 ## Structure
 
-- `src/theme.ts` — colors, typography, corner registration-mark constants, lifted from the source `.dc.html`'s CSS.
-- `src/ui/` — shared primitives: `Blueprint` (the bordered "steel on paper" frame with corner marks), `CTAButton`, `Tag`, `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
+- `src/theme.ts` — Bufab's tokens: colors, type scale, spacing (4px grid), radius, shadow, control sizes.
+- `src/ui/` — shared primitives, each modeled on its Bufab component: `Card` (`.ds-card`), `Button` (`.ds-btn`, 4 variants × 3 sizes), `Badge` (`.ds-badge`, 6 status tones), `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
 - `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end.
 - `src/auth/` — Entra ID (Azure AD) SSO scaffold via MSAL. See "Sign-in / MDM" below — this ships unconfigured (placeholder IDs) and is inert until real values are set.
@@ -118,6 +132,17 @@ out-of-band work — this scaffold only covers Oracle Note's own sign-in.
 
 ## Known limitations / assumptions
 
+- **Badge color mapping is a judgment call, not something Bufab's docs specify.**
+  Bufab defines six status tones (neutral/brand/success/warning/danger/info)
+  but no product ever told it what "Extracted" vs "You said" vs "Written"
+  should map to. This build uses: extracted/system-derived values →
+  `neutral`, rep-provided-but-unsynced values → `brand`, and post-sync
+  confirmation ("Written", "Synced") → `success`. Worth a real design
+  review once this isn't the only screen using these tones.
+- **Dark mode isn't wired up**, even though Bufab's tokens define a complete
+  dark theme (`project/tokens.json`, each color token's `.dark` value).
+  Adding it means a `useColorScheme()`-driven variant of `theme.ts`, not a
+  redesign.
 - **The MSAL scaffold is untested against a real tenant.** It's built from
   `react-native-msal`'s actual type definitions and Expo config plugin
   source (not guessed from memory), and the JS/TS side type-checks and

@@ -3,11 +3,11 @@ import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../ui/Screen';
 import { PhoneChrome } from '../ui/PhoneChrome';
-import { CTAButton } from '../ui/CTAButton';
-import { Tag } from '../ui/Tag';
+import { Button } from '../ui/Button';
+import { Badge } from '../ui/Badge';
 import { Row } from '../ui/Row';
 import { TranscriptSheet } from '../ui/TranscriptSheet';
-import { color, font, ink } from '../theme';
+import { color, space } from '../theme';
 import { stagedFields, visit } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
 import { useAuth } from '../auth/AuthContext';
@@ -26,19 +26,17 @@ export function StagedScreen({ navigation }: Props) {
   return (
     <Screen>
       <PhoneChrome time="11:12" />
-      <View style={{ paddingHorizontal: 18, paddingBottom: 13, borderBottomWidth: 1, borderBottomColor: color.border }}>
+      <View style={{ paddingHorizontal: space[4], paddingBottom: space[3], borderBottomWidth: 1, borderBottomColor: color.border.subtle }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: ink(0.55) }}>
+          <Text style={{ fontSize: 11, fontWeight: '600', letterSpacing: 0.44, textTransform: 'uppercase', color: color.text.muted }}>
             In staging · not in CRM
           </Text>
-          <View style={{ borderWidth: 1, borderColor: color.paleBlueBorderStrong, paddingHorizontal: 5, paddingVertical: 3 }}>
-            <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 9.5, letterSpacing: 1.2, textTransform: 'uppercase', color: color.blueprint }}>
-              Draft
-            </Text>
-          </View>
+          <Badge label="Draft" variant="neutral" />
         </View>
-        <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 26, lineHeight: 29, marginTop: 5, color: color.ink }}>{visit.customer}</Text>
-        <Text style={{ fontFamily: font.body.medium, fontSize: 12, lineHeight: 17, color: ink(0.55), marginTop: 3 }}>
+        <Text style={{ fontFamily: 'Archivo_700Bold', fontSize: 22, lineHeight: 28, marginTop: space[1], color: color.text.primary }}>
+          {visit.customer}
+        </Text>
+        <Text style={{ fontSize: 12, lineHeight: 17, color: color.text.muted, marginTop: space['025'] }}>
           {visit.visitKind} · {visit.visitDate}
         </Text>
       </View>
@@ -51,27 +49,28 @@ export function StagedScreen({ navigation }: Props) {
             value={f.value}
             badge={f.badge}
             highlighted={'highlighted' in f ? f.highlighted : false}
-            valueColor={'muted' in f && f.muted ? ink(0.5) : undefined}
+            valueColor={'muted' in f && f.muted ? color.text.disabled : undefined}
             onPress={'linksToTranscript' in f && f.linksToTranscript ? () => setSheetOpen(true) : undefined}
           />
         ))}
-        <Text style={{ padding: 18, fontFamily: font.body.medium, fontSize: 12, lineHeight: 18, color: ink(0.55) }}>
+        <Text style={{ padding: space[4], fontSize: 12, lineHeight: 18, color: color.text.muted }}>
           Tap a row for the transcript line behind it. Transcript kept; audio deleted after transcription.
         </Text>
       </View>
 
-      <View style={{ padding: 18, paddingTop: 12, borderTopWidth: 1, borderTopColor: color.border, gap: 9 }}>
-        <View style={{ flexDirection: 'row', gap: 7, alignItems: 'center' }}>
-          <View style={{ width: 7, height: 7, backgroundColor: verified ? color.steel : ink(0.3) }} />
-          <Text style={{ fontFamily: font.body.medium, fontSize: 11.5, lineHeight: 15, color: ink(0.58) }}>
+      <View style={{ padding: space[4], paddingTop: space[3], borderTopWidth: 1, borderTopColor: color.border.subtle, gap: space[2] }}>
+        <View style={{ flexDirection: 'row', gap: space[2], alignItems: 'center' }}>
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: verified ? color.status.success.icon : color.text.disabled }} />
+          <Text style={{ fontSize: 12, lineHeight: 16, color: color.text.muted }}>
             {verified
               ? `Signed in as ${account?.username} · managed device verified`
               : 'Demo mode · device verification not configured'}
           </Text>
         </View>
-        <CTAButton
+        <Button
           label="Confirm & sync 6 fields"
-          height={50}
+          size="lg"
+          block
           onPress={async () => {
             await saveVisitState({ status: 'synced' });
             navigation.navigate('Synced');

@@ -57,24 +57,24 @@ export const gapQuestions: GapQuestion[] = [
 ];
 
 export const stagedFields = [
-  { label: 'Stage', value: 'Proposal', badge: { text: 'Extracted', variant: 'outline' as const } },
-  { label: 'Volume / value', value: 'SEK 180–220k per year', badge: { text: 'Extracted', variant: 'outline' as const } },
+  { label: 'Stage', value: 'Proposal', badge: { text: 'Extracted', variant: 'neutral' as const } },
+  { label: 'Volume / value', value: 'SEK 180–220k per year', badge: { text: 'Extracted', variant: 'neutral' as const } },
   {
     label: 'Decision maker',
     value: 'Ulrika Sand decides · plant mgr signs over 200k',
-    badge: { text: 'You said', variant: 'filled' as const },
+    badge: { text: 'You said', variant: 'brand' as const },
     highlighted: true,
   },
   {
     label: 'Next step',
     value: 'Kanban quote · Fri 18 Sep',
-    badge: { text: 'You said', variant: 'filled' as const },
+    badge: { text: 'You said', variant: 'brand' as const },
     highlighted: true,
   },
   {
     label: 'Risk flagged',
     value: 'Competitor quote 8% under ours',
-    badge: { text: 'Extracted', variant: 'outline' as const },
+    badge: { text: 'Extracted', variant: 'neutral' as const },
     linksToTranscript: true,
   },
   { label: 'Consumption change', value: 'Left blank · optional', muted: true },
@@ -89,10 +89,10 @@ export const riskTranscript = {
 };
 
 export const syncedRows = [
-  { label: 'Account record', value: 'Stage, volume, decision maker updated', badge: { text: 'Written', variant: 'filled' as const } },
-  { label: 'Task created', value: 'Send kanban quote · due Fri 18 Sep', badge: { text: 'Written', variant: 'filled' as const } },
-  { label: 'Deal health', value: 'At risk → Improving', badge: { text: 'Written', variant: 'filled' as const } },
-  { label: 'Audit trail', value: 'Transcript and field origins retained 90 days', badge: { text: 'Kept', variant: 'outline' as const } },
+  { label: 'Account record', value: 'Stage, volume, decision maker updated', badge: { text: 'Written', variant: 'success' as const } },
+  { label: 'Task created', value: 'Send kanban quote · due Fri 18 Sep', badge: { text: 'Written', variant: 'success' as const } },
+  { label: 'Deal health', value: 'At risk → Improving', badge: { text: 'Written', variant: 'success' as const } },
+  { label: 'Audit trail', value: 'Transcript and field origins retained 90 days', badge: { text: 'Kept', variant: 'neutral' as const } },
 ];
 
 export const homeVisits = [

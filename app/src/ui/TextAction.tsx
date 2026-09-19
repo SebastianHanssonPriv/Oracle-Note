@@ -1,26 +1,25 @@
 import React from 'react';
 import { Pressable, Text } from 'react-native';
-import { color, font, ink } from '../theme';
+import { color } from '../theme';
 
 type Props = {
   label: string;
   onPress?: () => void;
-  tone?: 'muted' | 'blueprint';
+  tone?: 'muted' | 'brand';
   center?: boolean;
 };
 
-/** Small condensed uppercase text link, e.g. "Later — keep in staging", "Skip this one". */
+/** A low-emphasis text action, styled after `.ds-btn--ghost`'s label treatment. */
 export function TextAction({ label, onPress, tone = 'muted', center = true }: Props) {
   return (
     <Pressable onPress={onPress} hitSlop={8}>
       <Text
         style={{
           textAlign: center ? 'center' : 'left',
-          fontFamily: font.condensed.semiBold,
-          fontSize: 12,
-          letterSpacing: 1.2,
-          textTransform: 'uppercase',
-          color: tone === 'blueprint' ? color.blueprint : ink(0.55),
+          fontSize: 14,
+          fontWeight: '500',
+          lineHeight: 20,
+          color: tone === 'brand' ? color.text.link : color.text.secondary,
         }}
       >
         {label}

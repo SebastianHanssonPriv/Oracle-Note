@@ -1,8 +1,8 @@
 import React from 'react';
 import { Text, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Blueprint } from './Blueprint';
-import { color, font, ink } from '../theme';
+import { Card } from './Card';
+import { color } from '../theme';
 
 /**
  * Renders car-display content inside a bounded landscape card matching the
@@ -18,22 +18,22 @@ export function CarFrame({ children, below }: { children: React.ReactNode; below
   const frameHeight = frameWidth * (320 / 560);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#d9d9da' }} edges={['top', 'bottom']}>
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14, backgroundColor: '#d9d9da', padding: 24 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: color.bg.muted }} edges={['top', 'bottom']}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 14, backgroundColor: color.bg.muted, padding: 24 }}>
         <Text
           style={{
-            fontFamily: font.condensed.semiBold,
             fontSize: 11,
-            letterSpacing: 1.6,
+            fontWeight: '600',
+            letterSpacing: 0.44,
             textTransform: 'uppercase',
-            color: ink(0.45),
+            color: color.text.muted,
           }}
         >
           In-car display
         </Text>
-        <Blueprint style={{ width: frameWidth, height: frameHeight, backgroundColor: color.paper, padding: frameWidth > 420 ? 30 : 18 }}>
+        <Card style={{ width: frameWidth, height: frameHeight, padding: frameWidth > 420 ? 30 : 18 }} elevation="raised">
           {children}
-        </Blueprint>
+        </Card>
         {below}
       </View>
     </SafeAreaView>
