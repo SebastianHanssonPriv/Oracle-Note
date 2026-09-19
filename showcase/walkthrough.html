@@ -1,78 +1,91 @@
 <title>Oracle Note Walkthrough</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&display=swap">
 <style>
 :root{
-  --paper:#f2f2f3;
-  --paper-raised:#ffffff;
-  --ink:#1d1f20;
-  --ink-55:rgba(29,31,32,.55);
-  --ink-45:rgba(29,31,32,.45);
-  --blueprint:#416180;
-  --steel:#5980a6;
-  --steel-light:#94bce3;
-  --pale:#eef6ff;
-  --pale-border:rgba(89,128,166,.4);
-  --border:rgba(29,31,32,.16);
-  --mark:#d6ebff;
-  --rail-bg:#e9e9ea;
+  --bg-canvas:#f9fafb;
+  --bg-surface:#ffffff;
+  --bg-subtle:#f1f2f5;
+  --bg-selected:#ecf4fe;
+  --text-primary:#272a30;
+  --text-secondary:#4f545e;
+  --text-muted:#666c78;
+  --text-disabled:#8a919d;
+  --text-link:#124c99;
+  --text-brand:#124c99;
+  --border-subtle:#e3e6ec;
+  --border-default:#d0d5de;
+  --border-brand:#2667bc;
+  --action-primary-bg:#2667bc;
+  --action-primary-hover:#124c99;
+  --action-primary-fg:#ffffff;
+  --status-neutral-bg:#f1f2f5;
+  --status-neutral-border:#d0d5de;
+  --status-neutral-fg:#393d45;
+  --status-brand-bg:#ecf4fe;
+  --status-brand-border:#bed8fb;
+  --status-brand-fg:#083674;
+  --status-success-bg:#e5f8eb;
+  --status-success-border:#a3e7bc;
+  --status-success-fg:#00341b;
+  --mark-bg:#e5f6ff;
+  --radius-md:4px;
+  --radius-lg:6px;
+  --radius-full:9999px;
+  --shadow-xs:0 1px 2px 0 rgb(24 27 31 / 0.06);
+  --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-display:"Archivo",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box}
 body{
   margin:0;
-  background:var(--paper);
-  color:var(--ink);
-  font-family:"Barlow",system-ui,sans-serif;
+  background:var(--bg-canvas);
+  color:var(--text-primary);
+  font-family:var(--font-sans);
   font-size:15px;
   line-height:1.55;
   padding-inline:0;
 }
 h1,h2,h3{margin:0;text-wrap:balance}
 p{margin:0}
-a{color:var(--blueprint)}
-::selection{background:var(--mark)}
+a{color:var(--text-link)}
+::selection{background:var(--mark-bg)}
 
-.eyebrow{font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)}
-.eyebrow.accent{color:var(--blueprint)}
+.eyebrow{font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+.eyebrow.accent{color:var(--text-brand)}
 
-/* ---- registration-mark frame, lifted from the product's own design system ---- */
-.bp{position:relative;border:1px solid var(--border);background:var(--paper-raised)}
-.bp>i{position:absolute;width:11px;height:11px;color:var(--ink-45)}
-.bp>i::before{content:"";position:absolute;left:5px;top:0;width:1px;height:100%;background:currentColor}
-.bp>i::after{content:"";position:absolute;top:5px;left:0;width:100%;height:1px;background:currentColor}
-.bp>i.tl{top:-6px;left:-6px}
-.bp>i.tr{top:-6px;right:-6px}
-.bp>i.bl{bottom:-6px;left:-6px}
-.bp>i.br{bottom:-6px;right:-6px}
+/* ---- card, matches the product's .ds-card ---- */
+.card{border:1px solid var(--border-subtle);border-radius:var(--radius-lg);background:var(--bg-surface);box-shadow:var(--shadow-xs)}
 
-.k{font:600 10px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-55)}
-.row{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.k{font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+.row{padding:11px 16px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .row:last-child{border-bottom:none}
-.tag{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);border:1px solid rgba(29,31,32,.2);padding:3px 4px;white-space:nowrap;flex:none}
-.tagv{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--steel);padding:3px 4px;white-space:nowrap;flex:none}
-.cta{background:var(--steel);color:#fff;height:48px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:var(--blueprint)}
-.cta.ghost{background:transparent;color:var(--ink);border-color:var(--border)}
-.cta .l{font:600 16px/1 "Barlow Condensed",sans-serif;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
-.dot{width:10px;height:10px;border-radius:50%;background:#fff;display:block;flex:none}
+.badge{display:inline-flex;align-items:center;gap:4px;font:500 12px/1.4 var(--font-sans);color:var(--status-neutral-fg);border:1px solid var(--status-neutral-border);background:var(--status-neutral-bg);border-radius:var(--radius-full);padding:2px 8px;white-space:nowrap;flex:none}
+.badge--brand{color:var(--status-brand-fg);border-color:var(--status-brand-border);background:var(--status-brand-bg)}
+.badge--success{color:var(--status-success-fg);border-color:var(--status-success-border);background:var(--status-success-bg)}
+.btn{background:var(--action-primary-bg);color:#fff;height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-md);border:1px solid transparent}
+.btn.secondary{background:transparent;color:var(--text-primary);border-color:var(--border-default)}
+.btn .l{font:500 15px/1 var(--font-sans);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#fff;display:block;flex:none}
 
 .wave{display:flex;align-items:flex-end;gap:3px}
-.wave i{width:3px;background:var(--steel);display:block}
+.wave i{width:3px;background:var(--action-primary-bg);display:block}
 
 /* ---- page chrome ---- */
 .wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
 
-header.top{padding-block:22px;border-bottom:1px solid var(--border)}
+header.top{padding-block:22px;border-bottom:1px solid var(--border-subtle)}
 header.top .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
-.wordmark{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
-.wordmark b{color:var(--blueprint)}
-.top-meta{font:500 12px/1.4 "Barlow",sans-serif;color:var(--ink-55)}
+.wordmark{font:700 15px/1 var(--font-display);color:var(--text-primary)}
+.wordmark b{color:var(--text-brand)}
+.top-meta{font:500 12px/1.4 var(--font-sans);color:var(--text-muted)}
 
-.hero{padding-block:52px 40px;border-bottom:1px solid var(--border)}
+.hero{padding-block:52px 40px;border-bottom:1px solid var(--border-subtle)}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:40px;align-items:center}
-.hero h1{font:600 54px/1.04 "Barlow Condensed",sans-serif;letter-spacing:-.01em;max-width:15ch}
-.hero .lede{font:400 17px/1.6 "Barlow",sans-serif;color:rgba(29,31,32,.68);max-width:56ch;margin-top:18px}
+.hero h1{font:700 46px/1.15 var(--font-display);letter-spacing:-.015em;max-width:15ch}
+.hero .lede{font:400 17px/1.6 var(--font-sans);color:var(--text-secondary);max-width:56ch;margin-top:18px}
 .hero .stats{display:flex;gap:28px;flex-wrap:wrap;margin-top:28px}
-.stat b{display:block;font:600 26px/1 "Barlow Condensed",sans-serif;color:var(--ink)}
-.stat span{display:block;font:500 11.5px/1.4 "Barlow",sans-serif;color:var(--ink-55);margin-top:4px}
+.stat b{display:block;font:700 26px/1 var(--font-display);color:var(--text-primary)}
+.stat span{display:block;font:500 11.5px/1.4 var(--font-sans);color:var(--text-muted);margin-top:4px}
 .hero-visual{width:250px;flex:none}
 .hero-visual .tagline{text-align:center;margin-top:10px}
 @media (max-width:860px){
@@ -80,45 +93,45 @@ header.top .wrap{display:flex;justify-content:space-between;align-items:baseline
   .hero-visual{display:none}
 }
 
-.brief{padding-block:44px;border-bottom:1px solid var(--border)}
+.brief{padding-block:44px;border-bottom:1px solid var(--border-subtle)}
 .brief-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:18px}
-.brief-grid h3{font:600 13px/1.3 "Barlow Condensed",sans-serif;letter-spacing:.02em;margin-bottom:9px}
-.brief-grid p{font:400 13.5px/1.6 "Barlow",sans-serif;color:rgba(29,31,32,.68)}
+.brief-grid h3{font:600 15px/1.3 var(--font-sans);margin-bottom:9px;color:var(--text-primary)}
+.brief-grid p{font:400 13.5px/1.6 var(--font-sans);color:var(--text-secondary)}
 .brief-grid ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px}
-.brief-grid li{font:400 13.5px/1.5 "Barlow",sans-serif;color:rgba(29,31,32,.68)}
+.brief-grid li{font:400 13.5px/1.5 var(--font-sans);color:var(--text-secondary)}
 
 /* ---- layout: rail + steps ---- */
 .layout{display:grid;grid-template-columns:200px minmax(0,1fr);gap:48px;padding-block:44px 60px}
 .rail{position:sticky;top:20px;align-self:start;display:flex;flex-direction:column;gap:2px}
-.rail a{display:block;padding:8px 10px;font:600 12px/1.3 "Barlow Condensed",sans-serif;letter-spacing:.04em;color:var(--ink-55);text-decoration:none;border-left:2px solid transparent}
-.rail a:hover{color:var(--ink)}
-.rail a .n{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--ink-45);margin-right:7px}
-.rail-note{font:400 11.5px/1.5 "Barlow",sans-serif;color:var(--ink-45);padding:10px 10px 0;border-top:1px solid var(--border);margin-top:8px}
+.rail a{display:block;padding:8px 10px;font:600 13px/1.3 var(--font-sans);color:var(--text-muted);text-decoration:none;border-left:2px solid transparent;border-radius:var(--radius-md)}
+.rail a:hover{color:var(--text-primary);background:var(--bg-subtle)}
+.rail a .n{font:600 10px/1 ui-monospace,Menlo,monospace;color:var(--text-disabled);margin-right:7px}
+.rail-note{font:400 11.5px/1.5 var(--font-sans);color:var(--text-disabled);padding:10px 10px 0;border-top:1px solid var(--border-subtle);margin-top:8px}
 
 .steps{display:flex;flex-direction:column;gap:0}
-.step{padding-block:34px;border-bottom:1px solid var(--border);scroll-margin-top:20px}
+.step{padding-block:34px;border-bottom:1px solid var(--border-subtle);scroll-margin-top:20px}
 .step:last-child{border-bottom:none}
 .step-head{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
-.step-num{font:600 11px/1 ui-monospace,Menlo,monospace;background:var(--ink);color:var(--paper);padding:4px 7px;flex:none}
-.step-title{font:600 21px/1.15 "Barlow Condensed",sans-serif}
-.step-phase{font:600 10px/1 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--blueprint);margin-left:auto}
+.step-num{font:600 11px/1 ui-monospace,Menlo,monospace;background:var(--action-primary-bg);color:#fff;border-radius:var(--radius-md);padding:4px 7px;flex:none}
+.step-title{font:600 20px/1.3 var(--font-display);color:var(--text-primary)}
+.step-phase{font:600 10px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-brand);margin-left:auto}
 .step-body{display:grid;grid-template-columns:minmax(0,auto) minmax(240px,360px);gap:32px;align-items:start}
 .frame-col{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
-.explain p{font:400 14.5px/1.65 "Barlow",sans-serif;color:rgba(29,31,32,.72)}
+.explain p{font:400 14.5px/1.65 var(--font-sans);color:var(--text-secondary)}
 .explain p+p{margin-top:12px}
-.explain .why{font:600 10.5px/1 "Barlow Condensed",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-45);margin-bottom:8px;display:block}
+.explain .why{font:600 10.5px/1 var(--font-sans);letter-spacing:.06em;text-transform:uppercase;color:var(--text-disabled);margin-bottom:8px;display:block}
 
 /* car / phone frame sizing */
 .car{width:520px;max-width:100%;height:297px;padding:26px;display:flex;flex-direction:column}
 .phone{width:328px;max-width:100%;height:auto;min-height:560px;display:flex;flex-direction:column;overflow:hidden}
-.phone-status{display:flex;justify-content:space-between;padding:9px 16px 5px;font:500 10.5px/1 "Barlow",sans-serif;color:var(--ink-55);font-variant-numeric:tabular-nums}
+.phone-status{display:flex;justify-content:space-between;padding:9px 16px 5px;font:500 10.5px/1 var(--font-sans);color:var(--text-muted);font-variant-numeric:tabular-nums}
 
-footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
+footer.status{padding-block:44px 60px;border-top:1px solid var(--border-subtle)}
 .status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:20px}
-.status-grid h3{font:600 13px/1.3 "Barlow Condensed",sans-serif;margin-bottom:10px}
+.status-grid h3{font:600 15px/1.3 var(--font-sans);margin-bottom:10px;color:var(--text-primary)}
 .status-grid ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:8px}
-.status-grid li{font:400 13.5px/1.55 "Barlow",sans-serif;color:rgba(29,31,32,.68)}
-.status-grid li b{color:var(--ink);font-weight:600}
+.status-grid li{font:400 13.5px/1.55 var(--font-sans);color:var(--text-secondary)}
+.status-grid li b{color:var(--text-primary);font-weight:600}
 
 @media (max-width:900px){
   .layout{grid-template-columns:1fr;gap:0}
@@ -126,7 +139,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
   .rail a{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;flex:none}
   .rail-note{display:none}
   .step-body{grid-template-columns:1fr}
-  .hero h1{font-size:38px}
+  .hero h1{font-size:32px}
   .status-grid{grid-template-columns:1fr}
 }
 </style>
@@ -152,23 +165,23 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
     </div>
     <div class="hero-visual">
-      <div class="bp" style="padding:16px;display:flex;flex-direction:column;gap:9px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+      <div class="card" style="padding:16px;display:flex;flex-direction:column;gap:9px">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div class="k">In staging &middot; not in CRM</div>
-          <span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);border:1px solid var(--pale-border);padding:3px 5px">Draft</span>
+          <span class="badge">Draft</span>
         </div>
-        <div style="font:600 20px/1.1 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid var(--border)">
-          <div><div class="k" style="color:var(--blueprint)">Decision maker</div><div style="font:500 12.5px/1.3 'Barlow',sans-serif;margin-top:2px">Ulrika Sand decides</div></div>
-          <span class="tagv">You said</span>
+        <div style="font:700 18px/1.2 var(--font-display);color:var(--text-primary)">Bergman Maskin AB</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid var(--border-subtle)">
+          <div><div class="k" style="color:var(--text-brand)">Decision maker</div><div style="font:400 12.5px/1.3 var(--font-sans);margin-top:2px;color:var(--text-primary)">Ulrika Sand decides</div></div>
+          <span class="badge badge--brand">You said</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid var(--border)">
-          <div><div class="k">Risk flagged</div><div style="font:500 12.5px/1.3 'Barlow',sans-serif;margin-top:2px">Competitor 8% under</div></div>
-          <span class="tag">Extracted</span>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:8px;border-top:1px solid var(--border-subtle)">
+          <div><div class="k">Risk flagged</div><div style="font:400 12.5px/1.3 var(--font-sans);margin-top:2px;color:var(--text-primary)">Competitor 8% under</div></div>
+          <span class="badge">Extracted</span>
         </div>
-        <div class="bp cta" style="height:38px;margin-top:4px"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:13px">Confirm &amp; sync 6 fields</span></div>
+        <div class="btn" style="height:38px;margin-top:4px"><span class="l" style="font-size:13px">Confirm &amp; sync 6 fields</span></div>
       </div>
-      <p class="tagline eyebrow">Screen 07 of 9, in the flow below</p>
+      <p class="tagline eyebrow">Screen 06 of 8, in the flow below</p>
     </div>
   </div>
 </section>
@@ -193,7 +206,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div>
         <h3>What this build is</h3>
-        <p>A working React Native app (iOS and Android, one codebase) implementing this exact flow against a fixed demo visit. Voice capture, transcription, calendar matching and the CRM push are not wired to real services yet; see the build notes at the end of this page.</p>
+        <p>A working React Native app (iOS and Android, one codebase) implementing this exact flow against a fixed demo visit, styled on Bufab's own design system. Voice capture, transcription, calendar matching and the CRM push are not wired to real services yet; see the build notes at the end of this page.</p>
       </div>
     </div>
   </div>
@@ -222,19 +235,19 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card phone">
             <div class="phone-status"><span>9:41</span><span>iOS</span></div>
-            <div style="padding:10px 18px 16px;border-bottom:1px solid var(--border)">
+            <div style="padding:10px 18px 16px;border-bottom:1px solid var(--border-subtle)">
               <div class="k">Oracle Note</div>
-              <div style="font:600 30px/1.05 'Barlow Condensed',sans-serif;margin-top:5px">Tue 15 Sep</div>
+              <div style="font:700 26px/1.2 var(--font-display);margin-top:5px;color:var(--text-primary)">Tue 15 Sep</div>
             </div>
             <div style="flex:1">
-              <div class="row"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:var(--ink-55)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="tag">Synced</span></div>
-              <div class="row" style="background:var(--pale)"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:#2c455d">11:05 &middot; existing customer visit &middot; not started</div></div><span class="tagv">Next</span></div>
-              <div class="row" style="opacity:.55"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
-              <div class="row" style="opacity:.55"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Lindqvist Hydraulik</div><div style="font:500 12px/1.4 'Barlow',sans-serif">15:45 &middot; upcoming &middot; prospect, first visit</div></div></div>
+              <div class="row"><div><div style="font:600 16px/1.3 var(--font-display);color:var(--text-primary)">Setterwall Mekaniska</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="badge badge--success">Synced</span></div>
+              <div class="row" style="background:var(--bg-selected)"><div><div style="font:600 16px/1.3 var(--font-display);color:var(--text-primary)">Bergman Maskin AB</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-brand)">11:05 &middot; existing customer visit &middot; not started</div></div><span class="badge badge--brand">Next</span></div>
+              <div class="row" style="opacity:.55"><div><div style="font:600 16px/1.3 var(--font-display);color:var(--text-primary)">Nordflex Verkstad AB</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
+              <div class="row" style="opacity:.55"><div><div style="font:600 16px/1.3 var(--font-display);color:var(--text-primary)">Lindqvist Hydraulik</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">15:45 &middot; upcoming &middot; prospect, first visit</div></div></div>
             </div>
-            <div style="padding:14px 18px 18px"><div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Debrief Bergman visit</span></div></div>
+            <div style="padding:14px 18px 18px"><div class="btn"><span class="dot"></span><span class="l">Debrief Bergman visit</span></div></div>
           </div>
         </div>
         <div class="explain">
@@ -252,18 +265,18 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp car"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card car">
             <div style="display:flex;justify-content:space-between;align-items:baseline">
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Ready to debrief</div>
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Oracle Note</div>
+              <div class="k" style="color:var(--text-brand)">Ready to debrief</div>
+              <div class="k">Oracle Note</div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
-              <div style="font:600 40px/1.02 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
-              <div style="font:500 14.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.6)">11:05 visit &middot; matched from calendar, time and location</div>
+              <div style="font:700 32px/1.2 var(--font-display);color:var(--text-primary)">Bergman Maskin AB</div>
+              <div style="font:400 15px/1.4 var(--font-sans);color:var(--text-secondary)">11:05 visit &middot; matched from calendar, time and location</div>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border);padding-top:11px">
-              <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Oracle, start debrief&quot;</div>
-              <div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45)">Existing customer visit</div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border-subtle);padding-top:11px">
+              <div style="font:600 16px/1 var(--font-sans);color:var(--text-brand)">Say &quot;Oracle, start debrief&quot;</div>
+              <div style="font:400 12px/1 var(--font-sans);color:var(--text-muted)">Existing customer visit</div>
             </div>
           </div>
         </div>
@@ -282,16 +295,16 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp car"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card car">
             <div style="display:flex;justify-content:space-between;align-items:baseline">
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Recording</div>
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+              <div class="k" style="color:var(--text-brand)">Recording</div>
+              <div class="k">Bergman Maskin AB</div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px">
-              <div style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
-              <div class="wave" style="height:32px" id="wave3"></div>
+              <div style="font:700 76px/.9 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--text-primary)">01:48</div>
+              <div class="wave" style="height:30px" id="wave3"></div>
             </div>
-            <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Say &quot;Oracle, stop&quot; when you're finished</div>
+            <div style="font:600 15px/1 var(--font-sans);color:var(--text-muted)">Say &quot;Oracle, stop&quot; when you're finished</div>
           </div>
         </div>
         <div class="explain">
@@ -309,22 +322,22 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp car"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card car">
             <div style="display:flex;justify-content:space-between;align-items:baseline">
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved &middot; 01:49</div>
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+              <div class="k">Saved &middot; 01:49</div>
+              <div class="k">Bergman Maskin AB</div>
             </div>
             <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
-              <div style="font:600 32px/1.05 'Barlow Condensed',sans-serif">3 quick questions now, or later?</div>
+              <div style="font:700 30px/1.2 var(--font-display);color:var(--text-primary)">3 quick questions now, or later?</div>
             </div>
-            <div style="border-top:1px solid var(--border);padding-top:11px">
-              <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
+            <div style="border-top:1px solid var(--border-subtle);padding-top:11px">
+              <div style="font:600 16px/1 var(--font-sans);color:var(--text-brand)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
             </div>
           </div>
         </div>
         <div class="explain">
           <span class="why">Why it looks like this</span>
-          <p>The first version of this screen made the rep wait until the car had parked before it would ask anything &mdash; a rule enforced by the app rather than a choice the rep made. That's gone: the moment the monologue ends, Oracle asks directly, still by voice, still nothing to tap. &quot;Continue&quot; goes straight into the questions; &quot;Later&quot; ends the session outright rather than half-staging it, and the car display drops to a plain <em>Session inactive</em> state until the rep picks the visit back up from Home.</p>
+          <p>The first version of this screen made the rep wait until the car had parked before it would ask anything &mdash; a rule enforced by the app rather than a choice the rep made. That's gone: the moment the monologue ends, Oracle asks directly, still by voice, still nothing to tap. &quot;Continue&quot; goes straight into the questions; &quot;Later&quot; genuinely defers rather than abandoning the debrief &mdash; see the build notes below.</p>
         </div>
       </div>
     </article>
@@ -337,28 +350,28 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card phone">
             <div class="phone-status"><span>11:08</span><span>iOS</span></div>
-            <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border);align-items:baseline">
-              <div style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Question 1 of 3</div>
+            <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border-subtle);align-items:baseline">
+              <div style="font:600 12px/1 var(--font-sans);color:var(--text-brand)">Question 1 of 3</div>
               <div class="k">Bergman Maskin AB</div>
             </div>
-            <div style="padding:16px 18px;border-bottom:1px solid var(--border)">
-              <div class="k" style="color:var(--blueprint)">Oracle asked</div>
-              <div style="font:600 21px/1.15 'Barlow Condensed',sans-serif;margin-top:6px">&quot;Who decides on the frame agreement, and who signs it?&quot;</div>
-              <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45);margin-top:7px">Spoken aloud &middot; tap to hear again</div>
+            <div style="padding:16px 18px;border-bottom:1px solid var(--border-subtle)">
+              <div class="k" style="color:var(--text-brand)">Oracle asked</div>
+              <div style="font:600 20px/1.3 var(--font-display);margin-top:6px;color:var(--text-primary)">&quot;Who decides on the frame agreement, and who signs it?&quot;</div>
+              <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted);margin-top:7px">Spoken aloud &middot; tap to hear again</div>
             </div>
             <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:12px">
               <div style="display:flex;align-items:center;gap:9px">
-                <div style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Listening</div>
+                <div style="font:600 11px/1 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-brand)">Listening</div>
                 <div class="wave" style="height:20px;flex:1;opacity:.75" id="wave6"></div>
               </div>
-              <div style="font:400 14.5px/1.55 'Barlow',sans-serif">&quot;Ulrika Sand in purchasing decides, but the plant manager signs anything over two hundred thousand&hellip;&quot;</div>
-              <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45)">Transcribing as you speak. Say &quot;next&quot; to move on.</div>
+              <div style="font:400 15px/1.55 var(--font-sans);color:var(--text-primary)">&quot;Ulrika Sand in purchasing decides, but the plant manager signs anything over two hundred thousand&hellip;&quot;</div>
+              <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">Transcribing as you speak. Say &quot;next&quot; to move on.</div>
             </div>
             <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
-              <div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Next question</span></div>
-              <div style="text-align:center;font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Skip this one</div>
+              <div class="btn"><span class="l">Next question</span></div>
+              <div style="text-align:center;font:500 14px/1 var(--font-sans);color:var(--text-secondary)">Skip this one</div>
             </div>
           </div>
         </div>
@@ -377,29 +390,29 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card phone">
             <div class="phone-status"><span>11:12</span><span>iOS</span></div>
-            <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border)">
+            <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border-subtle)">
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <div class="k">In staging &middot; not in CRM</div>
-                <span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);border:1px solid var(--pale-border);padding:3px 5px">Draft</span>
+                <span class="badge">Draft</span>
               </div>
-              <div style="font:600 23px/1.1 'Barlow Condensed',sans-serif;margin-top:4px">Bergman Maskin AB</div>
-              <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55);margin-top:2px">Existing customer visit &middot; 15 Sep 11:05 &middot; Bor&aring;s</div>
+              <div style="font:700 20px/1.25 var(--font-display);margin-top:4px;color:var(--text-primary)">Bergman Maskin AB</div>
+              <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted);margin-top:2px">Existing customer visit &middot; 15 Sep 11:05 &middot; Bor&aring;s</div>
             </div>
             <div style="flex:1">
-              <div class="row"><div><div class="k">Stage</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Proposal</div></div><span class="tag">Extracted</span></div>
-              <div class="row"><div><div class="k">Volume / value</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">SEK 180&ndash;220k / yr</div></div><span class="tag">Extracted</span></div>
-              <div class="row" style="background:var(--pale)"><div><div class="k" style="color:var(--blueprint)">Decision maker</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Ulrika Sand decides &middot; plant mgr signs over 200k</div></div><span class="tagv">You said</span></div>
-              <div class="row" style="background:var(--pale)"><div><div class="k" style="color:var(--blueprint)">Next step</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Kanban quote &middot; Fri 18 Sep</div></div><span class="tagv">You said</span></div>
-              <div class="row" style="border-color:var(--steel)"><div><div class="k">Risk flagged</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div></div><span class="tag">Extracted</span></div>
-              <div class="row"><div><div class="k">Consumption change</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif;color:var(--ink-45)">Left blank &middot; optional</div></div></div>
+              <div class="row"><div><div class="k">Stage</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Proposal</div></div><span class="badge">Extracted</span></div>
+              <div class="row"><div><div class="k">Volume / value</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">SEK 180&ndash;220k / yr</div></div><span class="badge">Extracted</span></div>
+              <div class="row" style="background:var(--bg-selected)"><div><div class="k" style="color:var(--text-brand)">Decision maker</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Ulrika Sand decides &middot; plant mgr signs over 200k</div></div><span class="badge badge--brand">You said</span></div>
+              <div class="row" style="background:var(--bg-selected)"><div><div class="k" style="color:var(--text-brand)">Next step</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Kanban quote &middot; Fri 18 Sep</div></div><span class="badge badge--brand">You said</span></div>
+              <div class="row"><div><div class="k">Risk flagged</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Competitor quote 8% under ours</div></div><span class="badge">Extracted</span></div>
+              <div class="row"><div><div class="k">Consumption change</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-disabled)">Left blank &middot; optional</div></div></div>
             </div>
-            <div style="padding:12px 18px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px">
-              <div style="display:flex;gap:7px;align-items:center;font:500 10.5px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.58)">
-                <span style="width:7px;height:7px;background:var(--steel);display:block"></span><span>Managed device and corporate network verified</span>
+            <div style="padding:12px 18px 18px;border-top:1px solid var(--border-subtle);display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:7px;align-items:center;font:400 12px/1.3 var(--font-sans);color:var(--text-muted)">
+                <span style="width:6px;height:6px;border-radius:50%;background:var(--status-success-fg);display:block"></span><span>Managed device and corporate network verified</span>
               </div>
-              <div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Confirm &amp; sync 6 fields</span></div>
+              <div class="btn"><span class="l">Confirm &amp; sync 6 fields</span></div>
             </div>
           </div>
         </div>
@@ -418,18 +431,18 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp phone" style="min-height:auto;border-color:var(--ink)"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card phone" style="min-height:auto">
             <div style="padding:16px 18px;display:flex;flex-direction:column;gap:11px">
               <div style="display:flex;justify-content:space-between;align-items:baseline">
                 <div class="k">Risk flagged &middot; transcript 01:12&ndash;01:31</div>
-                <span style="font:400 16px/1 'Barlow',sans-serif;color:var(--ink-45)">&times;</span>
+                <span style="font:400 16px/1 var(--font-sans);color:var(--text-muted)">&times;</span>
               </div>
-              <p style="font:400 13.5px/1.6 'Barlow',sans-serif">&hellip;they're happy with delivery reliability, that came up twice. <span style="background:var(--mark);box-shadow:0 1px 0 var(--steel)">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price&hellip;</p>
+              <p style="font:400 14px/1.6 var(--font-sans);color:var(--text-primary)">&hellip;they're happy with delivery reliability, that came up twice. <span style="background:var(--mark-bg)">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price&hellip;</p>
               <div style="display:flex;gap:9px">
-                <div class="bp cta" style="height:42px;flex:1"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Keep field</span></div>
-                <div class="bp cta ghost" style="height:42px;flex:1"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Edit text</span></div>
+                <div class="btn" style="height:40px;flex:1"><span class="l" style="font-size:14px">Keep field</span></div>
+                <div class="btn secondary" style="height:40px;flex:1"><span class="l" style="font-size:14px">Edit text</span></div>
               </div>
-              <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Origin: extracted from your debrief &middot; not edited</div>
+              <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">Origin: extracted from your debrief &middot; not edited</div>
             </div>
           </div>
         </div>
@@ -448,20 +461,20 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       </div>
       <div class="step-body">
         <div class="frame-col">
-          <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+          <div class="card phone">
             <div class="phone-status"><span>11:13</span><span>iOS</span></div>
-            <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border)">
-              <div class="k" style="color:var(--blueprint)">Synced 11:13</div>
-              <div style="font:600 27px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Six fields written to your CRM</div>
-              <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
+            <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border-subtle)">
+              <div class="k" style="color:var(--text-brand)">Synced 11:13</div>
+              <div style="font:700 24px/1.25 var(--font-display);margin-top:5px;color:var(--text-primary)">Six fields written to your CRM</div>
+              <div style="font:400 13px/1.4 var(--font-sans);color:var(--text-muted);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
             </div>
             <div style="flex:1">
-              <div class="row"><div><div class="k">Account record</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Stage, volume, decision maker updated</div></div><span class="tagv">Written</span></div>
-              <div class="row"><div><div class="k">Task created</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Send kanban quote &middot; due Fri 18 Sep</div></div><span class="tagv">Written</span></div>
-              <div class="row"><div><div class="k">Deal health</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">At risk &rarr; Improving</div></div><span class="tagv">Written</span></div>
-              <div class="row"><div><div class="k">Audit trail</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Transcript and origins kept 90 days</div></div><span class="tag">Kept</span></div>
+              <div class="row"><div><div class="k">Account record</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Stage, volume, decision maker updated</div></div><span class="badge badge--success">Written</span></div>
+              <div class="row"><div><div class="k">Task created</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Send kanban quote &middot; due Fri 18 Sep</div></div><span class="badge badge--success">Written</span></div>
+              <div class="row"><div><div class="k">Deal health</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">At risk &rarr; Improving</div></div><span class="badge badge--success">Written</span></div>
+              <div class="row"><div><div class="k">Audit trail</div><div style="font:400 14px/1.3 var(--font-sans);color:var(--text-primary)">Transcript and origins kept 90 days</div></div><span class="badge">Kept</span></div>
             </div>
-            <div style="padding:14px 18px 18px"><div class="bp cta ghost"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Back to today</span></div></div>
+            <div style="padding:14px 18px 18px"><div class="btn secondary"><span class="l">Back to today</span></div></div>
           </div>
         </div>
         <div class="explain">
@@ -482,7 +495,9 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
         <h3>What's real in this build</h3>
         <ul>
           <li><b>The full interaction flow</b>, all eight screens, wired end to end in React Native for iOS and Android.</li>
-          <li><b>The visual system</b> above: paper ground, blueprint registration marks, Barlow / Barlow Condensed, carried over pixel-for-pixel from the design review.</li>
+          <li><b>The visual system</b> above: Bufab's own design system &mdash; colors, Archivo/system type, spacing and radius scale, pulled directly from its tokens, not approximated.</li>
+          <li><b>"Later" is a real save and resume</b>, not a dead end: choosing it, or leaving the question loop early, persists on-device and Home always reflects the true state.</li>
+          <li><b>An Entra ID (Azure AD) single sign-on scaffold</b>, so a signed-in rep on a managed device can get the same silent sign-in Teams and Outlook already have &mdash; shipped unconfigured, inert until real tenant values are set.</li>
           <li><b>The demo dataset</b>: a single fixed visit (Bergman Maskin AB) with real-shaped fields, questions and transcript text.</li>
         </ul>
       </div>
@@ -492,7 +507,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
           <li>Real speech-to-text, calendar matching and location, and a live CRM push. These screens run on the fixed demo dataset, not a backend.</li>
           <li>An actual CarPlay / Android Auto surface. Screens 02&ndash;04 render inside the phone app as a non-interactive, landscape-framed card; a real in-car surface needs a separate native extension.</li>
           <li>Two of the three spoken gap questions (next step, consumption change) use written-for-demo copy; only the decision-maker question was scripted in the original design.</li>
-          <li>Choosing "later" on step 04 ends the session outright (Inactive) rather than partially staging it; there's no save-and-resume layer yet, so that visit doesn't actually come back later in this build.</li>
+          <li>The save-and-resume above is on-device only, not synced to a backend yet &mdash; a reinstall loses an unsynced, deferred debrief.</li>
         </ul>
       </div>
     </div>

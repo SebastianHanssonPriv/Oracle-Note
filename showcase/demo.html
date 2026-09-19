@@ -1,110 +1,131 @@
 <title>Oracle Note Demo</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700&display=swap">
 <style>
 :root{
-  --paper:#f2f2f3;
-  --paper-raised:#ffffff;
-  --ink:#1d1f20;
-  --ink-55:rgba(29,31,32,.55);
-  --ink-45:rgba(29,31,32,.45);
-  --blueprint:#416180;
-  --steel:#5980a6;
-  --pale:#eef6ff;
-  --pale-border:rgba(89,128,166,.4);
-  --border:rgba(29,31,32,.16);
-  --mark:#d6ebff;
-  --stage-bg:#d9d9da;
+  --bg-canvas:#f9fafb;
+  --bg-surface:#ffffff;
+  --bg-subtle:#f1f2f5;
+  --bg-muted:#e3e6ec;
+  --bg-selected:#ecf4fe;
+  --text-primary:#272a30;
+  --text-secondary:#4f545e;
+  --text-muted:#666c78;
+  --text-disabled:#8a919d;
+  --text-link:#124c99;
+  --text-brand:#124c99;
+  --border-subtle:#e3e6ec;
+  --border-default:#d0d5de;
+  --border-strong:#8a919d;
+  --border-brand:#2667bc;
+  --action-primary-bg:#2667bc;
+  --action-primary-hover:#124c99;
+  --action-primary-fg:#ffffff;
+  --status-neutral-bg:#f1f2f5;
+  --status-neutral-border:#d0d5de;
+  --status-neutral-fg:#393d45;
+  --status-brand-bg:#ecf4fe;
+  --status-brand-border:#bed8fb;
+  --status-brand-fg:#083674;
+  --status-success-bg:#e5f8eb;
+  --status-success-border:#a3e7bc;
+  --status-success-fg:#00341b;
+  --mark-bg:#e5f6ff;
+  --radius-md:4px;
+  --radius-lg:6px;
+  --radius-full:9999px;
+  --shadow-xs:0 1px 2px 0 rgb(24 27 31 / 0.06);
+  --shadow-md:0 4px 10px 0 rgb(24 27 31 / 0.10);
+  --font-sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-display:"Archivo",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Barlow",system-ui,sans-serif;font-size:15px;line-height:1.5}
+body{margin:0;background:var(--bg-canvas);color:var(--text-primary);font-family:var(--font-sans);font-size:15px;line-height:1.55}
 h1,h2,h3{margin:0;text-wrap:balance}
 p{margin:0}
+a{color:var(--text-link)}
 button{font:inherit;color:inherit;cursor:pointer}
 [hidden]{display:none!important}
+::selection{background:var(--mark-bg)}
 
 .wrap{max-width:1040px;margin:0 auto;padding-inline:20px}
-.k{font:600 10px/1 "Barlow Condensed",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-55)}
+.k{font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
 
-.bp{position:relative;border:1px solid var(--border);background:var(--paper-raised)}
-.bp>i{position:absolute;width:11px;height:11px;color:var(--ink-45)}
-.bp>i::before{content:"";position:absolute;left:5px;top:0;width:1px;height:100%;background:currentColor}
-.bp>i::after{content:"";position:absolute;top:5px;left:0;width:100%;height:1px;background:currentColor}
-.bp>i.tl{top:-6px;left:-6px}.bp>i.tr{top:-6px;right:-6px}.bp>i.bl{bottom:-6px;left:-6px}.bp>i.br{bottom:-6px;right:-6px}
+.card{border:1px solid var(--border-subtle);border-radius:var(--radius-lg);background:var(--bg-surface);box-shadow:var(--shadow-xs)}
 
-.row{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.row{padding:11px 16px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
 .row:last-child{border-bottom:none}
 .row.tap{cursor:pointer}
-.row.tap:hover{background:rgba(89,128,166,.06)}
-.tag{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);border:1px solid rgba(29,31,32,.2);padding:3px 4px;white-space:nowrap;flex:none}
-.tagv{font:600 9px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:var(--steel);padding:3px 4px;white-space:nowrap;flex:none}
+.row.tap:hover{background:var(--bg-subtle)}
+.badge{display:inline-flex;align-items:center;gap:4px;font:500 12px/1.4 var(--font-sans);color:var(--status-neutral-fg);border:1px solid var(--status-neutral-border);background:var(--status-neutral-bg);border-radius:var(--radius-full);padding:2px 8px;white-space:nowrap;flex:none}
+.badge--brand{color:var(--status-brand-fg);border-color:var(--status-brand-border);background:var(--status-brand-bg)}
+.badge--success{color:var(--status-success-fg);border-color:var(--status-success-border);background:var(--status-success-bg)}
 
-button.cta{background:var(--steel);color:#fff;height:50px;display:flex;align-items:center;justify-content:center;gap:9px;border-color:var(--blueprint);width:100%}
-button.cta.ghost{background:transparent;color:var(--ink);border-color:var(--border)}
-button.cta:active{transform:translateY(1px)}
-.cta .l{font:600 16px/1 "Barlow Condensed",sans-serif;letter-spacing:.07em;text-transform:uppercase;white-space:nowrap}
-.dot{width:10px;height:10px;border-radius:50%;background:#fff;display:block;flex:none}
+button.btn{background:var(--action-primary-bg);color:#fff;height:44px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius-md);border:1px solid transparent;width:100%}
+button.btn.ghost{background:transparent;color:var(--text-primary);border-color:var(--border-default)}
+button.btn:active{transform:translateY(1px)}
+.btn .l{font:500 15px/1 var(--font-sans);white-space:nowrap}
+.dot{width:8px;height:8px;border-radius:50%;background:#fff;display:block;flex:none}
 
-button.textlink{background:none;border:0;padding:6px;font:600 11.5px/1 "Barlow Condensed",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)}
-button.textlink:hover{color:var(--ink)}
+button.textlink{background:none;border:0;padding:6px;font:600 12.5px/1 var(--font-sans);color:var(--text-muted)}
+button.textlink:hover{color:var(--text-primary)}
 
 .wave{display:flex;align-items:flex-end;gap:3px}
-.wave i{width:3px;background:var(--steel);display:block;border-radius:1px}
+.wave i{width:3px;background:var(--action-primary-bg);display:block;border-radius:1px}
 
-.icon-btn{display:inline-flex;align-items:center;gap:6px;background:var(--pale);border:1px solid var(--pale-border);color:var(--blueprint);padding:7px 11px;font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.icon-btn:hover{background:#e2f0ff}
-.icon-btn[disabled]{opacity:.4;cursor:not-allowed}
+.icon-btn{display:inline-flex;align-items:center;gap:6px;background:var(--bg-selected);border:1px solid var(--status-brand-border);border-radius:var(--radius-md);color:var(--text-brand);padding:7px 12px;font:500 12.5px/1 var(--font-sans)}
+.icon-btn:hover{background:#ddeeff}
+.icon-btn[disabled]{opacity:.5;cursor:not-allowed}
 .icon-btn svg{width:14px;height:14px}
-.icon-btn.speaking{background:var(--steel);color:#fff;border-color:var(--blueprint)}
+.icon-btn.speaking{background:var(--action-primary-bg);color:#fff;border-color:var(--action-primary-bg)}
 
 /* ---- page chrome ---- */
-header.top{padding-block:20px;border-bottom:1px solid var(--border)}
+header.top{padding-block:22px;border-bottom:1px solid var(--border-subtle)}
 header.top .wrap{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
-.wordmark{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.wordmark b{color:var(--blueprint)}
-.top-meta{font:500 12px/1.4 "Barlow",sans-serif;color:var(--ink-55)}
-.restart-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--ink-55);padding:7px 11px;font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.restart-btn:hover{color:var(--ink);border-color:rgba(29,31,32,.35)}
+.wordmark{font:700 15px/1 var(--font-display);color:var(--text-primary)}
+.wordmark b{color:var(--text-brand)}
+.top-meta{font:500 12px/1.4 var(--font-sans);color:var(--text-muted)}
+.restart-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border-default);border-radius:var(--radius-md);color:var(--text-muted);padding:7px 12px;font:500 12.5px/1 var(--font-sans)}
+.restart-btn:hover{color:var(--text-primary);border-color:var(--border-strong)}
 .restart-btn svg{width:13px;height:13px}
 
-.intro{padding-block:36px 8px}
-.intro h1{font:600 32px/1.1 "Barlow Condensed",sans-serif;max-width:22ch}
-.intro p{font:400 15px/1.55 "Barlow",sans-serif;color:rgba(29,31,32,.66);max-width:62ch;margin-top:12px}
+.intro{padding-block:40px 8px}
+.intro h1{font:700 32px/1.15 var(--font-display);letter-spacing:-.01em;max-width:22ch}
+.intro p{font:400 15px/1.6 var(--font-sans);color:var(--text-secondary);max-width:62ch;margin-top:14px}
 
 .tabs{display:flex;gap:8px;margin-top:24px}
-.tab{flex:1;max-width:220px;background:var(--paper-raised);border:1px solid var(--border);padding:13px 16px;text-align:left;display:flex;flex-direction:column;gap:2px}
-.tab .k{color:var(--ink-45)}
-.tab .name{font:600 17px/1.2 "Barlow Condensed",sans-serif}
-.tab[aria-selected="true"]{border-color:var(--blueprint);background:var(--pale)}
-.tab[aria-selected="true"] .k{color:var(--blueprint)}
+.tab{flex:1;max-width:220px;background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--radius-lg);padding:13px 16px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.tab .k{color:var(--text-disabled)}
+.tab .name{font:600 17px/1.2 var(--font-display);color:var(--text-primary)}
+.tab[aria-selected="true"]{border-color:var(--border-brand);background:var(--bg-selected)}
+.tab[aria-selected="true"] .k{color:var(--text-brand)}
 
-.stage-section{padding-block:30px 56px}
+.stage-section{padding-block:32px 56px}
 .stage-note{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
-.stage-note p{font:400 13.5px/1.5 "Barlow",sans-serif;color:rgba(29,31,32,.62);max-width:60ch}
-.stage-caption{font:600 12.5px/1.3 "Barlow Condensed",sans-serif;color:var(--ink);background:var(--paper-raised);border:1px solid var(--border);padding:8px 12px;display:inline-block}
+.stage-note p{font:400 13.5px/1.55 var(--font-sans);color:var(--text-secondary);max-width:60ch}
+.stage-caption{font:600 12.5px/1.3 var(--font-sans);color:var(--text-primary);background:var(--bg-surface);border:1px solid var(--border-subtle);border-radius:var(--radius-md);padding:8px 12px;display:inline-block}
 
-.stage{background:var(--stage-bg);padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.stage-label{font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-45)}
+.stage{background:var(--bg-muted);border-radius:var(--radius-lg);padding:32px 20px;display:flex;flex-direction:column;align-items:center;gap:16px}
 .controls-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-.sim-btn{background:transparent;border:1px dashed rgba(29,31,32,.35);color:var(--ink-45);padding:8px 12px;font:500 11.5px/1 ui-monospace,Menlo,monospace;display:inline-flex;align-items:center;gap:7px}
-.sim-btn:hover{color:var(--ink);border-color:rgba(29,31,32,.55)}
+.sim-btn{background:var(--bg-surface);border:1px dashed var(--border-strong);border-radius:var(--radius-md);color:var(--text-muted);padding:8px 12px;font:500 11.5px/1 ui-monospace,Menlo,monospace;display:inline-flex;align-items:center;gap:7px}
+.sim-btn:hover{color:var(--text-primary);border-color:var(--text-muted)}
 .sim-btn svg{width:13px;height:13px}
-.sim-note{font:400 12px/1.5 "Barlow",sans-serif;color:var(--ink-45);max-width:420px;text-align:center}
+.sim-note{font:400 12px/1.5 var(--font-sans);color:var(--text-disabled);max-width:420px;text-align:center}
 
 /* phone frame */
 .phone{width:328px;max-width:100%;min-height:600px;display:flex;flex-direction:column;overflow:hidden;position:relative}
-.phone-status{display:flex;justify-content:space-between;padding:9px 16px 5px;font:500 10.5px/1 "Barlow",sans-serif;color:var(--ink-55);font-variant-numeric:tabular-nums}
+.phone-status{display:flex;justify-content:space-between;padding:9px 16px 5px;font:500 10.5px/1 var(--font-sans);color:var(--text-muted);font-variant-numeric:tabular-nums}
 .screen{display:flex;flex-direction:column;flex:1}
-.sheet-overlay{position:absolute;left:0;right:0;bottom:0;background:var(--paper-raised);border-top:1px solid var(--ink);padding:16px 18px;display:flex;flex-direction:column;gap:11px;box-shadow:0 -14px 30px rgba(29,31,32,.18)}
+.sheet-overlay{position:absolute;left:0;right:0;bottom:0;background:var(--bg-surface);border-top:1px solid var(--border-default);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:16px 18px;display:flex;flex-direction:column;gap:11px;box-shadow:var(--shadow-md)}
 
 /* car frame */
 .car{width:520px;max-width:100%;height:297px;padding:26px;display:flex;flex-direction:column}
 
-footer.status{padding-block:40px 60px;border-top:1px solid var(--border)}
-.status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:16px}
-.status-grid h3{font:600 13px/1.3 "Barlow Condensed",sans-serif;margin-bottom:10px}
-.status-grid ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:7px}
-.status-grid li{font:400 13px/1.5 "Barlow",sans-serif;color:rgba(29,31,32,.65)}
-footer.status a{color:var(--blueprint)}
+footer.status{padding-block:44px 60px;border-top:1px solid var(--border-subtle)}
+.status-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;margin-top:20px}
+.status-grid h3{font:600 15px/1.3 var(--font-sans);margin-bottom:10px;color:var(--text-primary)}
+.status-grid ul{margin:0;padding-left:16px;display:flex;flex-direction:column;gap:8px}
+.status-grid li{font:400 13.5px/1.55 var(--font-sans);color:var(--text-secondary)}
+footer.status a{color:var(--text-link)}
 
 @media (max-width:640px){
   .intro h1{font-size:26px}
@@ -152,54 +173,53 @@ footer.status a{color:var(--blueprint)}
 
   <div class="stage">
 
-    <div class="bp phone" id="phone-frame">
-      <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+    <div class="card phone" id="phone-frame">
 
       <!-- HOME -->
       <div class="screen" data-state="home">
         <div class="phone-status"><span>9:41</span><span>iOS</span></div>
-        <div style="padding:10px 18px 16px;border-bottom:1px solid var(--border)">
+        <div style="padding:10px 18px 16px;border-bottom:1px solid var(--border-subtle)">
           <div class="k">Oracle Note</div>
-          <div style="font:600 30px/1.05 'Barlow Condensed',sans-serif;margin-top:5px">Tue 15 Sep</div>
+          <div style="font:700 28px/1.1 var(--font-display);margin-top:5px">Tue 15 Sep</div>
         </div>
         <div style="flex:1">
-          <div class="row"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:var(--ink-55)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="tag">Synced</span></div>
-          <div class="row" style="background:var(--pale)"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:#2c455d">11:05 &middot; recorded in the car &middot; 3 questions to answer</div></div><span class="tagv">Next</span></div>
-          <div class="row" style="opacity:.55"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
+          <div class="row"><div><div style="font:600 16px/1.3 var(--font-display)">Setterwall Mekaniska</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="badge badge--success">Synced</span></div>
+          <div class="row" style="background:var(--bg-selected)"><div><div style="font:600 16px/1.3 var(--font-display)">Bergman Maskin AB</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-brand)">11:05 &middot; recorded in the car &middot; 3 questions to answer</div></div><span class="badge badge--brand">Next</span></div>
+          <div class="row" style="opacity:.55"><div><div style="font:600 16px/1.3 var(--font-display)">Nordflex Verkstad AB</div><div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted)">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
         </div>
         <div style="padding:14px 18px 18px">
-          <button class="bp cta" onclick="goPhone('asking',0)"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Review Bergman visit</span></button>
+          <button class="btn" onclick="goPhone('asking',0)"><span class="dot"></span><span class="l">Review Bergman visit</span></button>
         </div>
       </div>
 
       <!-- ASKING (3 questions, one block, content swapped by JS) -->
       <div class="screen" data-state="asking" hidden>
         <div class="phone-status"><span>11:08</span><span>iOS</span></div>
-        <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border);align-items:baseline">
-          <div id="ask-progress" style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Question 1 of 3</div>
+        <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border-subtle);align-items:baseline">
+          <div id="ask-progress" style="font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-brand)">Question 1 of 3</div>
           <div class="k">Bergman Maskin AB</div>
         </div>
-        <div style="padding:16px 18px;border-bottom:1px solid var(--border)">
+        <div style="padding:16px 18px;border-bottom:1px solid var(--border-subtle)">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-            <div class="k" style="color:var(--blueprint)">Oracle asked</div>
+            <div class="k" style="color:var(--text-brand)">Oracle asked</div>
             <button class="icon-btn" id="ask-speak-btn" onclick="speakAsking()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
               <span id="ask-speak-label">Hear it</span>
             </button>
           </div>
-          <div id="ask-question" style="font:600 21px/1.15 'Barlow Condensed',sans-serif;margin-top:6px"></div>
-          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45);margin-top:7px">Spoken aloud &middot; tap &quot;hear it&quot; to play</div>
+          <div id="ask-question" style="font:600 19px/1.25 var(--font-display);margin-top:6px"></div>
+          <div style="font:400 11.5px/1.4 var(--font-sans);color:var(--text-disabled);margin-top:7px">Spoken aloud &middot; tap &quot;hear it&quot; to play</div>
         </div>
         <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:12px">
           <div style="display:flex;align-items:center;gap:9px">
-            <div style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Listening</div>
+            <div style="font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-brand)">Listening</div>
             <div class="wave" style="height:20px;flex:1;opacity:.75" id="ask-wave"></div>
           </div>
-          <div id="ask-reply" style="font:400 14.5px/1.55 'Barlow',sans-serif"></div>
-          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-45)">Transcribing as you speak. Say &quot;next&quot; to move on.</div>
+          <div id="ask-reply" style="font:400 14.5px/1.55 var(--font-sans);color:var(--text-primary)"></div>
+          <div style="font:400 11.5px/1.4 var(--font-sans);color:var(--text-disabled)">Transcribing as you speak. Say &quot;next&quot; to move on.</div>
         </div>
         <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
-          <button class="bp cta" onclick="askingNext()"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Next question</span></button>
+          <button class="btn" onclick="askingNext()"><span class="l">Next question</span></button>
           <button class="textlink" style="text-align:center" onclick="askingNext()">Skip this one</button>
         </div>
       </div>
@@ -207,60 +227,60 @@ footer.status a{color:var(--blueprint)}
       <!-- STAGED -->
       <div class="screen" data-state="staged" hidden>
         <div class="phone-status"><span>11:12</span><span>iOS</span></div>
-        <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border)">
+        <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border-subtle)">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div class="k">In staging &middot; not in CRM</div>
-            <span style="font:600 9px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);border:1px solid var(--pale-border);padding:3px 5px">Draft</span>
+            <span class="badge">Draft</span>
           </div>
-          <div style="font:600 23px/1.1 'Barlow Condensed',sans-serif;margin-top:4px">Bergman Maskin AB</div>
-          <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55);margin-top:2px">Existing customer visit &middot; 15 Sep 11:05 &middot; Bor&aring;s</div>
+          <div style="font:700 21px/1.15 var(--font-display);margin-top:4px">Bergman Maskin AB</div>
+          <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted);margin-top:2px">Existing customer visit &middot; 15 Sep 11:05 &middot; Bor&aring;s</div>
         </div>
         <div style="flex:1">
-          <div class="row"><div><div class="k">Stage</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Proposal</div></div><span class="tag">Extracted</span></div>
-          <div class="row"><div><div class="k">Volume / value</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">SEK 180&ndash;220k / yr</div></div><span class="tag">Extracted</span></div>
-          <div class="row"><div><div class="k" style="color:var(--blueprint)">Decision maker</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Ulrika Sand decides &middot; plant mgr signs over 200k</div></div><span class="tagv">You said</span></div>
-          <div class="row"><div><div class="k" style="color:var(--blueprint)">Next step</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Kanban quote &middot; Fri 18 Sep</div></div><span class="tagv">You said</span></div>
-          <div class="row tap" style="border-color:var(--steel)" onclick="goPhone('sheet')"><div><div class="k">Risk flagged &middot; tap for source</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Competitor quote 8% under ours</div></div><span class="tag">Extracted</span></div>
+          <div class="row"><div><div class="k">Stage</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Proposal</div></div><span class="badge">Extracted</span></div>
+          <div class="row"><div><div class="k">Volume / value</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">SEK 180&ndash;220k / yr</div></div><span class="badge">Extracted</span></div>
+          <div class="row" style="background:var(--bg-selected)"><div><div class="k" style="color:var(--text-brand)">Decision maker</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Ulrika Sand decides &middot; plant mgr signs over 200k</div></div><span class="badge badge--brand">You said</span></div>
+          <div class="row" style="background:var(--bg-selected)"><div><div class="k" style="color:var(--text-brand)">Next step</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Kanban quote &middot; Fri 18 Sep</div></div><span class="badge badge--brand">You said</span></div>
+          <div class="row tap" onclick="goPhone('sheet')"><div><div class="k">Risk flagged &middot; tap for source</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Competitor quote 8% under ours</div></div><span class="badge">Extracted</span></div>
         </div>
-        <div style="padding:12px 18px 18px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px">
-          <div style="display:flex;gap:7px;align-items:center;font:500 10.5px/1.3 'Barlow',sans-serif;color:rgba(29,31,32,.58)">
-            <span style="width:7px;height:7px;background:var(--steel);display:block"></span><span>Managed device and corporate network verified</span>
+        <div style="padding:12px 18px 18px;border-top:1px solid var(--border-subtle);display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;gap:7px;align-items:center;font:500 11px/1.3 var(--font-sans);color:var(--text-muted)">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--action-primary-bg);display:block"></span><span>Managed device and corporate network verified</span>
           </div>
-          <button class="bp cta" onclick="goPhone('synced')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Confirm &amp; sync 6 fields</span></button>
+          <button class="btn" onclick="goPhone('synced')"><span class="l">Confirm &amp; sync 6 fields</span></button>
         </div>
       </div>
 
       <!-- SYNCED -->
       <div class="screen" data-state="synced" hidden>
         <div class="phone-status"><span>11:13</span><span>iOS</span></div>
-        <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border)">
-          <div class="k" style="color:var(--blueprint)">Synced 11:13</div>
-          <div style="font:600 26px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Six fields written to your CRM</div>
-          <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
+        <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border-subtle)">
+          <div class="k" style="color:var(--text-brand)">Synced 11:13</div>
+          <div style="font:700 24px/1.15 var(--font-display);margin-top:5px">Six fields written to your CRM</div>
+          <div style="font:400 12px/1.4 var(--font-sans);color:var(--text-muted);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
         </div>
         <div style="flex:1">
-          <div class="row"><div><div class="k">Account record</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Stage, volume, decision maker updated</div></div><span class="tagv">Written</span></div>
-          <div class="row"><div><div class="k">Task created</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Send kanban quote &middot; due Fri 18 Sep</div></div><span class="tagv">Written</span></div>
-          <div class="row"><div><div class="k">Deal health</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">At risk &rarr; Improving</div></div><span class="tagv">Written</span></div>
-          <div class="row"><div><div class="k">Audit trail</div><div style="font:500 13.5px/1.3 'Barlow',sans-serif">Transcript and origins kept 90 days</div></div><span class="tag">Kept</span></div>
+          <div class="row"><div><div class="k">Account record</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Stage, volume, decision maker updated</div></div><span class="badge badge--success">Written</span></div>
+          <div class="row"><div><div class="k">Task created</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Send kanban quote &middot; due Fri 18 Sep</div></div><span class="badge badge--success">Written</span></div>
+          <div class="row"><div><div class="k">Deal health</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">At risk &rarr; Improving</div></div><span class="badge badge--success">Written</span></div>
+          <div class="row"><div><div class="k">Audit trail</div><div style="font:400 13.5px/1.3 var(--font-sans);color:var(--text-primary)">Transcript and origins kept 90 days</div></div><span class="badge">Kept</span></div>
         </div>
         <div style="padding:14px 18px 18px">
-          <button class="bp cta ghost" onclick="goPhone('home')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l">Back to today</span></button>
+          <button class="btn ghost" onclick="goPhone('home')"><span class="l">Back to today</span></button>
         </div>
       </div>
 
       <!-- SHEET (overlay on top of staged) -->
-      <div class="bp sheet-overlay" id="sheet-overlay" hidden>
+      <div class="card sheet-overlay" id="sheet-overlay" hidden>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
           <div class="k">Risk flagged &middot; transcript 01:12&ndash;01:31</div>
-          <button onclick="goPhone('staged')" style="background:none;border:0;font:400 18px/1 'Barlow',sans-serif;color:var(--ink-45)">&times;</button>
+          <button onclick="goPhone('staged')" style="background:none;border:0;font:400 18px/1 var(--font-sans);color:var(--text-disabled)">&times;</button>
         </div>
-        <p style="font:400 13.5px/1.6 'Barlow',sans-serif">&hellip;they're happy with delivery reliability, that came up twice. <span style="background:var(--mark);box-shadow:0 1px 0 var(--steel)">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price&hellip;</p>
+        <p style="font:400 13.5px/1.6 var(--font-sans);color:var(--text-primary)">&hellip;they're happy with delivery reliability, that came up twice. <span style="background:var(--mark-bg);box-shadow:0 1px 0 var(--action-primary-bg)">Purchasing has a quote from someone else, about eight percent under us on fasteners</span>, so price is going to come back at us. I said we'd show the kanban savings instead of moving on unit price&hellip;</p>
         <div style="display:flex;gap:9px">
-          <button class="bp cta" style="height:42px" onclick="goPhone('staged')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Keep field</span></button>
-          <button class="bp cta ghost" style="height:42px" onclick="goPhone('staged')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="l" style="font-size:14px">Edit text</span></button>
+          <button class="btn" style="height:42px" onclick="goPhone('staged')"><span class="l" style="font-size:14px">Keep field</span></button>
+          <button class="btn ghost" style="height:42px" onclick="goPhone('staged')"><span class="l" style="font-size:14px">Edit text</span></button>
         </div>
-        <div style="font:500 11px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Origin: extracted from your debrief &middot; not edited</div>
+        <div style="font:400 11.5px/1.4 var(--font-sans);color:var(--text-muted)">Origin: extracted from your debrief &middot; not edited</div>
       </div>
 
     </div>
@@ -280,59 +300,58 @@ footer.status a{color:var(--blueprint)}
 
   <div class="stage">
 
-    <div class="bp car" id="car-frame">
-      <i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
+    <div class="card car" id="car-frame">
 
       <div class="screen" data-cstate="ready" style="justify-content:space-between">
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Ready to debrief</div>
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Oracle Note</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-brand)">Ready to debrief</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Oracle Note</div>
         </div>
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
-          <div style="font:600 40px/1.02 'Barlow Condensed',sans-serif">Bergman Maskin AB</div>
-          <div style="font:500 14.5px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.6)">11:05 visit &middot; matched from calendar, time and location</div>
+          <div style="font:700 34px/1.1 var(--font-display)">Bergman Maskin AB</div>
+          <div style="font:400 14.5px/1.4 var(--font-sans);color:var(--text-secondary)">11:05 visit &middot; matched from calendar, time and location</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border);padding-top:11px">
-          <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Oracle, start debrief&quot;</div>
-          <div style="font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45)">Existing customer visit</div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--border-subtle);padding-top:11px">
+          <div style="font:600 15px/1.3 var(--font-sans);color:var(--text-brand)">Say &quot;Oracle, start debrief&quot;</div>
+          <div style="font:600 11px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-disabled)">Existing customer visit</div>
         </div>
       </div>
 
       <div class="screen" data-cstate="recording" style="justify-content:space-between" hidden>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--blueprint)">Recording</div>
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-brand)">Recording</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Bergman Maskin AB</div>
         </div>
-        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px">
-          <div id="car-clock" style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
-          <div class="wave" style="height:32px" id="car-wave"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px">
+          <div id="car-clock" style="font:700 68px/1 var(--font-display);letter-spacing:-.02em;font-variant-numeric:tabular-nums">01:48</div>
+          <div class="wave" style="height:30px;opacity:.75" id="car-wave"></div>
         </div>
-        <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Say &quot;Oracle, stop&quot; when you're finished</div>
+        <div style="font:600 15px/1.3 var(--font-sans);color:var(--text-muted)">Say &quot;Oracle, stop&quot; when you're finished</div>
       </div>
 
       <div class="screen" data-cstate="ask" style="justify-content:space-between" hidden>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <div id="car-ask-saved" style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved &middot; 02:07</div>
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+          <div id="car-ask-saved" style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Saved &middot; 02:07</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Bergman Maskin AB</div>
         </div>
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
-          <div style="font:600 36px/1.05 'Barlow Condensed',sans-serif">3 quick questions now,<br>or later?</div>
+          <div style="font:700 30px/1.15 var(--font-display)">3 quick questions now,<br>or later?</div>
         </div>
-        <div style="border-top:1px solid var(--border);padding-top:11px">
-          <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
+        <div style="border-top:1px solid var(--border-subtle);padding-top:11px">
+          <div style="font:600 15px/1.3 var(--font-sans);color:var(--text-brand)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
         </div>
       </div>
 
       <div class="screen" data-cstate="inactive" style="justify-content:space-between" hidden>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Session inactive</div>
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Session inactive</div>
+          <div style="font:600 12px/1.4 var(--font-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)">Bergman Maskin AB</div>
         </div>
         <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px">
-          <div style="font:600 34px/1.05 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.6)">Saved, not reviewed</div>
-          <div style="font:500 14.5px/1.4 'Barlow',sans-serif;color:var(--ink-45)">Resume anytime from today's visits.</div>
+          <div style="font:700 28px/1.15 var(--font-display);color:var(--text-secondary)">Saved, not reviewed</div>
+          <div style="font:400 14.5px/1.4 var(--font-sans);color:var(--text-disabled)">Resume anytime from today's visits.</div>
         </div>
-        <div style="height:1px;background:var(--border)"></div>
+        <div style="height:1px;background:var(--border-subtle)"></div>
       </div>
 
     </div>
@@ -373,7 +392,7 @@ footer.status a{color:var(--blueprint)}
       <div>
         <h3>What's real here</h3>
         <ul>
-          <li>Every screen, transition and field is the actual copy and layout from the design review and the working React Native build.</li>
+          <li>Every screen, transition and field is the actual copy, layout and Bufab styling from the working React Native build.</li>
           <li>The spoken lines use your browser's built-in text-to-speech (Web Speech API), triggered on tap &mdash; no audio files, nothing recorded.</li>
         </ul>
       </div>
@@ -381,7 +400,7 @@ footer.status a{color:var(--blueprint)}
         <h3>What's simulated</h3>
         <ul>
           <li>There's no real voice recognition here. The dashed controls under the car display stand in for the spoken commands the app itself listens for.</li>
-          <li>Choosing "Later" ends the session (Inactive) rather than partially staging it &mdash; there's no save-and-resume layer, so that visit doesn't actually come back later in this build.</li>
+          <li>Choosing "Later" here ends the demo session (Inactive). In the real app that same choice persists progress on-device and resumes from Home &mdash; this demo doesn't model multi-visit state, so that part isn't shown.</li>
           <li>One fixed demo visit (Bergman Maskin AB), same as the full build and the <a href="https://claude.ai/artifact/UesVC7p1CRtC6v4SNzSuRw" target="_blank" rel="noopener">walkthrough</a>.</li>
         </ul>
       </div>
