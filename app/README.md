@@ -7,11 +7,16 @@ design handoff bundle in [`../design/`](../design) (`../design/README.md`,
 ## Scope
 
 Per the scoping discussion at the start of this build: this implements the
-**single decided, concept-aligned flow** — the nine states encoded in
+**single decided, concept-aligned flow** from
 `../design/project/Oracle Note - Flow.dc.html` (home → in-car ready →
-recording → saved → gaps → asking → staged → synced) — not the full
-`Oracle Note - Option Board.dc.html`, which is a design-decision record
-containing ~15 competing/superseded mockups, not a build spec.
+recording → continue-or-later → asking → staged → synced, with an inactive
+branch off "later") — not the full `Oracle Note - Option Board.dc.html`,
+which is a design-decision record containing ~15 competing/superseded
+mockups, not a build spec.
+
+The continue-or-later step, and dropping the "wait until parked" gate in
+favor of asking right after the monologue, were later revisions on top of
+that source file, made directly against this build.
 
 Target codebase: this repo, under `app/`. Platform: React Native via Expo
 (iOS + Android), one codebase.
@@ -29,11 +34,16 @@ npm run ios      # or: npm run android
 - `src/theme.ts` — colors, typography, corner registration-mark constants, lifted from the source `.dc.html`'s CSS.
 - `src/ui/` — shared primitives: `Blueprint` (the bordered "steel on paper" frame with corner marks), `CTAButton`, `Tag`, `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
-- `src/screens/` — the nine screens, one per flow step.
+- `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions), `Staged`, `Synced`.
 - `App.tsx` — font loading + React Navigation native-stack wiring.
 
 ## Known limitations / assumptions
 
+- **"Later" ends the session rather than partially staging it.** Choosing
+  "Later" on the continue-or-later screen goes straight to `CarInactive` —
+  nothing is staged or synced yet. There's no persistence layer, so in this
+  build that visit doesn't actually resume from `Home` later; it's a dead
+  end included to show the state, not a working save-and-resume.
 - **No real voice, speech-to-text, calendar-matching, or CRM integration.**
   This is a UI/interaction build of the design, using the same fixed mock
   dataset the prototype used. Wiring an actual STT engine, calendar/location

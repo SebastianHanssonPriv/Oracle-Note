@@ -134,7 +134,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
 <header class="top">
   <div class="wrap">
     <div class="wordmark">Oracle <b>Note</b></div>
-    <div class="top-meta">Walkthrough &middot; nine screens, one debrief</div>
+    <div class="top-meta">Walkthrough &middot; eight screens, one debrief</div>
   </div>
 </header>
 
@@ -145,7 +145,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       <h1>One spoken debrief, staged and confirmed before it ever touches the CRM.</h1>
       <p class="lede">A rep finishes a customer visit, gets in the car, and talks for one to two minutes. Oracle Note transcribes it, matches the customer from the calendar, extracts what it can, and asks about the rest once the car has stopped. Nothing reaches the CRM until the rep confirms it on the phone.</p>
       <div class="stats">
-        <div class="stat"><b>9</b><span>screens, calendar&nbsp;to&nbsp;CRM</span></div>
+        <div class="stat"><b>8</b><span>screens, calendar&nbsp;to&nbsp;CRM</span></div>
         <div class="stat"><b>0</b><span>touch targets while driving</span></div>
         <div class="stat"><b>3</b><span>gaps the transcript leaves open</span></div>
         <div class="stat"><b>1&ndash;2min</b><span>typical monologue length</span></div>
@@ -185,7 +185,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
         <h3>What was settled</h3>
         <ul>
           <li>The car screen carries state only: elapsed time and one big target.</li>
-          <li>Monologue first, then gap questions, held until the car has stopped.</li>
+          <li>Monologue first; Oracle then asks, right there in the car, whether to continue with the gap questions now or later.</li>
           <li>The customer is matched from calendar, timestamp and location, not guessed from the transcript.</li>
           <li>Uncertainty is shown as a question, never as a confidence score.</li>
           <li>Every staged field keeps a visible origin: extracted, or something the rep said.</li>
@@ -204,12 +204,11 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
     <a href="#s1"><span class="n">01</span>Home</a>
     <a href="#s2"><span class="n">02</span>Ready</a>
     <a href="#s3"><span class="n">03</span>Recording</a>
-    <a href="#s4"><span class="n">04</span>Saved</a>
-    <a href="#s5"><span class="n">05</span>Gaps held</a>
-    <a href="#s6"><span class="n">06</span>Asked aloud</a>
-    <a href="#s7"><span class="n">07</span>Staged</a>
-    <a href="#s8"><span class="n">08</span>Origin</a>
-    <a href="#s9"><span class="n">09</span>Synced</a>
+    <a href="#s4"><span class="n">04</span>Continue?</a>
+    <a href="#s6"><span class="n">05</span>Asked aloud</a>
+    <a href="#s7"><span class="n">06</span>Staged</a>
+    <a href="#s8"><span class="n">07</span>Origin</a>
+    <a href="#s9"><span class="n">08</span>Synced</a>
     <p class="rail-note">Steps 02&ndash;04 are the car display. Nothing on it is tappable; everything there is spoken.</p>
   </nav>
 
@@ -305,73 +304,41 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
     <article class="step" id="s4">
       <div class="step-head">
         <span class="step-num">04</span>
-        <h2 class="step-title">In car &middot; saved to phone</h2>
+        <h2 class="step-title">In car &middot; continue or later?</h2>
         <span class="step-phase">Car display</span>
       </div>
       <div class="step-body">
         <div class="frame-col">
           <div class="bp car"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
             <div style="display:flex;justify-content:space-between;align-items:baseline">
-              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved to phone</div>
+              <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved &middot; 01:49</div>
               <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
             </div>
-            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
-              <div style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink-55)">02:07</div>
-              <div style="height:1px;background:var(--border)"></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
+              <div style="font:600 32px/1.05 'Barlow Condensed',sans-serif">3 quick questions now, or later?</div>
             </div>
-            <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Follow-up questions wait until you've parked</div>
-          </div>
-        </div>
-        <div class="explain">
-          <span class="why">Why it looks like this</span>
-          <p>Stopping the recording does not hand the rep a list of open questions while still in the driveway. Gap questions are held until the car has actually stopped, so the car display never asks anything.</p>
-        </div>
-      </div>
-    </article>
-
-    <article class="step" id="s5">
-      <div class="step-head">
-        <span class="step-num">05</span>
-        <h2 class="step-title">Stopped &middot; gaps held</h2>
-        <span class="step-phase">Phone</span>
-      </div>
-      <div class="step-body">
-        <div class="frame-col">
-          <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
-            <div class="phone-status"><span>11:34</span><span>iOS</span></div>
-            <div style="padding:10px 18px 14px;border-bottom:1px solid var(--border)">
-              <div class="k">Car stopped &middot; 2:07 captured</div>
-              <div style="font:600 25px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Three gaps in the Bergman debrief</div>
-              <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:7px">Checked against the existing-customer schema. Two of the three are mandatory.</div>
-            </div>
-            <div style="flex:1">
-              <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">1</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Decision maker</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; nobody named</div></div></div></div>
-              <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">2</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Next step and date</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; &quot;after their audit&quot;</div></div></div></div>
-              <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--ink-45)">3</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Consumption change</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Optional</div></div></div></div>
-            </div>
-            <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
-              <div class="bp cta"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Answer out loud</span></div>
-              <div style="text-align:center;font:600 11px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Later &middot; keep in staging</div>
+            <div style="border-top:1px solid var(--border);padding-top:11px">
+              <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
             </div>
           </div>
         </div>
         <div class="explain">
           <span class="why">Why it looks like this</span>
-          <p>Once the drive ends, the phone lists exactly what the transcript could not resolve, checked against the schema for an existing customer. Two of the three gaps are mandatory; the third can be left blank without blocking anything.</p>
+          <p>The first version of this screen made the rep wait until the car had parked before it would ask anything &mdash; a rule enforced by the app rather than a choice the rep made. That's gone: the moment the monologue ends, Oracle asks directly, still by voice, still nothing to tap. &quot;Continue&quot; goes straight into the questions; &quot;Later&quot; ends the session outright rather than half-staging it, and the car display drops to a plain <em>Session inactive</em> state until the rep picks the visit back up from Home.</p>
         </div>
       </div>
     </article>
 
     <article class="step" id="s6">
       <div class="step-head">
-        <span class="step-num">06</span>
+        <span class="step-num">05</span>
         <h2 class="step-title">Oracle asks out loud</h2>
         <span class="step-phase">Phone</span>
       </div>
       <div class="step-body">
         <div class="frame-col">
           <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
-            <div class="phone-status"><span>11:35</span><span>iOS</span></div>
+            <div class="phone-status"><span>11:08</span><span>iOS</span></div>
             <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border);align-items:baseline">
               <div style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Question 1 of 3</div>
               <div class="k">Bergman Maskin AB</div>
@@ -404,14 +371,14 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
 
     <article class="step" id="s7">
       <div class="step-head">
-        <span class="step-num">07</span>
+        <span class="step-num">06</span>
         <h2 class="step-title">Staged record</h2>
         <span class="step-phase">Phone</span>
       </div>
       <div class="step-body">
         <div class="frame-col">
           <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
-            <div class="phone-status"><span>11:41</span><span>iOS</span></div>
+            <div class="phone-status"><span>11:12</span><span>iOS</span></div>
             <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border)">
               <div style="display:flex;justify-content:space-between;align-items:center">
                 <div class="k">In staging &middot; not in CRM</div>
@@ -445,7 +412,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
 
     <article class="step" id="s8">
       <div class="step-head">
-        <span class="step-num">08</span>
+        <span class="step-num">07</span>
         <h2 class="step-title">Field origin &middot; transcript</h2>
         <span class="step-phase">Phone</span>
       </div>
@@ -475,16 +442,16 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
 
     <article class="step" id="s9">
       <div class="step-head">
-        <span class="step-num">09</span>
+        <span class="step-num">08</span>
         <h2 class="step-title">Synced to CRM</h2>
         <span class="step-phase">Phone</span>
       </div>
       <div class="step-body">
         <div class="frame-col">
           <div class="bp phone"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i>
-            <div class="phone-status"><span>11:42</span><span>iOS</span></div>
+            <div class="phone-status"><span>11:13</span><span>iOS</span></div>
             <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border)">
-              <div class="k" style="color:var(--blueprint)">Synced 11:42</div>
+              <div class="k" style="color:var(--blueprint)">Synced 11:13</div>
               <div style="font:600 27px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Six fields written to your CRM</div>
               <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
             </div>
@@ -514,7 +481,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
       <div>
         <h3>What's real in this build</h3>
         <ul>
-          <li><b>The full interaction flow</b>, all nine screens, wired end to end in React Native for iOS and Android.</li>
+          <li><b>The full interaction flow</b>, all eight screens, wired end to end in React Native for iOS and Android.</li>
           <li><b>The visual system</b> above: paper ground, blueprint registration marks, Barlow / Barlow Condensed, carried over pixel-for-pixel from the design review.</li>
           <li><b>The demo dataset</b>: a single fixed visit (Bergman Maskin AB) with real-shaped fields, questions and transcript text.</li>
         </ul>
@@ -525,6 +492,7 @@ footer.status{padding-block:44px 60px;border-top:1px solid var(--border)}
           <li>Real speech-to-text, calendar matching and location, and a live CRM push. These screens run on the fixed demo dataset, not a backend.</li>
           <li>An actual CarPlay / Android Auto surface. Screens 02&ndash;04 render inside the phone app as a non-interactive, landscape-framed card; a real in-car surface needs a separate native extension.</li>
           <li>Two of the three spoken gap questions (next step, consumption change) use written-for-demo copy; only the decision-maker question was scripted in the original design.</li>
+          <li>Choosing "later" on step 04 ends the session outright (Inactive) rather than partially staging it; there's no save-and-resume layer yet, so that visit doesn't actually come back later in this build.</li>
         </ul>
       </div>
     </div>

@@ -18,7 +18,7 @@ export function StagedScreen({ navigation }: Props) {
 
   return (
     <Screen>
-      <PhoneChrome time="11:41" />
+      <PhoneChrome time="11:12" />
       <View style={{ paddingHorizontal: 18, paddingBottom: 13, borderBottomWidth: 1, borderBottomColor: color.border }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
           <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: ink(0.55) }}>

@@ -31,7 +31,7 @@ export function CarRecordingScreen({ navigation }: Props) {
 
   return (
     <CarFrame
-      below={<DevAdvance label='"Oracle, stop"' onPress={() => navigation.replace('CarSaved', { elapsedSeconds: secondsRef.current })} />}
+      below={<DevAdvance label='"Oracle, stop"' onPress={() => navigation.replace('CarAsk', { elapsedSeconds: secondsRef.current })} />}
     >
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

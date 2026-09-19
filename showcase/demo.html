@@ -62,6 +62,9 @@ header.top .wrap{display:flex;justify-content:space-between;align-items:baseline
 .wordmark{font:600 15px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
 .wordmark b{color:var(--blueprint)}
 .top-meta{font:500 12px/1.4 "Barlow",sans-serif;color:var(--ink-55)}
+.restart-btn{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--border);color:var(--ink-55);padding:7px 11px;font:600 11px/1 "Barlow Condensed",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.restart-btn:hover{color:var(--ink);border-color:rgba(29,31,32,.35)}
+.restart-btn svg{width:13px;height:13px}
 
 .intro{padding-block:36px 8px}
 .intro h1{font:600 32px/1.1 "Barlow Condensed",sans-serif;max-width:22ch}
@@ -113,7 +116,13 @@ footer.status a{color:var(--blueprint)}
 <header class="top">
   <div class="wrap">
     <div class="wordmark">Oracle <b>Note</b></div>
-    <div class="top-meta">Interactive demo &middot; phone app + in-car display</div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="top-meta">Interactive demo &middot; phone app + in-car display</div>
+      <button class="restart-btn" onclick="resetDemo()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+        Restart demo
+      </button>
+    </div>
   </div>
 </header>
 
@@ -136,7 +145,7 @@ footer.status a{color:var(--blueprint)}
 <section class="stage-section" id="stage-phone">
   <div class="wrap">
     <div class="stage-note">
-      <p>Fully interactive: tap buttons and rows the way a rep would after the visit is already recorded. (Recording itself happens in the car &mdash; see that tab.)</p>
+      <p>Fully interactive: tap buttons and rows the way a rep would once Oracle has started asking. (Recording, and the continue-or-later choice, happen in the car &mdash; see that tab.)</p>
       <span class="stage-caption" id="phone-caption">Home &middot; today's visits</span>
     </div>
   </div>
@@ -155,36 +164,17 @@ footer.status a{color:var(--blueprint)}
         </div>
         <div style="flex:1">
           <div class="row"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Setterwall Mekaniska</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:var(--ink-55)">09:20 &middot; Synced &middot; 5 fields updated</div></div><span class="tag">Synced</span></div>
-          <div class="row" style="background:var(--pale)"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:#2c455d">11:05 &middot; recorded in the car &middot; ready to review</div></div><span class="tagv">Next</span></div>
+          <div class="row" style="background:var(--pale)"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Bergman Maskin AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif;color:#2c455d">11:05 &middot; recorded in the car &middot; 3 questions to answer</div></div><span class="tagv">Next</span></div>
           <div class="row" style="opacity:.55"><div><div style="font:600 17px/1.15 'Barlow Condensed',sans-serif">Nordflex Verkstad AB</div><div style="font:500 12px/1.4 'Barlow',sans-serif">13:30 &middot; upcoming &middot; 22 km, leave 13:00</div></div></div>
         </div>
         <div style="padding:14px 18px 18px">
-          <button class="bp cta" onclick="goPhone('gaps')"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Review Bergman visit</span></button>
-        </div>
-      </div>
-
-      <!-- GAPS -->
-      <div class="screen" data-state="gaps" hidden>
-        <div class="phone-status"><span>11:34</span><span>iOS</span></div>
-        <div style="padding:10px 18px 14px;border-bottom:1px solid var(--border)">
-          <div class="k">Car stopped &middot; 2:07 captured</div>
-          <div style="font:600 24px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Three gaps in the Bergman debrief</div>
-          <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Checked against the existing-customer schema. Two of the three are mandatory.</div>
-        </div>
-        <div style="flex:1">
-          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">1</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Decision maker</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; nobody named</div></div></div></div>
-          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--blueprint)">2</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Next step and date</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Mandatory &middot; &quot;after their audit&quot;</div></div></div></div>
-          <div class="row"><div style="display:flex;gap:10px"><span style="font:600 12px/1.3 'Barlow Condensed',sans-serif;color:var(--ink-45)">3</span><div><div style="font:600 15px/1.15 'Barlow Condensed',sans-serif">Consumption change</div><div style="font:500 11.5px/1.4 'Barlow',sans-serif;color:var(--ink-55)">Optional</div></div></div></div>
-        </div>
-        <div style="padding:14px 18px 18px;display:flex;flex-direction:column;gap:9px">
-          <button class="bp cta" onclick="goPhone('asking',0)"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Answer out loud</span></button>
-          <button class="textlink" style="text-align:center" onclick="goPhone('staged')">Later &middot; keep in staging</button>
+          <button class="bp cta" onclick="goPhone('asking',0)"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i><span class="dot"></span><span class="l">Review Bergman visit</span></button>
         </div>
       </div>
 
       <!-- ASKING (3 questions, one block, content swapped by JS) -->
       <div class="screen" data-state="asking" hidden>
-        <div class="phone-status"><span>11:35</span><span>iOS</span></div>
+        <div class="phone-status"><span>11:08</span><span>iOS</span></div>
         <div style="display:flex;justify-content:space-between;padding:10px 18px 12px;border-bottom:1px solid var(--border);align-items:baseline">
           <div id="ask-progress" style="font:600 10.5px/1 'Barlow Condensed',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)">Question 1 of 3</div>
           <div class="k">Bergman Maskin AB</div>
@@ -216,7 +206,7 @@ footer.status a{color:var(--blueprint)}
 
       <!-- STAGED -->
       <div class="screen" data-state="staged" hidden>
-        <div class="phone-status"><span>11:41</span><span>iOS</span></div>
+        <div class="phone-status"><span>11:12</span><span>iOS</span></div>
         <div style="padding:8px 18px 12px;border-bottom:1px solid var(--border)">
           <div style="display:flex;justify-content:space-between;align-items:center">
             <div class="k">In staging &middot; not in CRM</div>
@@ -242,9 +232,9 @@ footer.status a{color:var(--blueprint)}
 
       <!-- SYNCED -->
       <div class="screen" data-state="synced" hidden>
-        <div class="phone-status"><span>11:42</span><span>iOS</span></div>
+        <div class="phone-status"><span>11:13</span><span>iOS</span></div>
         <div style="padding:14px 18px 16px;border-bottom:1px solid var(--border)">
-          <div class="k" style="color:var(--blueprint)">Synced 11:42</div>
+          <div class="k" style="color:var(--blueprint)">Synced 11:13</div>
           <div style="font:600 26px/1.08 'Barlow Condensed',sans-serif;margin-top:5px">Six fields written to your CRM</div>
           <div style="font:500 12px/1.4 'Barlow',sans-serif;color:rgba(29,31,32,.58);margin-top:6px">Bergman Maskin AB &middot; existing customer visit</div>
         </div>
@@ -283,7 +273,7 @@ footer.status a{color:var(--blueprint)}
 <section class="stage-section" id="stage-car" hidden>
   <div class="wrap">
     <div class="stage-note">
-      <p>Nothing on this display is tappable, on purpose &mdash; the design review ruled out touch here entirely. Start and stop are spoken. Use the controls below the frame to stand in for that voice command.</p>
+      <p>Nothing on this display is tappable, on purpose &mdash; the design review ruled out touch here entirely. Start, stop, and the continue-or-later choice are all spoken. Use the controls below the frame to stand in for that voice.</p>
       <span class="stage-caption" id="car-caption">Ready to debrief</span>
     </div>
   </div>
@@ -320,16 +310,29 @@ footer.status a{color:var(--blueprint)}
         <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Say &quot;Oracle, stop&quot; when you're finished</div>
       </div>
 
-      <div class="screen" data-cstate="saved" style="justify-content:space-between" hidden>
+      <div class="screen" data-cstate="ask" style="justify-content:space-between" hidden>
         <div style="display:flex;justify-content:space-between;align-items:baseline">
-          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved to phone</div>
+          <div id="car-ask-saved" style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Saved &middot; 02:07</div>
           <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
         </div>
-        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
-          <div id="car-final-clock" style="font:600 92px/.85 'Barlow Condensed',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--ink-55)">02:07</div>
-          <div style="height:1px;background:var(--border)"></div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px">
+          <div style="font:600 36px/1.05 'Barlow Condensed',sans-serif">3 quick questions now,<br>or later?</div>
         </div>
-        <div style="font:600 14px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Follow-up questions wait until you've parked</div>
+        <div style="border-top:1px solid var(--border);padding-top:11px">
+          <div style="font:600 15px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint)">Say &quot;Continue&quot; or &quot;Later&quot;</div>
+        </div>
+      </div>
+
+      <div class="screen" data-cstate="inactive" style="justify-content:space-between" hidden>
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-55)">Session inactive</div>
+          <div style="font:600 13px/1 'Barlow Condensed',sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-55)">Bergman Maskin AB</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px">
+          <div style="font:600 34px/1.05 'Barlow Condensed',sans-serif;color:rgba(29,31,32,.6)">Saved, not reviewed</div>
+          <div style="font:500 14.5px/1.4 'Barlow',sans-serif;color:var(--ink-45)">Resume anytime from today's visits.</div>
+        </div>
+        <div style="height:1px;background:var(--border)"></div>
       </div>
 
     </div>
@@ -349,12 +352,17 @@ footer.status a{color:var(--blueprint)}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
         Simulate: &quot;Oracle, stop&quot;
       </button>
+      <button class="sim-btn" id="car-sim-continue" onclick="carContinue()" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        Simulate: &quot;Continue&quot;
+      </button>
+      <button class="sim-btn" id="car-sim-later" onclick="carLater()" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        Simulate: &quot;Later&quot;
+      </button>
     </div>
-    <div class="sim-note" id="car-parked-note" hidden>
-      Once parked, the held gap questions continue on the phone.
-      <button class="textlink" style="color:var(--blueprint);vertical-align:baseline" onclick="continueOnPhone()">Continue there &rarr;</button>
-    </div>
-    <div class="sim-note">The dashed control stands in for the spoken command &mdash; in the app this has no on-screen button at all.</div>
+    <div class="sim-note" id="car-inactive-note" hidden>Nothing further happens automatically from here &mdash; that's the point of "later."</div>
+    <div class="sim-note">The dashed controls stand in for what's spoken &mdash; in the app none of this is an on-screen button.</div>
   </div>
 </section>
 
@@ -373,6 +381,7 @@ footer.status a{color:var(--blueprint)}
         <h3>What's simulated</h3>
         <ul>
           <li>There's no real voice recognition here. The dashed controls under the car display stand in for the spoken commands the app itself listens for.</li>
+          <li>Choosing "Later" ends the session (Inactive) rather than partially staging it &mdash; there's no save-and-resume layer, so that visit doesn't actually come back later in this build.</li>
           <li>One fixed demo visit (Bergman Maskin AB), same as the full build and the <a href="https://claude.ai/artifact/UesVC7p1CRtC6v4SNzSuRw" target="_blank" rel="noopener">walkthrough</a>.</li>
         </ul>
       </div>
@@ -396,11 +405,12 @@ footer.status a{color:var(--blueprint)}
   var CAR_LINES = {
     ready: 'Ready to debrief. Say, Oracle, start debrief.',
     recording: 'Recording. Say, Oracle, stop, when you’re finished.',
-    saved: 'Saved to phone. Follow-up questions wait until you’ve parked.'
+    ask: 'Saved. Three quick questions now, or later?',
+    inactive: 'Session inactive. Resume anytime from today’s visits.'
   };
 
-  var phoneCaptions = { home: 'Home · today’s visits', gaps: 'Gaps held · phone', asking: 'Oracle asks out loud', staged: 'Staged record', sheet: 'Field origin · transcript', synced: 'Synced to CRM' };
-  var carCaptions = { ready: 'Ready to debrief', recording: 'Recording', saved: 'Saved to phone' };
+  var phoneCaptions = { home: 'Home · today’s visits', asking: 'Oracle asks out loud', staged: 'Staged record', sheet: 'Field origin · transcript', synced: 'Synced to CRM' };
+  var carCaptions = { ready: 'Ready to debrief', recording: 'Recording', ask: 'Continue or later?', inactive: 'Session inactive' };
 
   var askingIndex = 0;
   var carSeconds = 108;
@@ -455,11 +465,6 @@ footer.status a{color:var(--blueprint)}
     document.getElementById('tabbtn-phone').setAttribute('aria-selected', d === 'phone');
     document.getElementById('tabbtn-car').setAttribute('aria-selected', d === 'car');
   };
-  window.continueOnPhone = function(){
-    setDevice('phone');
-    goPhone('gaps');
-    window.scrollTo({ top: document.getElementById('stage-phone').getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' });
-  };
 
   // ---- phone state ----
   function showPhoneScreen(state){
@@ -500,7 +505,9 @@ footer.status a{color:var(--blueprint)}
     document.getElementById('car-caption').textContent = carCaptions[state];
     document.getElementById('car-sim-start').hidden = state !== 'ready';
     document.getElementById('car-sim-stop').hidden = state !== 'recording';
-    document.getElementById('car-parked-note').hidden = state !== 'saved';
+    document.getElementById('car-sim-continue').hidden = state !== 'ask';
+    document.getElementById('car-sim-later').hidden = state !== 'ask';
+    document.getElementById('car-inactive-note').hidden = state !== 'inactive';
   }
   window.carStart = function(){
     carSeconds = 108;
@@ -515,8 +522,31 @@ footer.status a{color:var(--blueprint)}
   };
   window.carStop = function(){
     clearInterval(carTimer);
-    document.getElementById('car-final-clock').textContent = fmt(carSeconds);
-    showCarScreen('saved');
+    document.getElementById('car-ask-saved').textContent = 'Saved · ' + fmt(carSeconds);
+    showCarScreen('ask');
+  };
+  window.carContinue = function(){
+    setDevice('phone');
+    goPhone('asking', 0);
+    window.scrollTo({ top: document.getElementById('stage-phone').getBoundingClientRect().top + window.scrollY - 12, behavior: 'smooth' });
+  };
+  window.carLater = function(){
+    showCarScreen('inactive');
+  };
+
+  window.resetDemo = function(){
+    clearInterval(carTimer);
+    if(canSpeak) window.speechSynthesis.cancel();
+    askingIndex = 0;
+    carSeconds = 108;
+    renderAsking();
+    showPhoneScreen('home');
+    showCarScreen('ready');
+    setDevice('phone');
+    document.getElementById('ask-speak-btn').classList.remove('speaking');
+    document.getElementById('car-speak-btn').classList.remove('speaking');
+    if(canSpeak) document.getElementById('car-speak-label').textContent = 'Hear Oracle';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // ---- init ----

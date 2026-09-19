@@ -20,8 +20,8 @@ import {
 import { HomeScreen } from './src/screens/HomeScreen';
 import { CarReadyScreen } from './src/screens/CarReadyScreen';
 import { CarRecordingScreen } from './src/screens/CarRecordingScreen';
-import { CarSavedScreen } from './src/screens/CarSavedScreen';
-import { GapsScreen } from './src/screens/GapsScreen';
+import { CarAskScreen } from './src/screens/CarAskScreen';
+import { CarInactiveScreen } from './src/screens/CarInactiveScreen';
 import { AskingScreen } from './src/screens/AskingScreen';
 import { StagedScreen } from './src/screens/StagedScreen';
 import { SyncedScreen } from './src/screens/SyncedScreen';
@@ -62,8 +62,8 @@ export default function App() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="CarReady" component={CarReadyScreen} />
             <Stack.Screen name="CarRecording" component={CarRecordingScreen} />
-            <Stack.Screen name="CarSaved" component={CarSavedScreen} />
-            <Stack.Screen name="Gaps" component={GapsScreen} />
+            <Stack.Screen name="CarAsk" component={CarAskScreen} />
+            <Stack.Screen name="CarInactive" component={CarInactiveScreen} />
             <Stack.Screen name="Asking" component={AskingScreen} />
             <Stack.Screen name="Staged" component={StagedScreen} />
             <Stack.Screen name="Synced" component={SyncedScreen} />

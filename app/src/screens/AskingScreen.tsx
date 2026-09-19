@@ -24,7 +24,7 @@ export function AskingScreen({ navigation, route }: Props) {
 
   return (
     <Screen>
-      <PhoneChrome time="11:35" />
+      <PhoneChrome time="11:08" />
       <View
         style={{
           paddingHorizontal: 18,

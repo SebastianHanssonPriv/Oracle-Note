@@ -14,10 +14,10 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Synced'>;
 export function SyncedScreen({ navigation }: Props) {
   return (
     <Screen>
-      <PhoneChrome time="11:42" />
+      <PhoneChrome time="11:13" />
       <View style={{ paddingHorizontal: 18, paddingTop: 16, paddingBottom: 18, borderBottomWidth: 1, borderBottomColor: color.border }}>
         <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 10, letterSpacing: 1.6, textTransform: 'uppercase', color: color.blueprint }}>
-          Synced 11:42
+          Synced 11:13
         </Text>
         <Text style={{ fontFamily: font.condensed.semiBold, fontSize: 32, lineHeight: 34, marginTop: 6, color: color.ink }}>
           Six fields written{'\n'}to your CRM
