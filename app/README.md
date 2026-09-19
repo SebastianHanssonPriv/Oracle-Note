@@ -49,7 +49,7 @@ itself are unchanged; every component was rebuilt against Bufab's actual
 - `src/ui/` — shared primitives, each modeled on its Bufab component: `Card` (`.ds-card`), `Button` (`.ds-btn`, 4 variants × 3 sizes), `Badge` (`.ds-badge`, 6 status tones), `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
 - `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end. Every write also fires a best-effort mirror to the backend (see "Backend" below).
-- `src/services/` — client for [`../backend/`](../backend): `backendConfig.ts` (unconfigured by default, same pattern as `src/auth/`), `backendClient.ts` (extraction, sync, and state-mirror calls, all best-effort — never throws, never blocks the UI on a network problem).
+- `src/services/` — client for [`../backend/`](../backend): `backendConfig.ts` (unconfigured by default, same pattern as `src/auth/`), `backendClient.ts` (extraction, sync, and state-mirror calls, all best-effort — never throws, never blocks the UI on a network problem); `audioRecording.ts` (in-memory handle to the last finished recording — see "Audio capture" below).
 - `src/auth/` — Entra ID (Azure AD) SSO scaffold via MSAL. See "Sign-in / MDM" below — this ships unconfigured (placeholder IDs) and is inert until real values are set.
 - `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions, and can be left early via "Finish the rest later"), `Staged`, `Synced`.
 - `App.tsx` — font loading, auth gate, and React Navigation native-stack wiring.
@@ -83,6 +83,43 @@ what already worked if the backend is absent or unreachable:
   ever being hardcoded in `mockVisit.ts`.
 - `screens/StagedScreen.tsx`'s "Confirm & sync" also POSTs the confirmed
   record to the backend's sink, alongside the existing local status change.
+
+## Audio capture
+
+`CarRecordingScreen` records real microphone audio via
+[`expo-audio`](https://www.npmjs.com/package/expo-audio) (the app's SDK 57
+recording API; `expo-av`, its predecessor, is deprecated) — the clock now
+shows the real elapsed recording time, starting from `00:00`, instead of
+the fixed `01:48` the source mockup's static frame used. On mount, the
+screen requests microphone permission
+(`app.json`'s `expo-audio` plugin entry sets `NSMicrophoneUsageDescription`
+/ `RECORD_AUDIO`) and starts recording if granted; "Oracle, stop" finalizes
+it and hands the local file URI to `src/services/audioRecording.ts`.
+
+**If the microphone is unavailable for any reason** — permission denied, no
+microphone (this also covers running the web build in a browser or
+automated test with no mic device), or the recording call throwing — the
+screen falls back to exactly the timer-only behavior it had before real
+capture existed. A rep is never blocked by a microphone problem. Verified
+in this build via two separate Playwright passes against the web export:
+one with no microphone available at all (the sandbox's actual condition,
+confirming the fallback path), one launching Chromium with
+`--use-fake-device-for-media-stream` and a granted `microphone` permission
+(confirming the real recording path — `recorder.record()`,
+`useAudioRecorderState`'s live `durationMillis`, and `recorder.stop()` /
+`recorder.currentTime` all worked against a real, if synthetic, media
+stream, not just type-checked).
+
+**What doesn't exist yet, on purpose**: nothing consumes the recorded file.
+There's no upload, no STT, and — because of that — no real
+"audio deleted after transcription," despite that being the Staged screen's
+existing copy (see `ARCHITECTURE.md`'s "Governance and security" section,
+which flags this explicitly as a UI promise ahead of the code that would
+make it true). The file sits in the recorder's local cache/document
+directory until the OS reclaims it or the app is reset; uploading it to a
+new `SttProvider` on the backend (not scaffolded yet — `backend/` currently
+only has `ExtractionProvider` and `SinkProvider`, see `backend/README.md`)
+is the next piece, once real transcription exists to send it to.
 
 ## Sign-in / MDM (Entra ID SSO)
 
@@ -188,10 +225,15 @@ out-of-band work — this scaffold only covers Oracle Note's own sign-in.
   flagged) and the optional Consumption-change row are still the fixed mock
   content, not derived from anything the rep actually said, since there's
   no real audio capture or STT feeding them yet.
-- **No real voice, speech-to-text, calendar-matching, or CRM integration.**
-  This is a UI/interaction build of the design, using the same fixed mock
-  dataset the prototype used. Wiring an actual STT engine, calendar/location
-  matching, and a CRM push API is a separate, unscoped effort.
+- **Real audio capture exists; speech-to-text, calendar-matching, and CRM
+  integration still don't.** `CarRecordingScreen` records real microphone
+  audio (see "Audio capture" above) — but nothing transcribes it, the gap
+  questions and staged "extracted" fields are still the same fixed mock
+  content the prototype used regardless of what was actually said, and
+  there's no calendar/location matching or CRM push API. Wiring an actual
+  STT + extraction pipeline behind the recording that now exists, plus
+  calendar/location matching and a CRM push API, remains a separate,
+  unscoped effort.
 - **Car display is not real CarPlay/Android Auto.** The brief and chat
   transcript are explicit that the car screen should have zero touch
   targets — start/stop/skip are voice-only, or done on the phone before the

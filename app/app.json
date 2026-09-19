@@ -30,6 +30,12 @@
         {
           "androidPackageSignatureHash": "YOUR_ANDROID_SIGNATURE_HASH"
         }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "Oracle Note records your spoken debrief so it can be staged and synced. Audio stays on this device."
+        }
       ]
     ]
   }
