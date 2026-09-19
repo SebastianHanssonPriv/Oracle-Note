@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../ui/Screen';
@@ -8,6 +8,7 @@ import { TextAction } from '../ui/TextAction';
 import { Waveform } from '../ui/Waveform';
 import { color, font, ink } from '../theme';
 import { gapQuestions, visit } from '../data/mockVisit';
+import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Asking'>;
@@ -17,9 +18,24 @@ export function AskingScreen({ navigation, route }: Props) {
   const question = gapQuestions[questionIndex];
   const isLast = questionIndex === gapQuestions.length - 1;
 
-  function advance() {
-    if (isLast) navigation.navigate('Staged', {});
-    else navigation.navigate('Asking', { questionIndex: questionIndex + 1 });
+  // Persist progress as it happens, not just at the end — closing the app
+  // mid-loop (or tapping "Finish the rest later" below) shouldn't lose it.
+  useEffect(() => {
+    saveVisitState({ status: 'answering', askingIndex: questionIndex });
+  }, [questionIndex]);
+
+  async function advance() {
+    if (isLast) {
+      await saveVisitState({ status: 'staged' });
+      navigation.navigate('Staged', {});
+    } else {
+      navigation.navigate('Asking', { questionIndex: questionIndex + 1 });
+    }
+  }
+
+  async function finishLater() {
+    await saveVisitState({ status: 'answering', askingIndex: questionIndex });
+    navigation.popToTop();
   }
 
   return (
@@ -72,6 +88,7 @@ export function AskingScreen({ navigation, route }: Props) {
       <View style={{ padding: 18, gap: 11 }}>
         <CTAButton label="Next question" onPress={advance} />
         <TextAction label="Skip this one" onPress={advance} />
+        <TextAction label="Finish the rest later" tone="blueprint" onPress={finishLater} />
       </View>
     </Screen>
   );

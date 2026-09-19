@@ -34,16 +34,35 @@ npm run ios      # or: npm run android
 - `src/theme.ts` — colors, typography, corner registration-mark constants, lifted from the source `.dc.html`'s CSS.
 - `src/ui/` — shared primitives: `Blueprint` (the bordered "steel on paper" frame with corner marks), `CTAButton`, `Tag`, `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
-- `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions), `Staged`, `Synced`.
+- `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end.
+- `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions, and can be left early via "Finish the rest later"), `Staged`, `Synced`.
 - `App.tsx` — font loading + React Navigation native-stack wiring.
+
+## "Later" / resume, on purpose
+
+The rep is never forced through the gap questions on the app's timeline.
+After the monologue, "Later" on `CarAsk` — and "Finish the rest later" at any
+point inside `Asking` — persist exactly where things stand (recorded but
+unanswered, or partway through the 3 questions) and return to `Home`. `Home`
+reads that state on every focus and reflects it truthfully: "Recorded in the
+car · 3 questions to answer", "N questions left to answer", "Answers in ·
+ready to sync", or "Synced". The primary button on `Home` resumes at the
+right screen — it never restarts the debrief from scratch. A "Reset demo
+data" link at the bottom of `Home` clears it for repeat testing.
 
 ## Known limitations / assumptions
 
-- **"Later" ends the session rather than partially staging it.** Choosing
-  "Later" on the continue-or-later screen goes straight to `CarInactive` —
-  nothing is staged or synced yet. There's no persistence layer, so in this
-  build that visit doesn't actually resume from `Home` later; it's a dead
-  end included to show the state, not a working save-and-resume.
+- **The save-and-resume is on-device only.** State lives in local
+  `AsyncStorage`, not a backend. A rep who reinstalls the app or switches
+  phones loses an unsynced, deferred debrief. A real build would sync this
+  state server-side as soon as "Continue" or "Later" is first chosen, not
+  only at final CRM push.
+- **Staged field *values* are still static.** The status-level flow
+  (recorded → answering → staged → synced) is real and persisted, but
+  `Staged`'s field list is still the fixed mock content from
+  `mockVisit.ts`, not dynamically built from what was actually answered or
+  skipped in `Asking`. Wiring per-field answers through is a separate,
+  larger piece of state management than the save/resume this round covered.
 - **No real voice, speech-to-text, calendar-matching, or CRM integration.**
   This is a UI/interaction build of the design, using the same fixed mock
   dataset the prototype used. Wiring an actual STT engine, calendar/location

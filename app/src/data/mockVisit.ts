@@ -97,6 +97,8 @@ export const syncedRows = [
 
 export const homeVisits = [
   { time: '09:20', customer: 'Setterwall Mekaniska', note: 'Synced · 5 fields updated', status: 'synced' as const },
+  // Bergman's note/status here are placeholders only — HomeScreen renders its
+  // row from the persisted visitStore state, not from this static entry.
   { time: '11:05', customer: 'Bergman Maskin AB', note: 'Existing customer visit · debrief not started', status: 'next' as const },
   { time: '13:30', customer: 'Nordflex Verkstad AB', note: 'Upcoming · 22 km, leave 13:00', status: 'upcoming' as const },
   { time: '15:45', customer: 'Lindqvist Hydraulik', note: 'Upcoming · prospect, first visit', status: 'upcoming' as const },

@@ -6,6 +6,7 @@ import { DevAdvance } from '../ui/DevAdvance';
 import { Waveform } from '../ui/Waveform';
 import { color, font, ink } from '../theme';
 import { visit } from '../data/mockVisit';
+import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CarRecording'>;
@@ -31,7 +32,16 @@ export function CarRecordingScreen({ navigation }: Props) {
 
   return (
     <CarFrame
-      below={<DevAdvance label='"Oracle, stop"' onPress={() => navigation.replace('CarAsk', { elapsedSeconds: secondsRef.current })} />}
+      below={
+        <DevAdvance
+          label='"Oracle, stop"'
+          onPress={async () => {
+            const elapsedSeconds = secondsRef.current;
+            await saveVisitState({ status: 'recorded', elapsedSeconds, askingIndex: 0 });
+            navigation.replace('CarAsk', { elapsedSeconds });
+          }}
+        />
+      }
     >
       <View style={{ flex: 1, justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

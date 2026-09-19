@@ -27,7 +27,7 @@ export function CarInactiveScreen({ navigation }: Props) {
             Saved, not reviewed
           </Text>
           <Text style={{ fontFamily: font.body.medium, fontSize: 14.5, lineHeight: 19, color: ink(0.5) }}>
-            Resume anytime from today's visits.
+            No rush — it'll be waiting on Home whenever you pick it back up.
           </Text>
         </View>
 

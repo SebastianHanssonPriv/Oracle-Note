@@ -9,6 +9,7 @@ import { Row } from '../ui/Row';
 import { TranscriptSheet } from '../ui/TranscriptSheet';
 import { color, font, ink } from '../theme';
 import { stagedFields, visit } from '../data/mockVisit';
+import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Staged'>;
@@ -60,7 +61,14 @@ export function StagedScreen({ navigation }: Props) {
             Managed device and corporate network verified
           </Text>
         </View>
-        <CTAButton label="Confirm & sync 6 fields" height={50} onPress={() => navigation.navigate('Synced')} />
+        <CTAButton
+          label="Confirm & sync 6 fields"
+          height={50}
+          onPress={async () => {
+            await saveVisitState({ status: 'synced' });
+            navigation.navigate('Synced');
+          }}
+        />
       </View>
 
       <TranscriptSheet visible={sheetOpen} onClose={() => setSheetOpen(false)} />

@@ -5,6 +5,7 @@ import { CarFrame } from '../ui/CarFrame';
 import { DevAdvance } from '../ui/DevAdvance';
 import { color, font, ink } from '../theme';
 import { visit, gapQuestions } from '../data/mockVisit';
+import { saveVisitState } from '../data/visitStore';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CarAsk'>;
@@ -22,8 +23,23 @@ export function CarAskScreen({ navigation, route }: Props) {
     <CarFrame
       below={
         <View style={{ flexDirection: 'row', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <DevAdvance label='"Continue"' onPress={() => navigation.replace('Asking', { questionIndex: 0 })} />
-          <DevAdvance label='"Later"' onPress={() => navigation.replace('CarInactive')} />
+          <DevAdvance
+            label='"Continue"'
+            onPress={async () => {
+              await saveVisitState({ status: 'answering', askingIndex: 0 });
+              navigation.replace('Asking', { questionIndex: 0 });
+            }}
+          />
+          <DevAdvance
+            label='"Later"'
+            onPress={async () => {
+              // Status stays 'recorded': the monologue is saved, the gap
+              // questions are simply deferred, not abandoned. Home reads
+              // this and lets the rep resume any time.
+              await saveVisitState({ status: 'recorded' });
+              navigation.replace('CarInactive');
+            }}
+          />
         </View>
       }
     >
