@@ -1,11 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEMO_VISIT_ID } from '../services/backendConfig';
+import { saveVisitStateRemote } from '../services/backendClient';
+import { visit } from './mockVisit';
 
 // Local persistence for the single demo visit's debrief progress, so a rep
 // can monologue in the car, choose "Later", and pick the gap questions back
 // up whenever — this session, tonight, or later that week — from Home.
-// There's one real backend-shaped concept missing here: this is on-device
-// only. A rep switching phones, or reinstalling, loses progress. A real
-// build would sync this state server-side once "Continue" is first chosen.
+//
+// AsyncStorage stays the source of truth the UI reads from — it's
+// synchronous-feeling, always available, and never blocks on a network
+// call. Every write also fires a best-effort mirror to the backend's
+// /state endpoint (services/backendClient.ts): unconfigured or unreachable,
+// it silently no-ops, so this behaves exactly as before unless a backend is
+// actually deployed. That mirror is what makes "a rep switching phones, or
+// reinstalling, loses progress" no longer true once a real backend exists —
+// see backend/README.md.
 
 const STORAGE_KEY = 'oracle-note/bergman-visit-state';
 
@@ -42,6 +51,15 @@ export async function saveVisitState(patch: Partial<VisitState>): Promise<VisitS
     // Best-effort: if storage isn't available, the session still works,
     // it just won't survive an app restart.
   }
+  // Fire-and-forget: never let the remote mirror add latency or a failure
+  // mode to a local save. saveVisitStateRemote() already no-ops silently
+  // when the backend isn't configured or unreachable.
+  void saveVisitStateRemote(DEMO_VISIT_ID, {
+    customer: visit.customer,
+    status: next.status,
+    elapsedSeconds: next.elapsedSeconds,
+    askingIndex: next.askingIndex,
+  });
   return next;
 }
 

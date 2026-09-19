@@ -18,10 +18,22 @@ export type GapQuestion = {
   id: string;
   num: number;
   title: string;
+  /** Short field label this answer stages as on the Staged screen, e.g. "Next step" for the longer title "Next step and date". Defaults to `title` when omitted. */
+  stagedLabel?: string;
   meta: string;
   mandatory: boolean;
   oracleAsked: string;
   liveTranscript: string; // authored
+  /**
+   * The condensed field value this answer stages as on the Staged screen —
+   * e.g. "Ulrika Sand decides · plant mgr signs over 200k", not the full
+   * quoted `liveTranscript` sentence. A real extraction step would derive
+   * this from the transcript (summarization); until one exists, it's
+   * authored alongside the transcript rather than reusing it verbatim, so
+   * the Staged screen shows the same crisp copy it always has. Falls back
+   * to `liveTranscript` if omitted.
+   */
+  stagedAnswer?: string;
 };
 
 export const gapQuestions: GapQuestion[] = [
@@ -33,16 +45,19 @@ export const gapQuestions: GapQuestion[] = [
     mandatory: true,
     oracleAsked: '"Who decides on the frame agreement, and who signs it?"',
     liveTranscript: '"Ulrika Sand in purchasing decides, but the plant manager signs anything over two hundred thousand…"',
+    stagedAnswer: 'Ulrika Sand decides · plant mgr signs over 200k',
   },
   {
     id: 'next-step',
     num: 2,
     title: 'Next step and date',
+    stagedLabel: 'Next step',
     meta: 'Mandatory · you said "after their audit"',
     mandatory: true,
     // authored — source only gives the topic, not the spoken question or reply
     oracleAsked: '"You said the next step is after their audit — what\'s the date, and what happens?"',
     liveTranscript: '"Their audit wraps up the eighteenth, so let\'s target Friday the eighteenth for the kanban quote…"',
+    stagedAnswer: 'Kanban quote · Fri 18 Sep',
   },
   {
     id: 'consumption-change',

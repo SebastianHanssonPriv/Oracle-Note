@@ -1,0 +1,22 @@
+{
+  "name": "oracle-note-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Azure Functions API for Oracle Note: staged-field extraction and the temporary pilot analysis sink.",
+  "main": "dist/src/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -p . --watch",
+    "start": "npm run build && func start",
+    "dev-shim": "npm run build && node backend-shim.js",
+    "harness": "npm run build && node dist/test/harness.js"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.2",
+    "@azure/functions": "^4.16.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "typescript": "~6.0.3"
+  }
+}

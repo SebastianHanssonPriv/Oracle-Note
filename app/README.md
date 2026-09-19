@@ -48,7 +48,8 @@ itself are unchanged; every component was rebuilt against Bufab's actual
 - `src/theme.ts` — Bufab's tokens: colors, type scale, spacing (4px grid), radius, shadow, control sizes.
 - `src/ui/` — shared primitives, each modeled on its Bufab component: `Card` (`.ds-card`), `Button` (`.ds-btn`, 4 variants × 3 sizes), `Badge` (`.ds-badge`, 6 status tones), `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
-- `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end.
+- `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end. Every write also fires a best-effort mirror to the backend (see "Backend" below).
+- `src/services/` — client for [`../backend/`](../backend): `backendConfig.ts` (unconfigured by default, same pattern as `src/auth/`), `backendClient.ts` (extraction, sync, and state-mirror calls, all best-effort — never throws, never blocks the UI on a network problem).
 - `src/auth/` — Entra ID (Azure AD) SSO scaffold via MSAL. See "Sign-in / MDM" below — this ships unconfigured (placeholder IDs) and is inert until real values are set.
 - `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions, and can be left early via "Finish the rest later"), `Staged`, `Synced`.
 - `App.tsx` — font loading, auth gate, and React Navigation native-stack wiring.
@@ -64,6 +65,24 @@ car · 3 questions to answer", "N questions left to answer", "Answers in ·
 ready to sync", or "Synced". The primary button on `Home` resumes at the
 right screen — it never restarts the debrief from scratch. A "Reset demo
 data" link at the bottom of `Home` clears it for repeat testing.
+
+## Backend
+
+[`../backend/`](../backend) is a real Azure Functions API — see its own
+README for what it does and how it was verified. Same principle as `src/auth/`:
+this app ships pointed at nothing (`EXPO_PUBLIC_BACKEND_BASE_URL` unset,
+`src/services/backendConfig.ts`), so it behaves exactly as before unless
+someone deliberately runs the backend locally and points the app at it (or,
+eventually, a real pilot deployment). Three places call it, all
+best-effort — never blocking, never throwing, silently falling back to
+what already worked if the backend is absent or unreachable:
+
+- `data/visitStore.ts` mirrors every local status change remotely.
+- `screens/StagedScreen.tsx` asks the backend to turn the two mandatory gap
+  answers into staged "you said" fields, instead of those two fields only
+  ever being hardcoded in `mockVisit.ts`.
+- `screens/StagedScreen.tsx`'s "Confirm & sync" also POSTs the confirmed
+  record to the backend's sink, alongside the existing local status change.
 
 ## Sign-in / MDM (Entra ID SSO)
 
@@ -150,17 +169,25 @@ out-of-band work — this scaffold only covers Oracle Note's own sign-in.
   app registration, a development build, and an actual device or simulator
   to verify — none of which exist in the environment this was built in.
   Treat it as a correctly-shaped starting point, not a tested one.
-- **The save-and-resume is on-device only.** State lives in local
-  `AsyncStorage`, not a backend. A rep who reinstalls the app or switches
-  phones loses an unsynced, deferred debrief. A real build would sync this
-  state server-side as soon as "Continue" or "Later" is first chosen, not
-  only at final CRM push.
-- **Staged field *values* are still static.** The status-level flow
-  (recorded → answering → staged → synced) is real and persisted, but
-  `Staged`'s field list is still the fixed mock content from
-  `mockVisit.ts`, not dynamically built from what was actually answered or
-  skipped in `Asking`. Wiring per-field answers through is a separate,
-  larger piece of state management than the save/resume this round covered.
+- **Save-and-resume is on-device first, remote-mirrored best-effort.**
+  `AsyncStorage` stays the source of truth the UI reads from (see
+  "Backend" above), and every status change now also fires a best-effort
+  mirror to the backend's `/state` endpoint. That mirror is real — but it's
+  fire-and-forget: if the backend is unreachable at the exact moment a rep
+  reinstalls or switches phones, whatever hasn't successfully mirrored yet
+  is still lost. A real build would want to confirm the mirror landed (or
+  retry) before treating a status change as durable, not just attempt it
+  once and move on.
+- **Staged field values are real for the two mandatory gap answers, still
+  static for everything else.** `Staged`'s "Decision maker" and "Next step"
+  rows now come from a real network round-trip through the backend's
+  `/extract` endpoint (see "Backend" above) instead of being hardcoded
+  directly in `mockVisit.ts`. But the extraction itself is a deterministic
+  pass-through, not real natural-language extraction (no Azure OpenAI
+  tenant exists to call) — and the "extracted" fields (Stage, Volume, Risk
+  flagged) and the optional Consumption-change row are still the fixed mock
+  content, not derived from anything the rep actually said, since there's
+  no real audio capture or STT feeding them yet.
 - **No real voice, speech-to-text, calendar-matching, or CRM integration.**
   This is a UI/interaction build of the design, using the same fixed mock
   dataset the prototype used. Wiring an actual STT engine, calendar/location

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../ui/Screen';
@@ -8,20 +8,49 @@ import { Badge } from '../ui/Badge';
 import { Row } from '../ui/Row';
 import { TranscriptSheet } from '../ui/TranscriptSheet';
 import { color, space } from '../theme';
-import { stagedFields, visit } from '../data/mockVisit';
+import { gapQuestions, stagedFields as mockStagedFields, visit } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
 import { useAuth } from '../auth/AuthContext';
+import { extractStagedFields, syncVisit } from '../services/backendClient';
+import { DEMO_VISIT_ID } from '../services/backendConfig';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Staged'>;
 
 export function StagedScreen({ navigation }: Props) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [fields, setFields] = useState(mockStagedFields);
+  const [syncing, setSyncing] = useState(false);
   const { status, account } = useAuth();
   // App.tsx's RootNavigator only reaches this screen when status is
   // 'unconfigured' (no real Entra ID values yet, demo mode) or 'signed-in'
   // (SSO actually verified this session) — never a half-signed-in state.
   const verified = status === 'signed-in';
+
+  // Ask the backend to turn the answered gap questions into staged "you
+  // said" fields — a real network round-trip (see backend/README.md),
+  // replacing what used to be hardcoded twice (once in AskingScreen's
+  // liveTranscript, again here). If the backend isn't configured or isn't
+  // reachable, extractStagedFields() resolves null and this silently keeps
+  // the static mock values already showing — never a broken or blank field.
+  useEffect(() => {
+    let active = true;
+    const gapAnswers = gapQuestions
+      .filter((q) => q.mandatory)
+      .map((q) => ({ questionId: q.id, topicLabel: q.stagedLabel ?? q.title, question: q.oracleAsked, answer: q.stagedAnswer ?? q.liveTranscript }));
+    extractStagedFields(DEMO_VISIT_ID, gapAnswers).then((remote) => {
+      if (!active || !remote) return;
+      setFields((current) =>
+        current.map((f) => {
+          const match = remote.find((r) => r.label === f.label);
+          return match ? { ...f, value: match.value } : f;
+        })
+      );
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <Screen>
@@ -42,7 +71,7 @@ export function StagedScreen({ navigation }: Props) {
       </View>
 
       <View style={{ flex: 1 }}>
-        {stagedFields.map((f) => (
+        {fields.map((f) => (
           <Row
             key={f.label}
             label={f.label}
@@ -71,8 +100,23 @@ export function StagedScreen({ navigation }: Props) {
           label="Confirm & sync 6 fields"
           size="lg"
           block
+          loading={syncing}
           onPress={async () => {
+            setSyncing(true);
             await saveVisitState({ status: 'synced' });
+            // Best-effort — see backend/README.md. If unconfigured or
+            // unreachable this resolves null and the local status change
+            // above still stands; the demo never blocks on it.
+            await syncVisit(DEMO_VISIT_ID, {
+              customer: visit.customer,
+              stagedFields: fields.map((f) => ({
+                id: f.label,
+                label: f.label,
+                value: f.value,
+                origin: f.badge?.variant === 'brand' ? 'you-said' : 'extracted',
+              })),
+            });
+            setSyncing(false);
             navigation.navigate('Synced');
           }}
         />
