@@ -7,9 +7,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.oraclenote.app"
     },
     "android": {
+      "package": "com.oraclenote.app",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -20,6 +22,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-dev-client",
+      [
+        "react-native-msal",
+        {
+          "androidPackageSignatureHash": "YOUR_ANDROID_SIGNATURE_HASH"
+        }
+      ]
+    ]
   }
 }

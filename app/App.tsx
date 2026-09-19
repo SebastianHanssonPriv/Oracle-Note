@@ -27,10 +27,44 @@ import { StagedScreen } from './src/screens/StagedScreen';
 import { SyncedScreen } from './src/screens/SyncedScreen';
 import type { RootStackParamList } from './src/navigation/types';
 import { color } from './src/theme';
+import { AuthProvider, useAuth } from './src/auth/AuthContext';
+import { SignInGate } from './src/auth/SignInGate';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+
+function RootNavigator() {
+  const { status } = useAuth();
+
+  // 'unconfigured' (no real Entra ID values yet) behaves exactly like
+  // before this file existed — no sign-in wall. Once real values are set,
+  // 'checking'/'signed-out'/'signing-in' show the sign-in gate instead.
+  if (status !== 'unconfigured' && status !== 'signed-in') {
+    return <SignInGate />;
+  }
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: color.paper },
+        }}
+      >
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="CarReady" component={CarReadyScreen} />
+        <Stack.Screen name="CarRecording" component={CarRecordingScreen} />
+        <Stack.Screen name="CarAsk" component={CarAskScreen} />
+        <Stack.Screen name="CarInactive" component={CarInactiveScreen} />
+        <Stack.Screen name="Asking" component={AskingScreen} />
+        <Stack.Screen name="Staged" component={StagedScreen} />
+        <Stack.Screen name="Synced" component={SyncedScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -51,24 +85,9 @@ export default function App() {
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            initialRouteName="Home"
-            screenOptions={{
-              headerShown: false,
-              contentStyle: { backgroundColor: color.paper },
-            }}
-          >
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="CarReady" component={CarReadyScreen} />
-            <Stack.Screen name="CarRecording" component={CarRecordingScreen} />
-            <Stack.Screen name="CarAsk" component={CarAskScreen} />
-            <Stack.Screen name="CarInactive" component={CarInactiveScreen} />
-            <Stack.Screen name="Asking" component={AskingScreen} />
-            <Stack.Screen name="Staged" component={StagedScreen} />
-            <Stack.Screen name="Synced" component={SyncedScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <AuthProvider>
+          <RootNavigator />
+        </AuthProvider>
         <StatusBar style="dark" />
       </SafeAreaProvider>
     </View>

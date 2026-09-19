@@ -35,8 +35,9 @@ npm run ios      # or: npm run android
 - `src/ui/` — shared primitives: `Blueprint` (the bordered "steel on paper" frame with corner marks), `CTAButton`, `Tag`, `Row`, `TextAction`, `PhoneChrome`, `Waveform`, `CarFrame`, `TranscriptSheet`.
 - `src/data/mockVisit.ts` — the single demo dataset (Bergman Maskin AB) the flow is wired against.
 - `src/data/visitStore.ts` — local persistence (AsyncStorage) for that visit's debrief progress: status, elapsed recording time, and which gap question the rep is on. This is what makes "Later" and "Finish the rest later" real save-and-resume rather than a dead end.
+- `src/auth/` — Entra ID (Azure AD) SSO scaffold via MSAL. See "Sign-in / MDM" below — this ships unconfigured (placeholder IDs) and is inert until real values are set.
 - `src/screens/` — one screen per flow step: `Home`, `CarReady`, `CarRecording`, `CarAsk` (continue-or-later, voice-only), `CarInactive` (the "later" branch), `Asking` (loops through the 3 gap questions, and can be left early via "Finish the rest later"), `Staged`, `Synced`.
-- `App.tsx` — font loading + React Navigation native-stack wiring.
+- `App.tsx` — font loading, auth gate, and React Navigation native-stack wiring.
 
 ## "Later" / resume, on purpose
 
@@ -50,8 +51,80 @@ ready to sync", or "Synced". The primary button on `Home` resumes at the
 right screen — it never restarts the debrief from scratch. A "Reset demo
 data" link at the bottom of `Home` clears it for repeat testing.
 
+## Sign-in / MDM (Entra ID SSO)
+
+The phones this ships to are fully Intune-enrolled: device compliance and
+encryption come from MDM, and VPN is always-on and self-reasserting, so
+neither needs any code in this app. SSO is different — Teams, Outlook,
+Copilot and Defender get silent sign-in because they're Microsoft
+first-party apps already registered with the device's sign-in broker.
+Oracle Note isn't, and has to register itself the same way to get the same
+experience. `src/auth/` is that registration's app-side half, via
+[`react-native-msal`](https://github.com/stashenergy/react-native-msal).
+
+**As shipped, this is a no-op.** `src/auth/msalConfig.ts` holds placeholder
+IDs; `isMsalConfigured()` returns `false`; `App.tsx` skips the sign-in gate
+entirely and the app behaves exactly as it did before this existed. The
+Staged screen's compliance line reflects this honestly — "Demo mode ·
+device verification not configured" instead of a hardcoded claim of
+verification that was never actually checked.
+
+**To make it real:**
+
+1. In the Entra admin center: **App registrations → New registration**,
+   name it, and add two redirect URIs:
+   - Android (type "Mobile and desktop applications"):
+     `msauth://<android.package>/<androidPackageSignatureHash>`
+   - iOS/macOS: `msauth.<ios.bundleIdentifier>://auth`
+
+   `android.package` / `ios.bundleIdentifier` are set in `app.json`
+   (currently the placeholder `com.oraclenote.app` — change it to whatever
+   this app is actually going to be signed and published as, on both
+   platforms, consistently).
+2. Get the Android signature hash for whichever keystore will sign the
+   build. For a local debug build:
+   ```
+   keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore \
+     | openssl sha1 -binary | openssl base64
+   ```
+   For an EAS-managed build, `eas credentials` shows the equivalent for
+   whatever keystore EAS is signing with. Put that hash in both
+   `app.json`'s `plugins` entry for `react-native-msal` and in
+   `ANDROID_PACKAGE_SIGNATURE_HASH` in `msalConfig.ts` — they need to match.
+3. Copy the registration's **Application (client) ID** and **Directory
+   (tenant) ID** into `MSAL_CLIENT_ID` / `MSAL_TENANT_ID` in
+   `msalConfig.ts`.
+4. Under **API permissions**, add whatever scope the backend this app
+   eventually syncs to actually exposes, and put it in `MSAL_SCOPES`.
+   `User.Read` (Microsoft Graph) is left as a placeholder that proves
+   sign-in works before that backend exists.
+
+**This requires leaving Expo Go.** MSAL needs native iOS/Android SDKs
+linked in, which Expo Go can't do. Once real values are set, run
+`npx expo prebuild` (or build via EAS) and use an Expo **development
+build** instead — `expo-dev-client` is already a dependency for this
+reason.
+
+Once configured: launch tries a silent, broker-backed token acquisition
+first (the same thing Teams/Outlook do) and only falls back to an
+interactive "Sign in with Microsoft" screen if that fails. The Staged
+screen's compliance line then shows the real signed-in identity instead of
+"Demo mode."
+
+**Not done here, and worth being explicit about:** the backend/CRM side of
+this (registering that API in Entra ID, exposing a scope, optionally
+gating it with Conditional Access on device compliance) is separate,
+out-of-band work — this scaffold only covers Oracle Note's own sign-in.
+
 ## Known limitations / assumptions
 
+- **The MSAL scaffold is untested against a real tenant.** It's built from
+  `react-native-msal`'s actual type definitions and Expo config plugin
+  source (not guessed from memory), and the JS/TS side type-checks and
+  bundles cleanly, but the native sign-in flow itself needs a real Entra ID
+  app registration, a development build, and an actual device or simulator
+  to verify — none of which exist in the environment this was built in.
+  Treat it as a correctly-shaped starting point, not a tested one.
 - **The save-and-resume is on-device only.** State lives in local
   `AsyncStorage`, not a backend. A rep who reinstalls the app or switches
   phones loses an unsynced, deferred debrief. A real build would sync this

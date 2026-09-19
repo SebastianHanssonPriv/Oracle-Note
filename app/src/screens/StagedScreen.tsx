@@ -10,12 +10,18 @@ import { TranscriptSheet } from '../ui/TranscriptSheet';
 import { color, font, ink } from '../theme';
 import { stagedFields, visit } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
+import { useAuth } from '../auth/AuthContext';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Staged'>;
 
 export function StagedScreen({ navigation }: Props) {
   const [sheetOpen, setSheetOpen] = useState(false);
+  const { status, account } = useAuth();
+  // App.tsx's RootNavigator only reaches this screen when status is
+  // 'unconfigured' (no real Entra ID values yet, demo mode) or 'signed-in'
+  // (SSO actually verified this session) — never a half-signed-in state.
+  const verified = status === 'signed-in';
 
   return (
     <Screen>
@@ -56,9 +62,11 @@ export function StagedScreen({ navigation }: Props) {
 
       <View style={{ padding: 18, paddingTop: 12, borderTopWidth: 1, borderTopColor: color.border, gap: 9 }}>
         <View style={{ flexDirection: 'row', gap: 7, alignItems: 'center' }}>
-          <View style={{ width: 7, height: 7, backgroundColor: color.steel }} />
+          <View style={{ width: 7, height: 7, backgroundColor: verified ? color.steel : ink(0.3) }} />
           <Text style={{ fontFamily: font.body.medium, fontSize: 11.5, lineHeight: 15, color: ink(0.58) }}>
-            Managed device and corporate network verified
+            {verified
+              ? `Signed in as ${account?.username} · managed device verified`
+              : 'Demo mode · device verification not configured'}
           </Text>
         </View>
         <CTAButton
