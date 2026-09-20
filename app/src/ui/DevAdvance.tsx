@@ -7,9 +7,13 @@ const monoFont = Platform.select({ ios: 'Courier', android: 'monospace', default
 /**
  * Deliberately NOT part of the product UI: the brief is explicit that the car
  * display has zero touch targets (start/stop/skip are voice-only or done on the
- * phone before the car moves — see chats/chat1.md, turn 3). Since no real voice
- * pipeline is wired up in this build, this control stands in for the spoken
- * command so the flow can still be driven end to end. Styled to read as
+ * phone before the car moves — see chats/chat1.md, turn 3). CarReadyScreen and
+ * CarAskScreen now also listen for the real spoken phrases (see
+ * src/services/voiceCommands.ts) — this control stays as the manual fallback for
+ * when voice isn't available (denied permission, unsupported platform, a noisy
+ * environment) or during a live demo, on purpose, not as the only path. On
+ * CarRecordingScreen it still is the only path — see that screen and
+ * app/README.md's "Voice triggers" section for why. Styled to read as
  * scaffolding, not chrome, and rendered outside the car-display frame.
  */
 export function DevAdvance({ label, onPress }: { label: string; onPress: () => void }) {

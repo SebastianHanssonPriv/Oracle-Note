@@ -3,9 +3,11 @@ import { Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CarFrame } from '../ui/CarFrame';
 import { DevAdvance } from '../ui/DevAdvance';
+import { VoiceListeningBadge } from '../ui/VoiceListeningBadge';
 import { color, space } from '../theme';
 import { visit, gapQuestions } from '../data/mockVisit';
 import { saveVisitState } from '../data/visitStore';
+import { useVoiceCommands } from '../services/voiceCommands';
 import type { RootStackParamList } from '../navigation/types';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CarAsk'>;
@@ -19,28 +21,37 @@ function formatClock(totalSeconds: number) {
 export function CarAskScreen({ navigation, route }: Props) {
   const { elapsedSeconds } = route.params;
 
+  async function onContinue() {
+    await saveVisitState({ status: 'answering', askingIndex: 0 });
+    navigation.replace('Asking', { questionIndex: 0 });
+  }
+
+  async function onLater() {
+    // Status stays 'recorded': the monologue is saved, the gap
+    // questions are simply deferred, not abandoned. Home reads
+    // this and lets the rep resume any time.
+    await saveVisitState({ status: 'recorded' });
+    navigation.replace('CarInactive');
+  }
+
+  // "Continue" and "later" are common enough words that a bare match risks
+  // false positives from background chatter — required word-boundary
+  // matches on the two actual choices being offered here, not a fuzzy one.
+  const voiceStatus = useVoiceCommands([
+    { match: (t) => /\bcontinue\b/.test(t), onMatch: onContinue },
+    { match: (t) => /\blater\b/.test(t), onMatch: onLater },
+  ]);
+
   return (
     <CarFrame
       below={
-        <View style={{ flexDirection: 'row', gap: space[2], flexWrap: 'wrap', justifyContent: 'center' }}>
-          <DevAdvance
-            label='"Continue"'
-            onPress={async () => {
-              await saveVisitState({ status: 'answering', askingIndex: 0 });
-              navigation.replace('Asking', { questionIndex: 0 });
-            }}
-          />
-          <DevAdvance
-            label='"Later"'
-            onPress={async () => {
-              // Status stays 'recorded': the monologue is saved, the gap
-              // questions are simply deferred, not abandoned. Home reads
-              // this and lets the rep resume any time.
-              await saveVisitState({ status: 'recorded' });
-              navigation.replace('CarInactive');
-            }}
-          />
-        </View>
+        <>
+          <View style={{ flexDirection: 'row', gap: space[2], flexWrap: 'wrap', justifyContent: 'center' }}>
+            <DevAdvance label='"Continue"' onPress={onContinue} />
+            <DevAdvance label='"Later"' onPress={onLater} />
+          </View>
+          <VoiceListeningBadge status={voiceStatus} />
+        </>
       }
     >
       <View style={{ flex: 1, justifyContent: 'space-between' }}>

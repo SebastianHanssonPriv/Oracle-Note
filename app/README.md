@@ -121,6 +121,44 @@ new `SttProvider` on the backend (not scaffolded yet — `backend/` currently
 only has `ExtractionProvider` and `SinkProvider`, see `backend/README.md`)
 is the next piece, once real transcription exists to send it to.
 
+## Voice triggers
+
+`CarReadyScreen` and `CarAskScreen` listen for their real spoken phrases —
+"Oracle, start debrief", "Continue", "Later" — via
+[`expo-speech-recognition`](https://www.npmjs.com/package/expo-speech-recognition)
+(`src/services/voiceCommands.ts`), matching the brief's "zero touch
+targets" requirement (`design/chats/chat1.md`, turn 3) for real, not just in
+UI copy. `DevAdvance`'s "DEV — simulate" control stays as the manual
+fallback on every car screen, on purpose: voice recognition can be denied,
+unsupported, or simply wrong in a noisy car, and a rep — or someone running
+a live demo — should never be stuck. A small "Listening for your voice"
+indicator (`src/ui/VoiceListeningBadge.tsx`) shows only when recognition is
+actually active, so it's never a claim the app isn't backing up.
+
+**`CarRecordingScreen`'s "Oracle, stop" is deliberately DEV-only, not a gap.**
+Running `expo-audio`'s recorder and `expo-speech-recognition`'s listener at
+the same time would mean two consumers fighting over one microphone session,
+which most platforms don't support cleanly — a real, silent-failure risk
+this sandbox's headless verification wouldn't catch either way, so shipping
+it without being sure would have been the wrong tradeoff. The correct fix,
+not done here: replace `CarRecordingScreen`'s separate `expo-audio` recorder
+with `expo-speech-recognition`'s own `recordingOptions: { persist: true }`,
+which persists the monologue audio *and* streams live transcripts *and* can
+catch "stop" in that same transcript — one mic session doing all three
+jobs instead of two sessions contending for it.
+
+Verified the same way as audio capture: two Playwright passes against the
+web export, one with no microphone (confirms the DEV-button fallback still
+works, no crashes), one with a fake media device and granted permission
+(confirms `isRecognitionAvailable()`, `requestPermissionsAsync()`, and
+`start()` all genuinely succeed and the app reaches `'listening'` status —
+not just that the code type-checks). Actually saying a trigger phrase and
+having it recognized is **not** verified here: there's no real audio input
+in this sandbox, and even the browser's Web Speech API depends on a
+cloud STT service this environment's egress policy blocks. Treat the
+matching logic itself (`useVoiceCommands`' `result` handler) as reviewed,
+not tested against real speech.
+
 ## Sign-in / MDM (Entra ID SSO)
 
 The phones this ships to are fully Intune-enrolled: device compliance and

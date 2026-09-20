@@ -36,6 +36,13 @@
         {
           "microphonePermission": "Oracle Note records your spoken debrief so it can be staged and synced. Audio stays on this device."
         }
+      ],
+      [
+        "expo-speech-recognition",
+        {
+          "microphonePermission": "Oracle Note listens for \"Oracle, start debrief\", \"Continue\" and \"Later\" so the car screen never needs a touch.",
+          "speechRecognitionPermission": "Oracle Note listens for \"Oracle, start debrief\", \"Continue\" and \"Later\" so the car screen never needs a touch."
+        }
       ]
     ]
   }
