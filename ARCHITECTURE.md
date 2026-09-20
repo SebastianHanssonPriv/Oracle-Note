@@ -1,5 +1,14 @@
 # Oracle Note — Architecture
 
+**Status: parked.** The system this document describes is no longer the
+active build target — see the top-level [`README.md`](README.md)'s
+"Project direction" for why (CRM integration turned out to be fully out of
+scope, and hands-free-while-driving turned out not to be a hard
+requirement; the active path forward is a Copilot Studio agent, spec'd
+separately). Everything below is accurate as of when work paused, kept as
+the honest record of what was real versus mocked at that point, and as the
+starting reference if CRM integration brings this system back into scope.
+
 This document exists to support a resourcing decision: what Oracle Note is
 built to become, what of that exists today, what's mocked in its place, and
 what a live pilot actually needs from the organization (Azure subscription
